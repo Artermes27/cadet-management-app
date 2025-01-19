@@ -1,0 +1,102 @@
+*{
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+body{
+    font-family: Arial;
+    min-height: 100%;
+    color: #555;
+}
+nav{
+    display:grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    grid-column-gap: 30px;
+    grid-template-rows:70px;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.15);
+    position: sticky;
+    top:0;
+    background-color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+nav.brand{
+    font-size: 28px;
+    font-weight: bold;
+    color: #245990;
+}
+nav a{
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 35px;
+    transition: background-color 0.3s, colour 0.3;
+    color: #245990;
+    font-size: 18px;
+}
+nav a:hover,
+nav a.active{
+    background: #245990;
+    color: #fff;
+    border-radius: 3px;
+}
+
+/* headder rules*/
+
+header{
+    padding: 40px 20px;
+    background-color: #f4f4f4;
+}
+header .sub-title{
+    margin-top:20px;
+    line-height: 28px;
+}
+
+/* main section*/
+
+main{
+    padding: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-column-gap: 30px;
+    margin-bottom: 30px;
+    color: #333;
+}
+main .login-box{
+    background-color: grey;
+	margin: auto;
+	width: 300px;
+	padding: 20px;
+}
+main .login-box .title{
+    text-align: center;
+}
+main .login-box .button{
+    padding: 10px;
+    width: 100px;
+    color: white;
+    background-color: lightblue;
+    border: none;
+}
+main .login-box .user-input{
+    height: 25px;
+    border-radius: 5px;
+    padding: 4px;
+    border: solid thin #aaa;
+    width: 100%;
+}
+main .section-title{
+    font-size: 22px;
+    margin-bottom: 30px;
+}
+
+/* footer rules*/
+footer{
+    background-color: #333;
+    padding: 20px;
+    width: 100%;
+    color: white;
+}

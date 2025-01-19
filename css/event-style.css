@@ -1,0 +1,12 @@
+.grid-container {
+    margin: 0;
+    padding: 10px 0;
+    background-color:#ddd;
+    display: grid;
+    grid-template-columns: 15% 85%;
+  }
+.grid-container .right-side {
+    display: grid;
+    grid-template-columns: 20% 50% 20% 10%;
+    grid-template-rows: auto auto;
+}

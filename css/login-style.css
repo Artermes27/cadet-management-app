@@ -1,0 +1,37 @@
+body{
+    font-family: "cabril";
+    display: flex;
+    justify-content: center;
+}
+body .container{
+    margin-top: 200px;
+}
+body .container .title{
+    display: flex;
+    justify-content: center;
+}
+form{
+    display: grid;
+}
+body .container .input-heading{
+    font-size: 20px;
+}
+body .container .minor-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+body .container .minor-container .remember-me{
+    justify-self: flex-start;
+}
+body .container .minor-container .forgot-password{
+    justify-self: flex-end;
+}
+body .container .login-button-container{
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-self: center;
+}
+body .container .login-button-container .login-button{
+    width: 400px;
+    height: 35px;
+}

@@ -1,0 +1,21 @@
+body .main .left{
+    display: grid;
+    box-shadow: 0 5px 5px rgba(0,0,0,0.15);
+    background-color: white;
+    grid-row-gap: 15px;
+}
+body .main .left h3{
+    text-align: center;
+    margin: 0px;
+}
+left ,img{
+    border-radius: 50%;
+    max-width: 350px;
+    max-height: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+body .main .left .links{
+    display: grid;
+    text-align: center;
+}
