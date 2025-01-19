@@ -49,88 +49,98 @@ session_start();
         $query = "select * from parades where date >= '$todaysDate' limit 5";
         $result = mysqli_query($con, $query);
         if ($result->num_rows > 0) {
-            //make the $allData array and set column count to 0
-            #echo(mysqli_num_rows($result));
+            //make the $all_data array and set column count to 0
+            $column_count = 0;
+            $all_data = [];
             while($parade = mysqli_fetch_assoc($result)) {
-                //retreve events for each parade
-                #print_r($row);
-                $query = "SELECT events.* FROM events, user_event WHERE events.parade_id = '$parade[parade_id]' and user_event.user_id = '" . get_id() . "' and user_event.event_id = events.event_id;";
-                echo($query);
+                //retreve events for a parade
+                $column = [];
+                $event_count = 1;
+                $query = "SELECT events.* FROM events, user_event WHERE events.parade_id = '$parade[parade_id]' and user_event.user_id = '" . get_id() . "' and user_event.event_id = events.event_id ORDER BY event_start;";
                 $all_events = mysqli_query($con, $query);
-                #print_r(mysqli_fetch_assoc($all_events_for_1_parade));
+                $column[0] = $parade;
                 while($event = mysqli_fetch_assoc($all_events)) {
-                    #loop through each event and place it into array for later retreval
+                    //loop through each event
+                    $column[$event_count] = $event;
+                    $query = "SELECT users.last_name, users.rank FROM users, events WHERE users.user_id = events.owner and events.event_id = $event[event_id];";
+                    $owner = mysqli_query($con, $query);
+                    $column[$event_count]["owner"] = mysqli_fetch_assoc($owner)["last_name"];
+                    $event_count = $event_count + 1;
                 }
+                $all_data[$column_count] = $column;
+                $column_count = $column_count + 1;
                 }
+            //print_r($all_data);
             }
-            //process of outputing data stored in $allData to HTML code
+            //process of outputing data stored in $all_data to HTML code
             echo("<div class=\"grid-container\">\n");
             if ($user_data["admin"] == 1) {
                 echo("<div class=\"grid-item\">\n");
                 echo("<h3> this is the admin panle</h3>\n");
                 $maxColumn = 4;
-                $columnCount = 0;
-                while($columnCount < $maxColumn){
+                $column_count = 0;
+                while($column_count < $maxColumn){
                     //HTML code for each of the more infomation tabs for each event
-                    $eventCount = 1;
-                    while($eventCount < 5){
-                        echo("<div class=\"R".$columnCount. "M". ($eventCount - 1)."\"hidden>\n");
-                        echo("<a href=\"event.php?paradeID=". $allData[$columnCount][0]["eventDate"]. "&eventID=". $allData[$columnCount][$eventCount]["eventID"]. "\">click for edit page</a><br>\n");
-                        echo("<a>event type: ". $allData[$columnCount][$eventCount]["eventType"]."</a><br>\n");
-                        echo("<a>event name: ". $allData[$columnCount][$eventCount]["eventName"]."</a><br>\n");
-                        echo("<a>event start time: ". $allData[$columnCount][$eventCount]["eventStart"]."</a><br>\n");
-                        echo("<a>event end time: ". $allData[$columnCount][$eventCount]["eventEnd"]."</a><br>\n");
-                        echo("<a>event owner: ". $allData[$columnCount][$eventCount]["first_name"]. $allData[$columnCount][$eventCount]["last_name"]. "</a><br>\n");
-                        if($allData[$columnCount][$eventCount]["first_name"] == "1"){
+                    $event_count = 1;
+                    while($event_count < 5){
+                        echo("<div class=\"R".$column_count. "M". ($event_count - 1)."\"hidden>\n");
+                        echo("<a href=\"event.php?paradeID=". $all_data[$column_count][0]["parade_id"]. "&eventID=". $all_data[$column_count][$event_count]["event_id"]. "\">click for edit page</a><br>\n");
+                        echo("<a>event type: ". $all_data[$column_count][$event_count]["event_type"]."</a><br>\n");
+                        echo("<a>event name: ". $all_data[$column_count][$event_count]["event_name"]."</a><br>\n");
+                        echo("<a>event start time: ". $all_data[$column_count][$event_count]["event_start"]."</a><br>\n");
+                        echo("<a>event end time: ". $all_data[$column_count][$event_count]["event_end"]."</a><br>\n");
+                        echo("<a>event owner: ". $all_data[$column_count][$event_count]["owner"]. $all_data[$column_count][$event_count]["last_name"]. "</a><br>\n");
+                        if($all_data[$column_count][$event_count]["final_aproval"] == "1"){
                             echo("<a>approved: TRUE</a><br>\n");
                         }else{
                             echo("<a>approved: FALSE</a><br>\n");
                         }
                         echo("<a>equipment request printout here</a><br>\n");
                         echo("</div>\n");
-                        $eventCount = $eventCount + 1;
+                        $event_count = $event_count + 1;
                     }
-                    $columnCount = $columnCount + 1;
+                    $column_count = $column_count + 1;
                     }
                 //close the admin column
                 echo("</div>\n");
             } else  {
                 $maxColumn = 5;
             }
-            $columnCount = 0;
-            while($columnCount < $maxColumn){
-                if($allData[$columnCount]){
-                    $eventCount = 0;
+            $column_count = 0;
+            while($column_count < $maxColumn){
+                if($all_data[$column_count]){
+                    $event_count = 0;
                     //HTML code for each column of the callendar
                     echo("<div class=\"grid-item\">");
-                    echo("<h3>". $allData[$columnCount][0]["eventDate"]. "<br>". $allData[$columnCount][0]["eventStartTime"]. " till ". $allData[$columnCount][0]["eventEndTime"]. "</h3>" ."\n");
-                    $eventCount = 1;
+                    echo("<h3>". $all_data[$column_count][0]["date"]. "<br>". $all_data[$column_count][0]["start"]. " till ". $all_data[$column_count][0]["end"]. "</h3>" ."\n");
+                    $event_count = 1;
                     if ($user_data["admin"] == 1) {
-                        while($eventCount < 5) {
+                        while($event_count < 5) {
                             //html code for each event in the column
-                            echo("<button id=\"R". $columnCount. "I". ($eventCount-1). "\">click for more</button>\n");
-                            echo("<L class=\"event\">". $allData[$columnCount][$eventCount]["eventStart"]." till ". $allData[$columnCount][$eventCount]["eventEnd"]."<br>". $allData[$columnCount][$eventCount]["eventName"] ."\n");
-                            echo("<br>". $allData[$columnCount][$eventCount]["first_name"]." ". $allData[$columnCount][$eventCount]["last_name"]. "</L>" ."\n");
-                            $eventCount = $eventCount + 1;
+                            echo("<button id=\"R". $column_count. "I". ($event_count-1). "\">click for more</button>\n");
+                            echo("<L class=\"event\">". $all_data[$column_count][$event_count]["event_start"]." till ". $all_data[$column_count][$event_count]["event_end"]."<br>". $all_data[$column_count][$event_count]["event_name"] ."\n");
+                            echo("<br>". $all_data[$column_count][$event_count]["first_name"]." ". $all_data[$column_count][$event_count]["last_name"]. "</L>" ."\n");
+                            $event_count = $event_count + 1;
                         }
                     }else{
-                        while($eventCount < 5) {
+                        while($event_count < 5) {
                             //html code for each event in the column
-                            echo("<L class=\"event\">". $allData[$columnCount][$eventCount]["eventStart"]." till ". $allData[$columnCount][$eventCount]["eventEnd"]."<br>". $allData[$columnCount][$eventCount]["eventName"] ."\n");
-                            echo("<br>". $allData[$columnCount][$eventCount]["first_name"]." ". $allData[$columnCount][$eventCount]["last_name"]. "</L>" ."\n");
-                            $eventCount = $eventCount + 1;
+                            echo("<L class=\"event\">". $all_data[$column_count][$event_count]["event_start"]." till ". $all_data[$column_count][$event_count]["event_end"]."<br>". $all_data[$column_count][$event_count]["event_name"] ."\n");
+                            echo("<br>". $all_data[$column_count][$event_count]["first_name"]." ". $all_data[$column_count][$event_count]["last_name"]. "</L>" ."\n");
+                            //echo($all_data[$column_count][$event_count]);
+                            $event_count = $event_count + 1;
                         }
                     }
                 }else {
                     //HTML code for when their are no more parade nights
                     echo("<div class=\"grid-item\">");
-                    echo("<h3>no events on this day</h3>");
+                    echo("<h3>no events on this day". $column_count . "</h3>");
                     echo("</div>");
-                    $columnCount = $columnCount + 1;
+                    $column_count = $column_count + 1;
                 }
 
                 echo("</div>" ."\n");
-                $columnCount = $columnCount + 1;
+                $column_count = $column_count + 1;
                 }
             echo("</div>" ."\n");
             echo("</ul>");
