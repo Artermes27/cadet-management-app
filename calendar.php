@@ -26,7 +26,7 @@ session_start();
             //$todaysDate = str_replace("/", "-", date("Y/m/d"));
             $todaysDate = "2024-11-29";
             //search for parades with date >= todays date
-            $query = "select eventDate from parades where eventDate >= '$todaysDate' limit 5";
+            $query = "select date from parades where date >= '$todaysDate' limit 5";
             $result = mysqli_query($con, $query);
             if ($result->num_rows > 0)  {
               $dates = $result->fetch_all();
@@ -46,34 +46,21 @@ session_start();
         //$todaysDate = str_replace("/", "-", date("Y/m/d"));
         $todaysDate = "2024-11-29";
         //search for parades with date >= todays date
-        $query = "select * from parades where eventDate >= '$todaysDate' limit 5";
+        $query = "select * from parades where date >= '$todaysDate' limit 5";
         $result = mysqli_query($con, $query);
         if ($result->num_rows > 0) {
             //make the $allData array and set column count to 0
-            $columnCount = 0;
-            $allData = [];
-            while($row = $result->fetch_assoc()) {
-                //make this arrays line
-                $line = [];
-                $line[0] = $row;
-                $sqlNames = ["", "event1ID", "event2ID", "event3ID", "event4ID"];
-                $eventCount = 1;
-                //retrieve info for event 1 to 4 useing while loop
-                while($eventCount < 5){
-                    $query = "select * from event where eventID = '". $row[$sqlNames[$eventCount]]. "'";
-                    $result0 = mysqli_query($con, $query);
-                    $line[$eventCount] = $result0->fetch_assoc();
-                    $query = "select first_name, last_name from user where id = '". $line[$eventCount]["ownerID"]. "'";
-                    $result0 = mysqli_query($con, $query);
-                    $rowOwner = $result0->fetch_assoc();
-                    $line[$eventCount]["first_name"] = $rowOwner["first_name"];
-                    $line[$eventCount]["last_name"] = $rowOwner["last_name"];
-                    $eventCount = $eventCount + 1;
+            #echo(mysqli_num_rows($result));
+            while($parade = mysqli_fetch_assoc($result)) {
+                //retreve events for each parade
+                #print_r($row);
+                $query = "SELECT events.* FROM events, user_event WHERE events.parade_id = '$parade[parade_id]' and user_event.user_id = '" . get_id() . "' and user_event.event_id = events.event_id;";
+                echo($query);
+                $all_events = mysqli_query($con, $query);
+                #print_r(mysqli_fetch_assoc($all_events_for_1_parade));
+                while($event = mysqli_fetch_assoc($all_events)) {
+                    #loop through each event and place it into array for later retreval
                 }
-                //add this rows data to the $allData array
-                $allData[$columnCount] = $line;
-                $columnCount = $columnCount + 1;
-                // href=\"event.php?paradeID=1&eventID=1\"
                 }
             }
             //process of outputing data stored in $allData to HTML code
