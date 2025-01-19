@@ -10,15 +10,12 @@ session_start();
 		//something was posted
 		$email = $_POST['email'];
 		$password = $_POST['password'];
-    echo"posted";
 		if(!empty($email) && !empty($password))
 		{
-      echo"hello";
 
 			//read from database
-			$query = "select * from user where email = '$email' limit 1";
+			$query = "select * from users where email = '$email' limit 1";
 			$result = mysqli_query($con, $query);
-
 			if($result)
 			{
 				if($result && mysqli_num_rows($result) > 0)
@@ -29,7 +26,7 @@ session_start();
 					if($user_data['password'] === hash("sha256", $password));
 					{
 						echo "password match";
-						$_SESSION['user_id'] = $user_data['id'];
+						$_SESSION['user_id'] = $user_data['user_id'];
 						header("Location: dashbord.php");
 						die;
 					}

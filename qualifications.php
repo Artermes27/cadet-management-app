@@ -18,7 +18,7 @@ session_start();
 	<h1>my rank</h1>
     <div class="container">
         <div class="left">  
-            <a><?php echo str_replace("_", " ", get_current_rank($con))," ", $user_data['last_name']; ?></a>
+            <a><?php echo str_replace("_", " ", get_rank($con, $user_data['user_id']))," ", $user_data['last_name']; ?></a>
             <?php
             $path = "profile-photos/" . get_id();
             if (file_exists("profile-photos/" . get_id() . ".jpg") == TRUE){
