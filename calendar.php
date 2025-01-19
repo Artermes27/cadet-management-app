@@ -84,7 +84,7 @@ session_start();
                     $event_count = 1;
                     while($event_count < 5){
                         echo("<div class=\"R".$column_count. "M". ($event_count - 1)."\"hidden>\n");
-                        echo("<a href=\"event.php?paradeID=". $all_data[$column_count][0]["parade_id"]. "&eventID=". $all_data[$column_count][$event_count]["event_id"]. "\">click for edit page</a><br>\n");
+                        echo("<a href=\"event.php?parade_id=". $all_data[$column_count][0]["parade_id"]. "&event_id=". $all_data[$column_count][$event_count]["event_id"]. "\">click for edit page</a><br>\n");
                         echo("<a>event type: ". $all_data[$column_count][$event_count]["event_type"]."</a><br>\n");
                         echo("<a>event name: ". $all_data[$column_count][$event_count]["event_name"]."</a><br>\n");
                         echo("<a>event start time: ". $all_data[$column_count][$event_count]["event_start"]."</a><br>\n");

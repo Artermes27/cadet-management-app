@@ -13,9 +13,9 @@ function check_login($con)
 		if($result && mysqli_num_rows($result) > 0)
 		{
 			$user_data = mysqli_fetch_assoc($result);
-			if ($_GET["paradeID"] and $_GET["eventID"]){
-				$user_data["paradeID"] = $_GET["paradeID"];
-				$user_data["eventID"] = $_GET["eventID"];
+			if (isset($_GET["parade_id"]) and isset($_GET["event_id"])){
+				$user_data["parade_id"] = $_GET["parade_id"];
+				$user_data["event_id"] = $_GET["event_id"];
 				return $user_data;
 			}else{
 				return $user_data;
