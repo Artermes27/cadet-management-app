@@ -3,7 +3,7 @@
 $dbhost = "localhost";
 $dbuser = "artermes27";
 $dbpass = "blackarch";
-$dbname = "main";
+$dbname = "main_v2";
 
 if(!$con = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname))
 {
