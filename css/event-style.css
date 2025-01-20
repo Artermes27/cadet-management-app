@@ -10,3 +10,14 @@
     grid-template-columns: 20% 50% 20% 10%;
     grid-template-rows: auto auto;
 }
+.grid-container .right-side .register-box-all {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto auto auto;
+}
+.grid-container .right-side .register-box-all .add-cadet-to-register {
+  padding-top: 10px;
+}
+.grid-container .right-side .register-box-all .remove-cadet-from-register {
+  padding-top: 10px;
+}

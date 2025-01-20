@@ -29,55 +29,85 @@ session_start();
         </div>
         <div class="right-side">
             <h1>lesson x</h1><h1></h1><h1></h1><h1></h1>
-            <div class=register>
+            <div class=register-box-all>
                 <h4>register</h4>
                 <?php
-                $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM user_event, users WHERE user_event.event_id = $user_data[event_id] and users.user_id = user_event.user_id;";
+                //retreving the curent status of the register
+                $query = "SELECT user_event.present, users.user_id, users.rank, users.first_name, users.last_name FROM user_event, users WHERE user_event.event_id = $user_data[event_id] and users.user_id = user_event.user_id;";
                 $result = mysqli_query($con, $query);
-                //prosesing method for when register is submited
-                if($_SERVER['REQUEST_METHOD'] == "POST")
-                {
-                    //something was posted
-                    $email = $_POST['email'];
-                    $password = $_POST['password'];
-                    if(!empty($email) && !empty($password))
-                    {
-                
-                        //read from database
-                        $query = "select * from users where email = '$email' limit 1";
-                        $result = mysqli_query($con, $query);
-                        if($result)
-                        {
-                            if($result && mysqli_num_rows($result) > 0)
-                            {echo "query sucess,";
-                
-                                $user_data = mysqli_fetch_assoc($result);
-                                
-                                if($user_data['password'] === hash("sha256", $password));
-                                {
-                                    echo "password match";
-                                    $_SESSION['user_id'] = $user_data['user_id'];
-                                    header("Location: dashbord.php");
-                                    die;
-                                }
-                            }
-                        }
-                        
-                        echo "wrong password!";
-                    }else
-                    {
-                        echo "wrong username!";
-                    }
-                }
+                //creating an asosiative array of current status of each cadet
+                $who_is_present_original = array();
                 if(mysqli_num_rows($result) > 0)    {
+                    echo("<div class=\"register-main\"><table>");?><form method="post" action="<?php $_SERVER["PHP_SELF"]; ?>"><?php
                     while($cadet = mysqli_fetch_assoc($result)) {
-                        echo("<lable>". $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</lable>\n");
-                        echo("<input style=\"width: 10px; height: 20px;\" type=\number\" placeholder=\"0\" name=\"$cadet[user_id]\"><br>");
+                        //printing the current register to the webpage
+                        echo("<tr>");
+                        echo("<td><lable>". $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</lable></td>\n");
+                        echo("<td><input style=\"width: 10px; height: 20px;\" type=\"text\" placeholder=\"". $cadet["present"] . "\" name=\"$cadet[user_id]\"></td>\n");
+                        echo("</tr>");
+                        //adding the cadets original present status to the asosiative array
+                        $who_is_present_original[$cadet["user_id"]] = $cadet["present"];
                     }
-                    echo("<input type=\"submit\" value=\"submit the register\" class=\"register-button\">");
+                    //print_r($who_is_present_original);
+                    //print_r(array_keys($who_is_present_original));
+                    //printing the form for submiting the register
+                    echo("</table></div>\n");
+                    echo("<div style=\"padding-top:10px\" class=\"submit-the-register\"><input type=\"submit\" value=\"submit the register\" class=\"register-button\" name=\"submit-register\">\n");
+                    echo("</form></div>");
                 }
                 else    {
                     echo("no cadets will be present");
+                }
+                //printing the form for adding a cadets
+                echo("<div class=\"add-cadet-to-register\">\n");
+                ?><form method="post" action="<?php $_SERVER["PHP_SELF"]; ?>"><?php
+                echo("<input type=\"text\" placeholder=\"enter cadets name here\"></input><br>\n");
+                echo("<input type=\"submit\" value=\"add cadet to the register\" name=\"add-cadet\"class=\"register-button\">\n");
+                echo("</form>\n");
+                echo("</div>\n");
+                //printing the form for revmoing a cadets
+                echo("<div class=\"remove-cadet-from-register\">\n");
+                ?><form method="post" action="<?php $_SERVER["PHP_SELF"]; ?>"><?php
+                echo("<input type=\"text\" placeholder=\"enter cadets name here\"></input><br>\n");
+                echo("<input type=\"submit\" value=\"remove cadet from register\" name=\"remove-cadet\"class=\"register-button\">\n");
+                echo("</form>\n");
+                echo("</div>\n");
+                //prosesing method for when register is submited
+                if(isset($_POST['submit-register']))
+                {
+                    $who_is_present_new = $_POST;
+                    unset($who_is_present_new["submit-register"]);
+                    $difference = array();
+                    //print_r($who_is_present_original);
+                    foreach($who_is_present_new as $id => $present) {
+                        if(isset($who_is_present_original[$id]) != null) {
+                            //echo("not empty");
+                            if($who_is_present_original[$id] != $present) {
+                                //echo(" no-match ");
+                                $difference[$id] = $present;
+                            }   else    {
+                                //do nothing because the present status hasnt changed
+                                //echo(" match ");
+                            }
+                        }
+                    }
+                    //print_r($difference);
+                    foreach($difference as $id => $present) {
+                        $query = "update user_event set present = " . $present . " where user_id = " . $id . " and event_id = " . $user_data["event_id"] . ";";
+                        mysqli_query($con, $query);
+                    }
+                    //find a better way to do this i.e. refreshing is slow
+                    header("refresh:0");
+                }
+                //prosesing method for when a cadets name is enterd to the add cadet box and submited
+                if(isset($_POST['add-cadet']))
+                {
+                    echo("add a cadet process");
+                }
+                //prosessing method for whena  cadets name is enterd to the remove a cadet box and submited
+                if(isset($_POST['remove-cadet']))
+                {
+                    echo("remove a cadet process");
                 }
                 ?>
             </div>

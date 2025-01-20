@@ -34,7 +34,7 @@ session_start();
                 $path = "profile-photos/defalt.jpg";
             }
             ?>
-            <img style="width: 200px; height: 200px" src=<?php echo $path ?>>
+            <img style="width: 200px; height: 200px" src=<?php echo($path); ?>>
             <form action="uploads.php" method="post" enctype="multipart/form-data">
                 <label>change profile photo<br></label>
                 <input type="file" name="fileToUpload" id="fileToUpload">
