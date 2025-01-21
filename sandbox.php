@@ -1,22 +1,38 @@
 <?php
-    if (isset($_POST['submit_data'])) {
-        echo("hello world");
-    }
-    
-    if (isset($_POST['edit_data'])) {
-        //second form
-    }
+session_start();
+
+    include("connection.php");
+    include("functions.php");
+    update_search($con)
 ?>
 
+<html>
+<head>
+<script>
+function showResult(str) {
+  if (str.length==0) {
+    document.getElementById("livesearch").innerHTML="";
+    document.getElementById("livesearch").style.border="0px";
+    return;
+  }
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("livesearch").innerHTML=this.responseText;
+      document.getElementById("livesearch").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","functions.php?search_first_name="+str,true);
+  xmlhttp.send();
+}
+</script>
+</head>
+<body>
 
-<form method="post" action="<?php $_SERVER["PHP_SELF"]; ?>">
-    <label for='name'>Naam:</label><br>
-    <input type="text" id="name" name="name" placeholder = "John Doe" required><br>
-    <input type="submit" name="submit_data" value="Save"><br>
+<form>
+<input type="text" size="30" onkeyup="showResult(this.value)">
+<div id="livesearch"></div>
 </form>
 
-<form method="post" action="<?php $_SERVER["PHP_SELF"]; ?>">
-    <label for='name'>Naam:</label><br>
-    <input type="text" id="name" name="name" placeholder = "John Doe" required><br>
-    <input type="submit" name="edit_data" value="Edit"><br>
-</form>
+</body>
+</html>
