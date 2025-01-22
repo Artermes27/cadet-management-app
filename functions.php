@@ -46,37 +46,36 @@ function get_rank($con, $id)
 	}
 }
 
-function update_search($con)
-{
-	$query = "SELECT users.user_id, users.first_name, users.last_name, users.rank FROM users WHERE active = 1 ORDER BY first_name";
+if(isset($_GET["add_user_id"]) and isset($_GET["event_id"]))	{
+	include("connection.php");	
+	$query = "INSERT INTO user_event (user_id, event_id, present) VALUES (" . $_GET["add_user_id"] . "," . $_GET["event_id"] . ",0);";
+	echo $query;
 	$result = mysqli_query($con, $query);
-
-	if(mysqli_num_rows($result) > 0)
-	{
-		$file_out = fopen("search.xml", "w") or die("Unable to open file!");
-		fwrite($file_out, "<all_users>\n");
-		while($cadet = mysqli_fetch_assoc($result)){
-			$output = "<cadet>\n<user_id>" . $cadet["user_id"] . "</user_id>\n<first_name>" . $cadet["first_name"] . "</first_name>\n<last_name>" . $cadet["last_name"] . "</last_name>\n<rank>" . $cadet["rank"] . "</rank>\n</cadet>\n";
-			fwrite($file_out, $output);
-		}
-		fwrite($file_out, "</all_users>\n");
-		fclose($file_out);
-	}
 }
 
 if(isset($_GET["search_first_name"]) != ""){
-	echo("search for first name");
+	include("connection.php");
+	//echo("search for first name");
 	$first_name = $_GET["search_first_name"];
-	$query = "";
+	$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0)	{
 		//their are names symalar
-		
+		//print_r(mysqli_fetch_all($result));
+		$output = "";
 		while($cadet = mysqli_fetch_assoc($result)){
-
+			//echo $output;
+			if($output == ""){
+				$output = "<script src=\"js/search.js\"></script><a onclick='resultHasBeenClicked(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
+			}	else	{
+				$output = $output . "<a onclick='resultHasBeenClicked(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
+			}
 		}
+		echo $output;
+		return $result;
 	}	else{
 		//their are no symalar names
+		return "<a>no names match your prompt</a>";
 	}
 }
 
@@ -87,57 +86,3 @@ if(isset($_GET["search_last_name"]) != ""){
 if(isset($_GET["search_rank"]) != ""){
 	echo("search for rank");
 }
-
-$xmlDoc=new DOMDocument();
-$xmlDoc->load("search.xml");
-
-$max_length=$xmlDoc->getElementsByTagName('name');
-
-//get the name parameter from URL
-$prompt=$_GET["search_first_name"];
-
-//lookup all links from the xml file if length of q>0
-// Check if the prompt is provided
-if (strlen($prompt) > 0) {
-    $search_result = "";
-
-    // Loop through the XML nodes
-    for ($count = 0; $count < $max_length->length; $count++) {
-        // Get the first name, last name, and rank elements for the current node
-        $first_name = $max_length->item($count)->getElementsByTagName("first_name");
-        $last_name = $max_length->item($count)->getElementsByTagName("last_name");
-        $rank = $max_length->item($count)->getElementsByTagName("rank");
-
-        // Check if the first name element exists
-        if ($first_name->item(0)->nodeType == 1) {
-            // Check if the first name matches the search prompt
-            if (stristr($first_name->item(0)->childNodes->item(0)->nodeValue, $prompt)) {
-                // If no previous results, create the first result
-                if ($search_result == "") {
-                    $search_result = "<a href='" . $last_name->item(0)->childNodes->item(0)->nodeValue . "' target='_blank'>" .
-                    $first_name->item(0)->childNodes->item(0)->nodeValue . "</a>";
-                } else {
-                    // Otherwise, append the new result with a line break
-                    $search_result .= "<br /><a href='" . $last_name->item(0)->childNodes->item(0)->nodeValue . "' target='_blank'>" .
-                    $first_name->item(0)->childNodes->item(0)->nodeValue . "</a>";
-                }
-            }
-        }
-    }
-
-    // Output the search result
-    echo $search_result;
-}
-
-
-// Set output to "no suggestion" if no hint was found
-// or to the correct values
-if ($search_result=="") {
-  $response="no suggestion";
-} else {
-  $response=$search_result;
-}
-
-//output the response
-echo $response;
-
