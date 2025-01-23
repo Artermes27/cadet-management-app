@@ -10,6 +10,7 @@ session_start();
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="js/search.js"></script>
 	<title>my Dashbord</title>
 	<link rel="stylesheet" href="css/event-style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
@@ -61,15 +62,16 @@ session_start();
                 //printing the form for adding a cadets
                 echo("<div class=\"add-cadet-to-register\">\n");
                 ?><form method="post" action="<?php $_SERVER["PHP_SELF"]; ?>"><?php
-                echo("<input type=\"text\" placeholder=\"enter cadets name here\"></input><br>\n");
-                echo("<input type=\"submit\" value=\"add cadet to the register\" name=\"add-cadet\"class=\"register-button\">\n");
+                //echo("<input type=\"text\" placeholder=\"enter cadets name here\"></input><br>\n");
+                echo("<input style=\"width: 180px;\" placeholder=\"add a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name\" value=\"\" onkeyup=\"showResult(this.value, 'search_first_name', '" . "0" . "')\"><br>\n");
+                echo("<div id=\"livesearch\"></div>");
                 echo("</form>\n");
                 echo("</div>\n");
                 //printing the form for revmoing a cadets
                 echo("<div class=\"remove-cadet-from-register\">\n");
                 ?><form method="post" action="<?php $_SERVER["PHP_SELF"]; ?>"><?php
-                echo("<input type=\"text\" placeholder=\"enter cadets name here\"></input><br>\n");
-                echo("<input type=\"submit\" value=\"remove cadet from register\" name=\"remove-cadet\"class=\"register-button\">\n");
+                echo("<input style=\"width: 180px;\" placeholder=\"remove a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name_delete\" value=\"\" onkeyup=\"showResultDelete(this.value, 'search_first_name_delete', '" . "0" . "')\"><br>\n");
+                echo("<div id=\"livesearch_delete\"></div>");
                 echo("</form>\n");
                 echo("</div>\n");
                 //prosesing method for when register is submited
@@ -98,16 +100,6 @@ session_start();
                     }
                     //find a better way to do this i.e. refreshing is slow
                     header("refresh:0");
-                }
-                //prosesing method for when a cadets name is enterd to the add cadet box and submited
-                if(isset($_POST['add-cadet']))
-                {
-                    echo("add a cadet process");
-                }
-                //prosessing method for whena  cadets name is enterd to the remove a cadet box and submited
-                if(isset($_POST['remove-cadet']))
-                {
-                    echo("remove a cadet process");
                 }
                 ?>
             </div>

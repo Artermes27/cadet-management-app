@@ -12,7 +12,7 @@ session_start();
 <body>
 
 <form>
-<input type="text" size="30" value="" onkeyup="showResult(this.value, 'search_first_name')">
+<input type="text" size="30" id="search_first_name" value="" onkeyup="showResult(this.value, 'search_first_name')">
 <div id="livesearch"></div>
 </form>
 
