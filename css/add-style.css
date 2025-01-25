@@ -1,3 +1,4 @@
+/*overall rules for the page*/
 .grid-container {
     margin: 0;
     padding: 10px 0;
@@ -6,21 +7,76 @@
     grid-template-columns: 33% 33% 33%;
   }
 
-
+/*rueles for each catagory of actions*/
 .grid-container .events-parades{
-    background-color: #b890da;;
+    background-color: #ddd;;
     margin-left:5px;
     margin-right:5px;
 }
 
 .grid-container .users{
-    background-color: #b890da;;
+    background-color: #ddd;;
     margin-left:5px;
     margin-right:5px;
 }
 
 .grid-container .equipment{
-    background-color: #b890da;;
+    background-color: #ddd;;
     margin-left:5px;
     margin-right:5px;
+}
+
+/*elements within form boxes*/
+form {
+    display: grid;
+    grid-template-columns: 50%;
+    gap: 10px;
+    padding-left: 10px;
+    padding-right:10px;
+}
+
+/*livesearch output box*/
+.livesearch {
+    grid-column: span 2;
+    font-size: 25px;
+}
+
+/*lables and inputs*/
+h4 {
+    grid-column: span 2;
+    text-decoration: underline;
+}
+
+h2 {
+    grid-column: span 2;
+    text-align: center;
+}
+
+label {
+    font-weight: bold;
+    line-height: 2;
+}
+
+input, select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/*buttons*/
+button {
+    grid-column: span 2;
+    margin-top: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #6b86c0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4c6baf;
 }
