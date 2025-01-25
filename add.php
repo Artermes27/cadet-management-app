@@ -143,11 +143,30 @@ session_start();
                     <button>submit</button>
                 </form>
             </div>
-            <div class="remove-equipment">
-
-            </div>
             <div class="modify-equipment">
-
+                <form id="modify_existing_equipment" action="functions.php" method="POST">
+                    <h4 style="text-decoration:underline">update equipment</h4>
+                    <input hidden value="1" type="text" name="modify_equipment" id="modify_equipment">
+                    <input hidden value="" type="text" name="modify_equipment_id" id="modify_equipment_id">
+                    <label>search for equipment by name</label>
+                    <input type="text" name="input_search_equipment_name" id="input_search_equipment_name" onkeyup="showResutsSearchForEquipmentByName(this.value)"><br>
+                    <div style="border: 1px solid rgb(165, 172, 178);" id="livesearch_equipment_name"></div>
+                    <label>search for equipment by location</label>
+                    <input type="text" name="input_search_equipment_location" id="input_search_equipment_location" onkeyup="showResutsSearchForEquipmentByLocation(this.value)"><br>
+                    <div style="border: 1px solid rgb(165, 172, 178);" id="livesearch_equipment_location"></div>
+                    <label>equipment name</label>
+                    <input type="text" name="modify_equipment_name" id="modify_equipment_name"><br>
+                    <label>equipment description</label>
+                    <input type="text" name="modify_equipment_description" id="modify_equipment_description"><br>
+                    <label>equipment location</label>
+                    <input type="text" name="modify_equipment_location" id="modify_equipment_location"><br>
+                    <label>active</label>
+                    <select id="operation" name="operation">
+                        <option value="modify">modify</option>
+                        <option value="delete">delete</option>
+                    </select><br>
+                    <button type="submit" onclick="setModifyEquipment()">update equipment</button>
+                </form>
             </div>
         </div>
     </div>

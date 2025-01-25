@@ -98,3 +98,72 @@ function resultHasBeenClickedUser(user_id) {
     }
     return;
 }
+
+function showResutsSearchForEquipmentByName(str){
+    //console.log(str);
+    if (str.length==0) {
+        document.getElementById("livesearch_equipment_name").innerHTML="";
+        document.getElementById("livesearch_equipment_name").style.border="0px";
+        return;
+      }
+      var xmlhttp=new XMLHttpRequest();
+      xmlhttp.onreadystatechange=function() {
+        if (this.readyState==4 && this.status==200) {
+          document.getElementById("livesearch_equipment_name").innerHTML=this.responseText;
+          document.getElementById("livesearch_equipment_name").style.border="1px solid #A5ACB2";
+        }
+      }
+      //console.log("functions.php?search_equipment_name="+str);
+      xmlhttp.open("GET","functions.php?search_equipment_name="+str,true);
+      xmlhttp.send();
+}
+
+function showResutsSearchForEquipmentByLocation(str){
+    //console.log(str);
+    if (str.length==0) {
+        document.getElementById("livesearch_equipment_location").innerHTML="";
+        document.getElementById("livesearch_equipment_location").style.border="0px";
+        return;
+      }
+      var xmlhttp=new XMLHttpRequest();
+      xmlhttp.onreadystatechange=function() {
+        if (this.readyState==4 && this.status==200) {
+          document.getElementById("livesearch_equipment_location").innerHTML=this.responseText;
+          document.getElementById("livesearch_equipment_location").style.border="1px solid #A5ACB2";
+        }
+      }
+      //console.log("functions.php?search_equipment_name="+str);
+      xmlhttp.open("GET","functions.php?search_equipment_location="+str,true);
+      xmlhttp.send();
+}
+
+function resultHasBeenClickedEquipment(equipment_id){
+    //console.log(equipment_id);
+    document.getElementById("livesearch_equipment_name").innerHTML="";
+    document.getElementById("livesearch_equipment_name").style.border="0px";
+    document.getElementById("input_search_equipment_name").value = "";
+    document.getElementById("livesearch_equipment_location").innerHTML="";
+    document.getElementById("livesearch_equipment_location").style.border="0px";
+    document.getElementById("input_search_equipment_location").value = "";
+    var xmlhttp=new XMLHttpRequest();
+      xmlhttp.onreadystatechange=function() {
+        if (this.readyState==4 && this.status==200) {
+          document.getElementById("livesearch_equipment_location").innerHTML=this.responseText;
+          document.getElementById("livesearch_equipment_location").style.border="1px solid #A5ACB2";
+        }
+      }
+    console.log("functions.php?equipment_id_info_dump="+equipment_id);
+    xmlhttp.open("GET","functions.php?equipment_id_info_dump="+equipment_id,true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange=function() {
+      if (this.readyState==4 && this.status==200) {
+        var equipmentDetails = JSON.parse(this.responseText);
+        console.log(equipmentDetails);
+        document.getElementById("modify_equipment_id").value = equipmentDetails.equipment_id;
+        document.getElementById("modify_equipment_name").value = equipmentDetails.name;
+        document.getElementById("modify_equipment_location").value = equipmentDetails.location;
+        document.getElementById("modify_equipment_description").value = equipmentDetails.description;
+        }
+    }
+    return;
+}

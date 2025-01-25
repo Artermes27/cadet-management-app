@@ -1,7 +1,6 @@
 <?php
 
-function check_login($con)
-{
+function check_login($con){
 
 	if(isset($_SESSION['user_id']))
 	{
@@ -30,13 +29,11 @@ function check_login($con)
 
 }
 
-function get_id()
-{
+function get_id(){
 	return $_SESSION['user_id'];
 }
 
-function get_rank($con, $id)
-{
+function get_rank($con, $id){
 	$query = "SELECT * FROM users Where user_id = '$id' limit 1;";
 	$result = mysqli_query($con, $query);
 	
@@ -199,6 +196,66 @@ if(isset($_GET["search_last_name_user"])){
 	}
 }
 
+if(isset($_GET["search_equipment_name"])){
+	$name = $_GET["search_equipment_name"];
+	include("connection.php");
+	$query = "SELECT * FROM equipment WHERE name REGEXP '" . str_replace('"', "", $name) . "';";
+	$result = mysqli_query($con, $query);
+	if(mysqli_num_rows($result) > 0)	{
+		//their are names symalar
+		//print_r(mysqli_fetch_all($result));
+		$output = "";
+		while($equipment = mysqli_fetch_assoc($result)){
+			//echo $output;
+			if($output == ""){
+				$output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedEquipment(" . $equipment["equipment_id"] . ")' name=" . $equipment["equipment_id"] . ">name:" . $equipment["name"] . " location:" . $equipment["location"] . "</a><br>";
+			}	else	{
+				$output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedEquipment(" . $equipment["equipment_id"] . ")' name=" . $equipment["equipment_id"] . ">name:" . $equipment["name"] . " location:" . $equipment["location"] . "</a><br>";
+			}
+		}
+		echo $output;
+	}	else{
+		//their are no symalar names
+		echo("<a>no names match your prompt</a>");
+	}
+}
+
+if(isset($_GET["search_equipment_location"])){
+	$name = $_GET["search_equipment_location"];
+	include("connection.php");
+	$query = "SELECT * FROM equipment WHERE location REGEXP '" . str_replace('"', "", $name) . "';";
+	$result = mysqli_query($con, $query);
+	if(mysqli_num_rows($result) > 0)	{
+		//their are names symalar
+		//print_r(mysqli_fetch_all($result));
+		$output = "";
+		while($equipment = mysqli_fetch_assoc($result)){
+			//echo $output;
+			if($output == ""){
+				$output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedEquipment(" . $equipment["equipment_id"] . ")' name=" . $equipment["equipment_id"] . ">name:" . $equipment["name"] . " location:" . $equipment["location"] . "</a><br>";
+			}	else	{
+				$output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedEquipment(" . $equipment["equipment_id"] . ")' name=" . $equipment["equipment_id"] . ">name:" . $equipment["name"] . " location:" . $equipment["location"] . "</a><br>";
+			}
+		}
+		echo $output;
+	}	else{
+		//their are no symalar names
+		echo("<a>no locations match your prompt</a>");
+	}
+}
+
+if(isset($_GET["equipment_id_info_dump"])){
+	include("connection.php");
+	$query = "SELECT * FROM equipment WHERE equipment_id = " . $_GET["equipment_id_info_dump"] . ";";
+	$result = mysqli_query($con, $query);
+	if(mysqli_num_rows($result) > 0)	{
+		$equipment = mysqli_fetch_assoc($result);
+		echo json_encode($equipment);
+	} else {
+		return json_encode(["message" => "no names match your prompt"]);
+	}
+}
+
 if(isset($_GET["user_id_info_dump"])){
 	include("connection.php");
 	$query = "SELECT * FROM users WHERE user_id = " . $_GET["user_id_info_dump"] . ";";
@@ -211,6 +268,7 @@ if(isset($_GET["user_id_info_dump"])){
 		return json_encode(["message" => "no names match your prompt"]);
 	}
 }
+
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 	//var_dump($_POST);
 	if(isset($_POST["add_new_user"]) and $_POST["add_new_user"] == "1"){
@@ -298,5 +356,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			$result = mysqli_query($con, $query);
 		}
 		header("Location: add.php");
+	}if(isset($_POST["modify_equipment"]) and $_POST["modify_equipment"] == "1"){
+		if($_POST["operation"] == "delete"){
+			include("connection.php");
+			echo("delete equipment process");
+			$equipment_id = $_POST["modify_equipment_id"];
+			$query = "DELETE FROM `equipment` WHERE `equipment`.`equipment_id` = " . $equipment_id . ";";
+			echo($query);
+			$result = mysqli_query($con, $query);
+			header("Location: add.php");
+		}else{
+			include("connection.php");
+			echo("modify equipment process");
+			$equipment_id = $_POST["modify_equipment_id"];
+			$name = $_POST["modify_equipment_name"];
+			$description = $_POST["modify_equipment_description"];
+			$location = $_POST["modify_equipment_location"];
+			$query = "UPDATE `equipment` SET `name` = '" . $name . "', `description` = '" . $description . "', `location` = '" . $location . "' WHERE `equipment`.`equipment_id` = " . $equipment_id . ";";
+			echo($query);
+			$result = mysqli_query($con, $query);
+			header("Location: add.php");
+		}
 	}
 }
+
+//var_dump($_POST);
