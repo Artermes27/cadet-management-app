@@ -21,23 +21,9 @@
 }
 
 .grid-container .users .add-user{
-    display: grid;
     margin-top: 3px;
     margin-bottom: 3px;
     background-color: #ddd;
-    grid-template-columns: 30% 70%;
-}
-
-.grid-container .users .add-user .lables{
-    display: grid;
-    grid-template-rows: 20px;
-    margin: 0px;
-}
-
-.grid-container .users .add-user .input-fields{
-    display: grid;
-    grid-template-columns: 20px;
-    margin: 0px;
 }
 
 .grid-container .equipment{
