@@ -14,16 +14,9 @@
 }
 
 .grid-container .users{
-    display:grid;
     background-color: #b890da;;
     margin-left:5px;
     margin-right:5px;
-}
-
-.grid-container .users .add-user{
-    margin-top: 3px;
-    margin-bottom: 3px;
-    background-color: #ddd;
 }
 
 .grid-container .equipment{
