@@ -1,15 +1,16 @@
-function showResutsSearchForOwner(str) {
+function showResutsSearchForOwner(str, paradeID, event_id) {
     //console.log(str);
+    var id = "livesearch_owner[" + paradeID + "," + event_id + "]";
     if (str.length==0) {
-      document.getElementById("livesearch_owner").innerHTML="";
-      document.getElementById("livesearch_owner").style.border="0px";
+      document.getElementById(id).innerHTML="";
+      document.getElementById(id).style.border="0px";
       return;
     }
     var xmlhttp=new XMLHttpRequest();
     xmlhttp.onreadystatechange=function() {
       if (this.readyState==4 && this.status==200) {
-        document.getElementById("livesearch_owner").innerHTML=this.responseText;
-        document.getElementById("livesearch_owner").style.border="1px solid #A5ACB2";
+        document.getElementById(id).innerHTML=this.responseText;
+        document.getElementById(id).style.border="1px solid #A5ACB2";
       }
     }
     xmlhttp.open("GET","functions.php?search_first_name_owner="+str,true);

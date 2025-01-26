@@ -12,7 +12,7 @@ session_start();
     $current_date = "2025-01-24";
   }
   //getting the parade dates for the current date
-  $temp = get_parade_date_range($con, $current_date);
+  $temp = get_parade_date_range($con, $current_date, $user_data["admin"]);
   $parade_dates = $temp[0];
   $end_date = $temp[1];
   //defining the variables for the skip forwards and back in the calendar
@@ -26,6 +26,7 @@ session_start();
     $max_add = date_skip_method($con, $current_date, "+4");
     $max_subtract = date_skip_method($con, $current_date, "-4");
   }
+  $output_count = 0;
 ?>
 
 <!DOCTYPE html>
@@ -55,19 +56,26 @@ session_start();
     </div>
     <div class="calendar">
       <div class="parade1">
-        <?php echo(html_for_parade_on_callendar($con, $parade_dates[0]["date"], $user_data))?>
+        <?php 
+        if($user_data["admin"] == 1) {
+          echo(html_for_admin_page_on_callandar($con, $parade_dates));
+        } else {
+          echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count));
+          $output_count = $output_count + 1;
+        }
+        ?>
       </div>
       <div class="parade2">
-        <?php echo(html_for_parade_on_callendar($con, $parade_dates[1]["date"], $user_data))?>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count)); $output_count = $output_count + 1;?>
       </div>
       <div class="parade3">
-        <?php echo(html_for_parade_on_callendar($con, $parade_dates[2]["date"], $user_data))?>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count)); $output_count = $output_count + 1;?>
       </div>
       <div class="parade4">
-        <?php echo(html_for_parade_on_callendar($con, $parade_dates[3]["date"], $user_data))?>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count)); $output_count = $output_count + 1;?>
       </div>
       <div class="parade5">
-        <?php echo(html_for_parade_on_callendar($con, $parade_dates[4]["date"], $user_data))?>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count)); $output_count = $output_count + 1;?>
       </div>
     </div>
   </div>

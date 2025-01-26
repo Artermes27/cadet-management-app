@@ -8,7 +8,7 @@
 <nav>
         <div class="left">
             <a data-active="my dashbord" href="dashbord.php">my dashbord</a>
-            <a data-active="my calendar" href="calendar.php">my calendar</a>
+            <a data-active="my calendar" href="calendar1.php">my calendar</a>
             <a data-active="my events" href="contact.php">my events</a>
             <a data-active="my stores" href="contact.php">my stores</a>
         </div>
