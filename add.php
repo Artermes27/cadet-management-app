@@ -5,6 +5,9 @@ session_start();
 	include("functions.php");
 
 	$user_data = check_login($con);
+    if($user_data["admin"] == 0) {
+        header("Location: calendar.php");
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,15 +24,15 @@ session_start();
             <h2>events/parades</h2>
             <div class="add-parade">
                 <form id="add_new_parade" action="functions.php" method="POST">
-                    <h4 >add a parade</h4>
+                    <h4 >add a Parade</h4>
                     <a>the latest scheduled parade is curently set to:<?php $latest = get_latest_parade($con); echo($latest);?></a>
                     <a>the next parade should be: <?php echo(date("Y-m-d", strtotime($latest . " +7 days")));?></a>
                     <input hidden value="1" type="text" name="add_new_parade" id="add_new_parade">
-                    <label>date</label>
+                    <label>Date</label>
                     <input type="date" name="date" id="date">
-                    <label>start time</label>
+                    <label>Start time</label>
                     <input type="time" name="start" id="start">
-                    <label>finish time</label>
+                    <label>Finish time</label>
                     <input type="time" name="end" id="end">
                     <button>submit</button>
                 </form>

@@ -53,6 +53,93 @@ function get_latest_parade($con)	{
 	}
 }
 
+function get_parade_date_range($con, $current_date)	{
+	include("connection.php");
+	$query = "SELECT date FROM parades WHERE date >= '$current_date' ORDER BY date ASC limit 5;";
+	//echo($query);
+	$result = mysqli_query($con, $query);
+	$dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
+	if (count($dates) < 5)  {
+		$end_date = $dates[count($dates)-1]["date"];
+		while(count($dates) < 5) {
+			$dates[] = ["date" => "no parades beyond this date"];
+		}
+	} else {
+		$end_date = $dates[count($dates)-1]["date"];
+	}
+	return [$dates, $end_date];
+}
+
+function date_skip_method($con, $current_date, $skip){
+	if($skip == "-1"){
+		include("connection.php");
+		$query = "SELECT date FROM parades WHERE date < '$current_date' ORDER BY date DESC limit 1;";
+		//echo($query);
+		$result = mysqli_query($con, $query);
+		$dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		if (count($dates) == 0)  {
+			return "null";
+		} else {
+		return $dates[0]["date"];
+		}
+	}if($skip == "+1"){
+		include("connection.php");
+		$query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date ASC limit 1;";
+		//echo($query);
+		$result = mysqli_query($con, $query);
+		$dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		if (count($dates) == 0)  {
+			return "null";
+		} else {
+		return $dates[0]["date"];
+		}
+	}if($skip == "-5"){
+		include("connection.php");
+		$query = "SELECT date FROM parades WHERE date < '$current_date' ORDER BY date ASC limit 5;";
+		//echo($query);
+		$result = mysqli_query($con, $query);
+		$dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		if(mysqli_num_rows($result) == 0){
+			return "null";
+		} else {
+			return $dates[0]["date"];
+		}
+	}if($skip == "+5"){
+		include("connection.php");
+		$query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date ASC limit 5;";
+		//echo($query);
+		$result = mysqli_query($con, $query);
+		$dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		if(mysqli_num_rows($result) == 0){
+			return "null";
+		} else {
+			return $dates[count($dates)-1]["date"];
+		}
+	}if($skip == "-4"){
+		include("connection.php");
+		$query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date ASC limit 4;";
+		//echo($query);
+		$result = mysqli_query($con, $query);
+		$dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		if(mysqli_num_rows($result) == 0){
+			return "null";
+		} else {
+			return $dates[0]["date"];
+		}
+	}if($skip == "+4"){
+		include("connection.php");
+		$query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date ASC limit 4;";
+		//echo($query);
+		$result = mysqli_query($con, $query);
+		$dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		if(mysqli_num_rows($result) == 0){
+			return "null";
+		} else {
+			return $dates[count($dates)-1]["date"];
+		}
+	}
+}
+
 if(isset($_GET["add_user_id"]) and isset($_GET["event_id"]))	{
 	include("connection.php");	
 	$query = "INSERT INTO user_event (user_id, event_id, present) VALUES (" . $_GET["add_user_id"] . "," . $_GET["event_id"] . ",0);";

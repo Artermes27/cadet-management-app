@@ -1,0 +1,19 @@
+.container {
+  display: grid;
+  grid-template-rows: 15% 85%;
+}
+
+.banner {
+    margin: 0;
+    padding: 10px 0;
+    background-color:#ddd;
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    text-align: center;
+}
+
+.calendar{
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    text-align: center;
+}
