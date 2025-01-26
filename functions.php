@@ -43,7 +43,7 @@ function get_rank($con, $id){
 	}
 }
 
-function get_latest_parade($con)	{
+function get_latest_parade($con)	{//get latest parade for next parade date sugestion on add.php
 	$query = "SELECT date FROM parades ORDER BY date DESC LIMIT 1;";
 	$result = mysqli_query($con, $query);
 	
@@ -53,7 +53,7 @@ function get_latest_parade($con)	{
 	}
 }
 
-function get_parade_date_range($con, $current_date)	{
+function get_parade_date_range($con, $current_date)	{//retreving the next 5 parade dates
 	include("connection.php");
 	$query = "SELECT date FROM parades WHERE date >= '$current_date' ORDER BY date ASC limit 5;";
 	//echo($query);
@@ -70,7 +70,7 @@ function get_parade_date_range($con, $current_date)	{
 	return [$dates, $end_date];
 }
 
-function date_skip_method($con, $current_date, $skip){
+function date_skip_method($con, $current_date, $skip){//retreving the dates for the skip buttons on calendar.php
 	if($skip == "-1"){
 		include("connection.php");
 		$query = "SELECT date FROM parades WHERE date < '$current_date' ORDER BY date DESC limit 1;";
@@ -140,21 +140,48 @@ function date_skip_method($con, $current_date, $skip){
 	}
 }
 
-if(isset($_GET["add_user_id"]) and isset($_GET["event_id"]))	{
+function html_for_parade_on_callendar($con, $parade_date, $user_data){//echo the HTML for the parade on the calendar
+	$query = "SELECT parade_id FROM parades WHERE date = '$parade_date';";
+	$result = mysqli_query($con, $query);
+	$parade = mysqli_fetch_assoc($result);
+	$parade_id = $parade["parade_id"];
+	$query = "SELECT events.* FROM events, user_event WHERE parade_id = $parade_id and events.event_id = user_event.event_id and user_event.user_id = " . $user_data["user_id"] . " ORDER BY events.event_start;";
+	$result = mysqli_query($con, $query);
+	$events = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+	$event_count = 0;
+	$event_html = "<div class=\"event\"><h2>" . $parade_date . "</h2></div>";
+	if(count($events) == 0){//the user has no events on this parade night
+		$event_html = $event_html . "<div class=\"event\"><a>you have no events on this parade night</a></div>";
+	}else{//the user has events on this parade night
+		while($event_count < count($events)){
+			//giving the owner the option to modify their event
+			if($user_data["user_id"] == $events[$event_count]["owner"] or $user_data["admin"] == 1){
+				$event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br><a href=\"event.php?parade_id=" . $parade_id . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a></div>";
+			} else {//non owner so they can only view the event
+				$event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br><a>" . $events[$event_count]["event_name"] . "</a></div>";
+			}
+			$event_count = $event_count + 1;
+		}
+	}
+	return $event_html;
+}
+
+if(isset($_GET["add_user_id"]) and isset($_GET["event_id"])){//search method for adding a user to an event used by search.js for searching for user by first name on event.php
 	include("connection.php");	
 	$query = "INSERT INTO user_event (user_id, event_id, present) VALUES (" . $_GET["add_user_id"] . "," . $_GET["event_id"] . ",0);";
 	//echo $query;
 	$result = mysqli_query($con, $query);
 }
 
-if(isset($_GET["remove_user_id"]) and isset($_GET["event_id"]))	{
+if(isset($_GET["remove_user_id"]) and isset($_GET["event_id"])){//search method for removing a user from an event used by search.js for searching for user by first name on event.php
 	include("connection.php");	
 	$query = "DELETE FROM user_event WHERE user_id=" . $_GET["remove_user_id"] . " AND event_id=" . $_GET["event_id"]. ";";
 	//echo $query;
 	$result = mysqli_query($con, $query);
 }
 
-if(isset($_GET["search_first_name"]) != "" and isset($_GET["event_id"]) != ""){
+if(isset($_GET["search_first_name"]) != "" and isset($_GET["event_id"]) != ""){//search method for adding a user to an event used by add.js for searching for user by first name on event.php
 	include("connection.php");
 	//echo("search for first name");
 	$first_name = $_GET["search_first_name"];
@@ -180,7 +207,7 @@ if(isset($_GET["search_first_name"]) != "" and isset($_GET["event_id"]) != ""){
 	}
 }
 
-if(isset($_GET["search_first_name_delete"]) != "" and isset($_GET["event_id"]) != ""){
+if(isset($_GET["search_first_name_delete"]) != "" and isset($_GET["event_id"]) != ""){//search method for removing a user from an event used by search.js for searching for user by first name on event.php
 	include("connection.php");
 	//echo("search for first name");
 	$first_name = $_GET["search_first_name_delete"];
@@ -208,7 +235,7 @@ if(isset($_GET["search_first_name_delete"]) != "" and isset($_GET["event_id"]) !
 	}
 }
 
-if(isset($_GET["search_first_name_owner"])){
+if(isset($_GET["search_first_name_owner"])){//search method for creating an event used by add.js for searching for user by first name
 	$name = $_GET["search_first_name_owner"];
 	include("connection.php");
 	$query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "';";
@@ -233,7 +260,7 @@ if(isset($_GET["search_first_name_owner"])){
 	}
 }
 
-if(isset($_GET["search_first_name_user"])){
+if(isset($_GET["search_first_name_user"])){//search method for user's first name used by add.js for searching for user by first name
 	$name = $_GET["search_first_name_user"];
 	include("connection.php");
 	$query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "';";
@@ -258,7 +285,7 @@ if(isset($_GET["search_first_name_user"])){
 	}
 }
 
-if(isset($_GET["search_last_name_user"])){
+if(isset($_GET["search_last_name_user"])){//search method for user's last name used by add.js for searching for user by last name
 	$name = $_GET["search_last_name_user"];
 	include("connection.php");
 	$query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE last_name REGEXP '" . str_replace('"', "", $name) . "';";
@@ -283,7 +310,7 @@ if(isset($_GET["search_last_name_user"])){
 	}
 }
 
-if(isset($_GET["search_equipment_name"])){
+if(isset($_GET["search_equipment_name"])){//search method for equipment name used by add.js for searching for equipment by name
 	$name = $_GET["search_equipment_name"];
 	include("connection.php");
 	$query = "SELECT * FROM equipment WHERE name REGEXP '" . str_replace('"', "", $name) . "';";
@@ -307,7 +334,7 @@ if(isset($_GET["search_equipment_name"])){
 	}
 }
 
-if(isset($_GET["search_equipment_location"])){
+if(isset($_GET["search_equipment_location"])){//search method used by add.js for searching for equipment by location
 	$name = $_GET["search_equipment_location"];
 	include("connection.php");
 	$query = "SELECT * FROM equipment WHERE location REGEXP '" . str_replace('"', "", $name) . "';";
@@ -331,7 +358,7 @@ if(isset($_GET["search_equipment_location"])){
 	}
 }
 
-if(isset($_GET["equipment_id_info_dump"])){
+if(isset($_GET["equipment_id_info_dump"])){//retreve all information about a piece of equipment from its id used by add.php to populate the modify equipment form
 	include("connection.php");
 	$query = "SELECT * FROM equipment WHERE equipment_id = " . $_GET["equipment_id_info_dump"] . ";";
 	$result = mysqli_query($con, $query);
@@ -343,7 +370,7 @@ if(isset($_GET["equipment_id_info_dump"])){
 	}
 }
 
-if(isset($_GET["user_id_info_dump"])){
+if(isset($_GET["user_id_info_dump"])){//retreve all user data for a user_id used by add.php to populate the modify user form
 	include("connection.php");
 	$query = "SELECT * FROM users WHERE user_id = " . $_GET["user_id_info_dump"] . ";";
 	$result = mysqli_query($con, $query);
@@ -356,8 +383,7 @@ if(isset($_GET["user_id_info_dump"])){
 	}
 }
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-	//var_dump($_POST);
+if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the database from add.php
 	if(isset($_POST["add_new_user"]) and $_POST["add_new_user"] == "1"){
 		include("connection.php");
 		echo("add new user process");
@@ -466,5 +492,3 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		}
 	}
 }
-
-//var_dump($_POST);

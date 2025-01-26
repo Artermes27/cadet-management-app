@@ -15,7 +15,7 @@
         <div class="right">
             <?php 
             if($user_data["admin"] == "1")  {
-                echo("<a data-active=\"my-profile\" href=\"add.php\">add parade/event/acount/equipment</a>");
+        echo("<a data-active=\"my-profile\" href=\"add.php\">add parade/event/acount/equipment</a>");
             }
             ?>
             <a data-active="my-profile" href="profile.php">my profile</a>

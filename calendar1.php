@@ -4,18 +4,21 @@ session_start();
 	include("connection.php");
 	include("functions.php");
 
-	$user_data = check_login($con);
+  $user_data = check_login($con);
+  //checking for the current date variable from the previous page
   if(isset($_GET["current_date"]) and $_GET["current_date"] != "null") {
     $current_date = $_GET["current_date"];
   } else {
     $current_date = "2025-01-24";
   }
+  //getting the parade dates for the current date
   $temp = get_parade_date_range($con, $current_date);
   $parade_dates = $temp[0];
   $end_date = $temp[1];
   //defining the variables for the skip forwards and back in the calendar
   $min_add = date_skip_method($con, $current_date, "+1");
   $min_subtract = date_skip_method($con, $current_date, "-1");
+  //skip is different for admin because they have the admin panle on the left which take up a parade slot
   if($user_data["admin"] == 0) {
     $max_add = date_skip_method($con, $current_date, "+5");
     $max_subtract = date_skip_method($con, $current_date, "-5");
@@ -52,20 +55,19 @@ session_start();
     </div>
     <div class="calendar">
       <div class="parade1">
-        <input hidden value="" type="date" name="parade1_date" id="parade1_date">
-        <h2><?php echo($parade_dates[0]["date"]);?></h2>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[0]["date"], $user_data))?>
       </div>
       <div class="parade2">
-        <h2><?php echo($parade_dates[1]["date"]);?></h2>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[1]["date"], $user_data))?>
       </div>
       <div class="parade3">
-        <h2><?php echo($parade_dates[2]["date"]);?></h2>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[2]["date"], $user_data))?>
       </div>
       <div class="parade4">
-        <h2><?php echo($parade_dates[3]["date"]);?></h2>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[3]["date"], $user_data))?>
       </div>
       <div class="parade5">
-        <h2><?php echo($parade_dates[4]["date"]);?></h2>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[4]["date"], $user_data))?>
       </div>
     </div>
   </div>
