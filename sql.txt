@@ -1,0 +1,88 @@
+CREATE TABLE `users` (
+  `user_id` int unsigned NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `first_name` tinytext NOT NULL,
+  `last_name` tinytext NOT NULL,
+  `DOB` date NOT NULL,
+  `gender` tinytext NOT NULL,
+  `rank` varchar(255) NOT NULL,
+  `active` bit NOT NULL
+);
+
+
+CREATE TABLE `events` (
+  `event_id` int unsigned NOT NULL,
+  `parade_id` int unsigned NOT NULL,
+  `event_type` tinytext NOT NULL,
+  `event_name` tinytext NOT NULL,
+  `event_start` time NOT NULL,
+  `event_end` time NOT NULL,
+  `request_equipment_id` int NOT NULL,
+  `final_aproval` bit NOT NULL COMMENT '0 = not aproved, 1 = aproved'
+);
+
+
+CREATE TABLE `parades` (
+  `parade_id` int NOT NULL,
+  `date` date NOT NULL,
+  `start` time NOT NULL,
+  `end` time NOT NULL
+);
+
+
+CREATE TABLE `user_event` (
+  `user_id` int NOT NULL,
+  `event_id` int NOT NULL,
+  `present` bit NOT NULL COMMENT '0 = absent, 1 = present'
+);
+
+
+CREATE TABLE `equipment` (
+  `equipment_id` int NOT NULL,
+  `name` tinytext NOT NULL,
+  `description` text NOT NULL,
+  `location` text NOT NULL
+);
+
+
+CREATE TABLE `equipment_requests` (
+  `request_equipment_id` int NOT NULL,
+  `equipment_id` int NOT NULL,
+  `aproved` bit NOT NULL
+);
+
+
+ALTER TABLE `events`
+ADD PRIMARY KEY `event_id_parade_id` (`event_id`, `parade_id`);
+
+
+ALTER TABLE `parades`
+ADD PRIMARY KEY `parade_id` (`parade_id`);
+
+
+ALTER TABLE `user_event`
+ADD PRIMARY KEY `user_id_event_id` (`user_id`, `event_id`);
+
+
+ALTER TABLE `users`
+ADD PRIMARY KEY `user_id` (`user_id`);
+
+
+ALTER TABLE `events`
+ADD UNIQUE `request_equipment_id` (`request_equipment_id`);
+
+
+ALTER TABLE `equipment_requests`
+ADD FOREIGN KEY (`request_equipment_id`) REFERENCES `events` (`request_equipment_id`)
+
+
+ALTER TABLE `events`
+ADD FOREIGN KEY (`parade_id`) REFERENCES `parades` (`parade_id`)
+
+
+ALTER TABLE `user_event`
+ADD FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`)
+
+
+
