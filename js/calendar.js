@@ -1,21 +1,31 @@
-function showResutsSearchForOwner(str, event_id){
+function showResutsSearchForOwner(str, paradeID, event_id) {
   //console.log(str);
+  var id = "livesearch_owner[" + paradeID + "," + event_id + "]";
   if (str.length==0) {
-    document.getElementById("livesearch_owner").innerHTML="";
-    document.getElementById("livesearch_owner").style.border="0px";
+    document.getElementById(id).innerHTML="";
+    document.getElementById(id).style.border="0px";
     return;
   }
   var xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
-      document.getElementById("livesearch_owner").innerHTML=this.responseText;
-      document.getElementById("livesearch_owner").style.border="1px solid #A5ACB2";
+      console.log("functions.php?search_first_name_owner_calendar="+str+"&event_id="+event_id+"&parade_id="+paradeID);
+      document.getElementById(id).innerHTML=this.responseText;
+      document.getElementById(id).style.border="1px solid #A5ACB2";
     }
   }
-  xmlhttp.open("GET","functions.php?search_first_name_owner="+str,true);
+  xmlhttp.open("GET","functions.php?search_first_name_owner_calendar="+str+"&event_id="+event_id+"&parade_id="+paradeID,true);
   xmlhttp.send();
 }
 
+function resultHasBeenClickedOwner(user_id, paradeID, event_id) {
+  var owner_id_tag = "owner[" + paradeID + "," + event_id + "]";
+  var id = "livesearch_owner[" + paradeID + "," + event_id + "]";
+  document.getElementById(id).innerHTML="";
+  document.getElementById(id).style.border="0px";
+  document.getElementById(owner_id_tag).value = user_id;
+  return;
+}
 
 //false means every item is hidden, an id code mans that id codes more infomation is showing
 var overall = false;

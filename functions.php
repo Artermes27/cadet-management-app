@@ -99,7 +99,7 @@ function date_skip_method($con, $current_date, $skip){//retreving the dates for 
 		}
 	}if($skip == "-5"){
 		include("connection.php");
-		$query = "SELECT date FROM parades WHERE date < '$current_date' ORDER BY date ASC limit 5;";
+		$query = "SELECT date FROM parades WHERE date < '$current_date' ORDER BY date DESC limit 5;";
 		//echo($query);
 		$result = mysqli_query($con, $query);
 		$dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -121,7 +121,7 @@ function date_skip_method($con, $current_date, $skip){//retreving the dates for 
 		}
 	}if($skip == "-4"){
 		include("connection.php");
-		$query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date ASC limit 4;";
+		$query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date DESC limit 4;";
 		//echo($query);
 		$result = mysqli_query($con, $query);
 		$dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -178,7 +178,7 @@ function html_for_parade_on_callendar($con, $parade_date, $user_data, $parade_co
 
 function html_for_admin_page_on_callandar($con, $parade_dates){//generate the HTML for the admin panle on the calendar i.e. the hidden items with uneque IDs
 	$parade_count = 0;
-	$all_html = "<h2>admin panle</h2>";
+	$all_html = "<h2>admin panel</h2>";
 	//loop through each parade
 	while($parade_count < count($parade_dates)){
 		//retreve the parade_id of the current parade
@@ -212,7 +212,7 @@ function html_for_admin_page_on_callandar($con, $parade_dates){//generate the HT
 			<form action = \"functions.php\" method = \"POST\">
 				<input hidden value=\"" . $event["parade_id"] . "\"type=\"text\" name=\"parade_id\" id=\"parade_id\">
 				<input hidden value=\"" . $event["event_id"] . "\" type=\"text\" name=\"event_id\" id=\"event_id\">
-				<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"owner\" id=\"owner\">
+				<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"owner\" id=\"owner[" . $event["parade_id"]. "," . $event["event_id"] . "]\">
 				<label>event type</label>
 				<input value=\"" . $event["event_type"] . "\" type=\"text\" name=\"event_type\" id=\"event_type\"><br>
 				<label>event name</label>
@@ -222,7 +222,7 @@ function html_for_admin_page_on_callandar($con, $parade_dates){//generate the HT
 				<label>event end</label>
 				<input value=\"" . $event["event_end"] . "\" type=\"time\" name=\"event_end\" id=\"event_end\"><br>
 				<label>event owner</label>
-				<input type=\"text\" name=\"event_owner\" id=\"event_owner\" onkeyup=\"showResutsSearchForOwner(this.value" . ", ". $event["event_id"] .")\">
+				<input type=\"text\" name=\"event_owner\" id=\"event_owner\" onkeyup=\"showResutsSearchForOwner(this.value" . ", ". $event["parade_id"] . ", ". $event["event_id"]. ")\">
 				<div class=\"livesearch\" id=\"livesearch_owner[". $event["parade_id"] . "," . $event["event_id"] . "]\"></div>
 				<button>submit</button>
 			</form>
@@ -322,6 +322,33 @@ if(isset($_GET["search_first_name_owner"])){//search method for creating an even
 				$output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
 			}	else	{
 				$output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
+			}
+		}
+		echo $output;
+		return $result;
+	}	else{
+		//their are no symalar names
+		return "<a>no names match your prompt</a>";
+	}
+}
+
+if(isset($_GET["search_first_name_owner_calendar"])){//search method for creating an event used by add.js for searching for user by first name
+	$name = $_GET["search_first_name_owner_calendar"];
+	$parade_id = $_GET["parade_id"];
+	$event_id = $_GET["event_id"];
+	include("connection.php");
+	$query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "';";
+	$result = mysqli_query($con, $query);
+	if(mysqli_num_rows($result) > 0)	{
+		//their are names symalar
+		//print_r(mysqli_fetch_all($result));
+		$output = "";
+		while($cadet = mysqli_fetch_assoc($result)){
+			//echo $output;
+			if($output == ""){
+				$output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . "," . $parade_id . "," . $event_id .  ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
+			}	else	{
+				$output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . "," . $parade_id . "," . $event_id .  ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
 			}
 		}
 		echo $output;

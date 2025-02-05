@@ -41,6 +41,12 @@ form {
     font-size: 25px;
 }
 
+.input-error-handeling {
+    grid-column: span 2;
+    font-size: 20px;
+    background-color: #d11717;
+}
+
 /*lables and inputs*/
 h4 {
     grid-column: span 2;
@@ -75,8 +81,13 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    text-decoration: solid;
 }
 
 button:hover {
     background-color: #4c6baf;
+}
+
+button:disabled {
+    color: red;
 }
