@@ -18,6 +18,27 @@
     text-align: center;
 }
 
+.event_not_aproved{
+    display: inline-block;
+    background-color: rgb(255, 117, 117);
+    margin: 3px;
+    width: 98%;
+}
+
+.event_aproved{
+    display: inline-block;
+    background-color: rgb(131, 255, 131);
+    margin: 3px;
+    width: 98%;
+}
+
+.event_aproval_requested{
+    display: inline-block;
+    background-color:rgb(255, 198, 93);
+    margin: 3px;
+    width: 98%;
+}
+
 .event{
     display: inline-block;
     background-color: #ddd;
@@ -39,4 +60,24 @@ button {
 
 button:hover {
     background-color: #4c6baf;
+}
+
+label {
+    font-weight: bold;
+    line-height: 2;
+}
+
+input, select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.modify_event_form {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 10px;
+    padding-left: 10px;
+    padding-right:10px;
 }

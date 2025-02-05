@@ -144,7 +144,7 @@ function date_skip_method($con, $current_date, $skip){//retreving the dates for 
 	}
 }
 
-function html_for_parade_on_callendar($con, $parade_date, $user_data, $parade_count){//echo the HTML for the parade on the calendar
+function html_for_parade_on_callendar($con, $parade_date, $user_data){//echo the HTML for the parade on the calendar
 	$query = "SELECT parade_id FROM parades WHERE date = '$parade_date';";
 	$result = mysqli_query($con, $query);
 	$parade = mysqli_fetch_assoc($result);
@@ -163,8 +163,15 @@ function html_for_parade_on_callendar($con, $parade_date, $user_data, $parade_co
 	}else{//the user has events on this parade night
 		while($event_count < count($events)){
 			//giving the owner the option to modify their event
+			if($events[$event_count]["final_aproval"] == 0){//the event is not aproved
+				$style_class = "event_not_aproved";
+			}elseif($events[$event_count]["final_aproval"] == 1){//the event is aproved
+				$style_class = "event_aproved";
+			}elseif($events[$event_count]["final_aproval"] == 2){//the event is pending aproval
+				$style_class = "event_aproval_requested";
+			}
 			if($user_data["admin"] == 1){//admin so add buttons to activate the event specific element of the admin panle
-				$event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br><a>" . $events[$event_count]["event_name"] . "</a><br><button id=\"R" . $parade_count . "I" . $event_count . "\">click for edit page</button></div>";
+				$event_html = $event_html . "<div class=\"" . $style_class . "\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br><a>" . $events[$event_count]["event_name"] . "</a><br><button onclick=\"populateAdminEditEventForm('" . $events[$event_count]["parade_id"] . "', '" . $events[$event_count]["event_id"] . "', '" . $events[$event_count]["event_type"] . "', '" . $events[$event_count]["event_name"] . "', '" .  $events[$event_count]["event_start"] . "', '" . $events[$event_count]["event_end"] . "', '" . $events[$event_count]["owner"] . "', '" .  $events[$event_count]["final_aproval"] . "')\">click for edit page</button></div>";
 			}elseif($user_data["user_id"] == $events[$event_count]["owner"]){
 				$event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br><a href=\"event.php?parade_id=" . $parade_id . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a></div>";
 			}else {//non owner so they can only view the event
@@ -176,67 +183,38 @@ function html_for_parade_on_callendar($con, $parade_date, $user_data, $parade_co
 	return $event_html;
 }
 
-function html_for_admin_page_on_callandar($con, $parade_dates){//generate the HTML for the admin panle on the calendar i.e. the hidden items with uneque IDs
-	$parade_count = 0;
-	$all_html = "<h2>admin panel</h2>";
-	//loop through each parade
-	while($parade_count < count($parade_dates)){
-		//retreve the parade_id of the current parade
-		$query = "SELECT parade_id FROM parades WHERE date = '" . $parade_dates[$parade_count]["date"] . "';";
-		$result = mysqli_query($con, $query);
-		$parade_id = mysqli_fetch_assoc($result)["parade_id"];
-		//retreve the event_ids of the events on the parade
-		$query = "SELECT event_id FROM events WHERE parade_id = " . $parade_id . " ORDER BY event_start;";
-		$result = mysqli_query($con, $query);
-		//initialise an array of events to display
-		$to_display = array();
-		//populate the array with the event ids of the events to display
-		while($event = mysqli_fetch_assoc($result)){
-			$to_display[] = $event["event_id"];
-		}
-		//create the $max_events variable to store the number of events to display
-		$max_events = count($to_display);
-		//create the $event_count variable to store the number of events displayed so far in the current parade
-		//create the $parade_html variable to store the HTML output for the current parade
-		$event_count = 0;
-		$parade_html = "";
-		while($event_count < $max_events){
-			//select the event with the wanted event_id
-			$query = "SELECT * FROM events WHERE event_id = " . $to_display[0] . ";";
-			$result = mysqli_query($con, $query);
-			$event = mysqli_fetch_assoc($result);
-			//remove the event_id from the array
-			$to_display = array_slice($to_display, 1);
-			$event_html = "<div class=\"R" . $parade_count . "M" . $event_count . "\"hidden>
-			<a href=\"event.php?parade_id=" . $event["parade_id"] . "&event_id=" . $event["event_id"] . "\">click for edit page</a><br>
-			<form action = \"functions.php\" method = \"POST\">
-				<input hidden value=\"" . $event["parade_id"] . "\"type=\"text\" name=\"parade_id\" id=\"parade_id\">
-				<input hidden value=\"" . $event["event_id"] . "\" type=\"text\" name=\"event_id\" id=\"event_id\">
-				<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"owner\" id=\"owner[" . $event["parade_id"]. "," . $event["event_id"] . "]\">
-				<label>event type</label>
-				<input value=\"" . $event["event_type"] . "\" type=\"text\" name=\"event_type\" id=\"event_type\"><br>
-				<label>event name</label>
-				<input value=\"" . $event["event_name"] . "\" type=\"text\" name=\"event_name\" id=\"event_name\"><br>
-				<label>event start</label>
-				<input value=\"" . $event["event_start"] . "\" type=\"time\" name=\"event_start\" id=\"event_start\"><br>
-				<label>event end</label>
-				<input value=\"" . $event["event_end"] . "\" type=\"time\" name=\"event_end\" id=\"event_end\"><br>
-				<label>event owner</label>
-				<input type=\"text\" name=\"event_owner\" id=\"event_owner\" onkeyup=\"showResutsSearchForOwner(this.value" . ", ". $event["parade_id"] . ", ". $event["event_id"]. ")\">
-				<div class=\"livesearch\" id=\"livesearch_owner[". $event["parade_id"] . "," . $event["event_id"] . "]\"></div>
-				<button>submit</button>
-			</form>
-			</div>";
-			//append the event_html to the parade_html then add one to the event_count
-			$parade_html = $parade_html . $event_html;
-			$event_count = $event_count + 1;
-		}
-		//append the parade_html to the all_html then add one to the parade_count
-		$all_html = $all_html . $parade_html;
-		$parade_count = $parade_count + 1;
-	}
-	//return all_html
-	return $all_html;
+function html_for_admin_page_on_callandar($con){//generate the general form for the admin panle on calendar.php
+	echo("<h2>admin panel</h2>\n");
+	echo("<div>\n");
+	echo("<a>click for edit page</a><br>");
+	echo("<div id=\"curent_event_owner_full_name\"></div>\n");
+	echo("<form action = \"functions.php\" method = \"POST\">\n");
+	echo("<div class=\"modify_event_form\">\n");
+	echo("<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">\n");
+	echo("<input hidden value=\"\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n");
+	echo("<input hidden value=\"\" type=\"text\" name=\"event_id\" id=\"event_id\">\n");
+	echo("<input hidden value=\"\" type=\"text\" name=\"owner_id\" id=\"owner_id\">\n");
+	echo("<label>event type</label>\n");
+	echo("<input type=\"text\" name=\"event_type\" id=\"event_type\">\n");
+	echo("<label>event name</label>\n");
+	echo("<input type=\"text\" name=\"event_name\" id=\"event_name\">\n");
+	echo("<label>event start</label>\n");
+	echo("<input type=\"time\" name=\"event_start\" id=\"event_start\">\n");
+	echo("<label>event end</label>\n");
+	echo("<input type=\"time\" name=\"event_end\" id=\"event_end\">\n");
+	echo("<label>aproved</label>\n");
+	echo("<select id=\"final_aproval\" name=\"final_aproval\">\n");
+	echo("<option value=\"0\">not-aproved</option>\n");
+	echo("<option value=\"1\">aproved</option>\n");
+	echo("<option value=\"2\">aproval requested</option>\n");
+	echo("</select>\n");
+	echo("<label>event owner</label>\n");
+	echo("<input type=\"text\" name=\"event_owner_search_box\" id=\"event_owner_search_box\" onkeyup=\"showResutsSearchForOwner(this.value)\">\n");
+	echo("<div class=\"livesearch\" id=\"livesearch_owner\"></div>\n");
+	echo("<button>submit</button>\n");
+	echo("</div>\n");
+	echo("</form>\n");
+	echo("</div>\n");
 }
 
 if(isset($_GET["add_user_id"]) and isset($_GET["event_id"])){//search method for adding a user to an event used by search.js for searching for user by first name on event.php
@@ -589,5 +567,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 			$result = mysqli_query($con, $query);
 			header("Location: add.php");
 		}
+	}if(isset($_POST["request_approval"]) and $_POST["request_approval"] == "1"){
+		include("connection.php");
+		$event_id = $_POST["event_id"];
+		$parade_id = $_POST["parade_id"];
+		$query = "UPDATE events SET final_aproval = 2 WHERE event_id = " . $event_id;
+		echo($query);
+		$result = mysqli_query($con, $query);
+		echo("event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
+		header("location: event.php?parade_id=" . $parade_id . "&event_id=" . $event_id . ";");
+	}if(isset($_POST["modify_event_details"]) and $_POST["modify_event_details"] == "1"){
+		include("connection.php");
+		$parade_id = $_POST["parade_id"];
+		$event_id = $_POST["event_id"];
+		$event_type = $_POST["event_type"];
+		$event_name = $_POST["event_name"];
+		$event_start = $_POST["event_start"];
+		$event_end = $_POST["event_end"];
+		$owner = $_POST["owner_id"];
+		$final_aproval = $_POST["final_aproval"];
+		$query = "UPDATE events SET event_type = '" . $event_type . "', event_name = '" . $event_name . "', event_start = '" . $event_start . "', event_end = '" . $event_end . "', owner = " . $owner . ", final_aproval = " . $final_aproval . " WHERE event_id = " . $event_id;
+		echo($query);
+		$result = mysqli_query($con, $query);
+		header("location: calendar1.php");
 	}
 }

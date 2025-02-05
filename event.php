@@ -5,16 +5,31 @@ session_start();
 	include("functions.php");
 
 	$user_data = check_login($con);
+
+    function is_event_aproved($con, $event_id){
+        $query = "SELECT final_aproval from events WHERE event_id = " . $event_id . ";";
+        $result = mysqli_query($con, $query);
+        if(mysqli_fetch_assoc($result)["final_aproval"] == "1"){
+            return "aproved";
+        }   else{
+            return "not aproved";
+        }
+    }
+
+    function get_event_name($con, $event_id){
+        $query = "SELECT event_name FROM events WHERE event_id = " . $event_id . ";";
+        $result = mysqli_query($con, $query);
+        return mysqli_fetch_assoc($result)["event_name"];
+    }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="js/search.js"></script>
+    <script src="js/event.js"></script>
 	<title>my Dashbord</title>
 	<link rel="stylesheet" href="css/event-style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
-  <script src="js/event.js"></script>
 </head>
 <body>
     <?php include("includes/nav.php");?>
@@ -29,7 +44,7 @@ session_start();
             </div>
         </div>
         <div class="right-side">
-            <h1>lesson x</h1><h1></h1><h1></h1><h1></h1>
+            <h1><?php echo(get_event_name($con, $user_data["event_id"]));?></h1><h1></h1><h1></h1><h1></h1>
             <div class=register-box-all>
                 <h4>register</h4>
                 <?php
@@ -63,14 +78,14 @@ session_start();
                 echo("<div class=\"add-cadet-to-register\">\n");
                 ?><form method="post" action="<?php $_SERVER["PHP_SELF"]; ?>"><?php
                 //echo("<input type=\"text\" placeholder=\"enter cadets name here\"></input><br>\n");
-                echo("<input style=\"width: 180px;\" placeholder=\"add a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name\" value=\"\" onkeyup=\"showResult(this.value, 'search_first_name', '" . "0" . "')\"><br>\n");
+                echo("<input style=\"width: 180px;\" placeholder=\"add a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name\" value=\"\" onkeyup=\"showResult(this.value, 'search_first_name', '" . $user_data["event_id"] . "')\"><br>\n");
                 echo("<div id=\"livesearch\"></div>");
                 echo("</form>\n");
                 echo("</div>\n");
                 //printing the form for revmoing a cadets
                 echo("<div class=\"remove-cadet-from-register\">\n");
                 ?><form method="post" action="<?php $_SERVER["PHP_SELF"]; ?>"><?php
-                echo("<input style=\"width: 180px;\" placeholder=\"remove a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name_delete\" value=\"\" onkeyup=\"showResultDelete(this.value, 'search_first_name_delete', '" . "0" . "')\"><br>\n");
+                echo("<input style=\"width: 180px;\" placeholder=\"remove a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name_delete\" value=\"\" onkeyup=\"showResultDelete(this.value, 'search_first_name_delete', '" . $user_data["event_id"] . "')\"><br>\n");
                 echo("<div id=\"livesearch_delete\"></div>");
                 echo("</form>\n");
                 echo("</div>\n");
@@ -97,6 +112,7 @@ session_start();
                     foreach($difference as $id => $present) {
                         $query = "update user_event set present = " . $present . " where user_id = " . $id . " and event_id = " . $user_data["event_id"] . ";";
                         mysqli_query($con, $query);
+                        echo($query);
                     }
                     //find a better way to do this i.e. refreshing is slow
                     header("refresh:0");
@@ -108,6 +124,13 @@ session_start();
             </div>
             <div class="status">
                 <h4>this is the section to show approval status</h4>
+                <a><?php echo(is_event_aproved($con, $user_data["event_id"]));?></a>
+                <form action="functions.php" method="POST">
+                    <input name="request_approval" id="request_approval" value="1" hidden></input>
+                    <input name="event_id" id="event_id" value=<?php echo("\"" . $user_data["event_id"] . "\"");?> hidden></input>
+                    <input name="parade_id" id="parade_id" value=<?php echo("\"" . $user_data["parade_id"] . "\"");?> hidden></input>
+                    <button id="request_approval_submit">request approval</button>
+                </form>
             </div>
             <div class="equipment-requests">
                 <h4>equipment requests displayed here</h4>

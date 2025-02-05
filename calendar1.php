@@ -58,24 +58,24 @@ session_start();
       <div class="parade1">
         <?php 
         if($user_data["admin"] == 1) {
-          echo(html_for_admin_page_on_callandar($con, $parade_dates));
+          echo(html_for_admin_page_on_callandar($con));
         } else {
-          echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count));
+          echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data));
           $output_count = $output_count + 1;
         }
         ?>
       </div>
       <div class="parade2">
-        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count)); $output_count = $output_count + 1;?>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data)); $output_count = $output_count + 1;?>
       </div>
       <div class="parade3">
-        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count)); $output_count = $output_count + 1;?>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data)); $output_count = $output_count + 1;?>
       </div>
       <div class="parade4">
-        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count)); $output_count = $output_count + 1;?>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data)); $output_count = $output_count + 1;?>
       </div>
       <div class="parade5">
-        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data, $output_count)); $output_count = $output_count + 1;?>
+        <?php echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data)); $output_count = $output_count + 1;?>
       </div>
     </div>
   </div>
