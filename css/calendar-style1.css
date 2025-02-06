@@ -19,6 +19,7 @@
 }
 
 .event_not_aproved{
+    border-radius: 10px;
     display: inline-block;
     background-color: rgb(255, 117, 117);
     margin: 3px;
@@ -26,6 +27,7 @@
 }
 
 .event_aproved{
+    border-radius: 10px;
     display: inline-block;
     background-color: rgb(131, 255, 131);
     margin: 3px;
@@ -33,6 +35,7 @@
 }
 
 .event_aproval_requested{
+    border-radius: 10px;
     display: inline-block;
     background-color:rgb(255, 198, 93);
     margin: 3px;
@@ -40,6 +43,7 @@
 }
 
 .event{
+    border-radius: 10px;
     display: inline-block;
     background-color: #ddd;
     margin: 3px;
@@ -60,6 +64,13 @@ button {
 
 button:hover {
     background-color: #4c6baf;
+}
+
+button:disabled {
+    color: red;
+}
+.input_handeling{
+    grid-column: span 2;
 }
 
 label {

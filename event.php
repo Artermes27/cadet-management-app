@@ -9,9 +9,12 @@ session_start();
     function is_event_aproved($con, $event_id){
         $query = "SELECT final_aproval from events WHERE event_id = " . $event_id . ";";
         $result = mysqli_query($con, $query);
-        if(mysqli_fetch_assoc($result)["final_aproval"] == "1"){
+        $final_aproval = mysqli_fetch_assoc($result)["final_aproval"];
+        if($final_aproval == "1"){
             return "aproved";
-        }   else{
+        }else if($final_aproval == "2"){
+            return "awating aproval";
+        }else{
             return "not aproved";
         }
     }
@@ -20,6 +23,17 @@ session_start();
         $query = "SELECT event_name FROM events WHERE event_id = " . $event_id . ";";
         $result = mysqli_query($con, $query);
         return mysqli_fetch_assoc($result)["event_name"];
+    }
+
+    function disable_or_enable_request_aproval_button($con, $event_id){//disable or enable the request aproval button on event.php
+        $query = "SELECT final_aproval FROM events WHERE event_id = $event_id;";
+        $result = mysqli_query($con, $query);
+        $final_aproval = mysqli_fetch_assoc($result)["final_aproval"];
+        if($final_aproval == 1 or $final_aproval == 2){
+            return "disabled";
+        }else{
+            return "enabled";
+        }
     }
 ?>
 
@@ -129,7 +143,7 @@ session_start();
                     <input name="request_approval" id="request_approval" value="1" hidden></input>
                     <input name="event_id" id="event_id" value=<?php echo("\"" . $user_data["event_id"] . "\"");?> hidden></input>
                     <input name="parade_id" id="parade_id" value=<?php echo("\"" . $user_data["parade_id"] . "\"");?> hidden></input>
-                    <button id="request_approval_submit">request approval</button>
+                    <button id="request_approval_submit" <?php echo(disable_or_enable_request_aproval_button($con, $user_data["event_id"]));?>>request approval</button>
                 </form>
             </div>
             <div class="equipment-requests">

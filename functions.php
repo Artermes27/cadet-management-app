@@ -186,7 +186,6 @@ function html_for_parade_on_callendar($con, $parade_date, $user_data){//echo the
 function html_for_admin_page_on_callandar($con){//generate the general form for the admin panle on calendar.php
 	echo("<h2>admin panel</h2>\n");
 	echo("<div>\n");
-	echo("<a>click for edit page</a><br>");
 	echo("<div id=\"curent_event_owner_full_name\"></div>\n");
 	echo("<form action = \"functions.php\" method = \"POST\">\n");
 	echo("<div class=\"modify_event_form\">\n");
@@ -194,24 +193,26 @@ function html_for_admin_page_on_callandar($con){//generate the general form for 
 	echo("<input hidden value=\"\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n");
 	echo("<input hidden value=\"\" type=\"text\" name=\"event_id\" id=\"event_id\">\n");
 	echo("<input hidden value=\"\" type=\"text\" name=\"owner_id\" id=\"owner_id\">\n");
+	echo("<input hidden value=\"\" type=\"text\" name=\"original_aproval\" id=\"original_aproval\">\n");
 	echo("<label>event type</label>\n");
-	echo("<input type=\"text\" name=\"event_type\" id=\"event_type\">\n");
+	echo("<input type=\"text\" name=\"event_type\" id=\"event_type\" onkeyup=\"REGEXCheckEvent(this.value, 'event_type')\">\n");
 	echo("<label>event name</label>\n");
-	echo("<input type=\"text\" name=\"event_name\" id=\"event_name\">\n");
+	echo("<input type=\"text\" name=\"event_name\" id=\"event_name\" onkeyup=\"REGEXCheckEvent(this.value, 'event_name')\">\n");
 	echo("<label>event start</label>\n");
-	echo("<input type=\"time\" name=\"event_start\" id=\"event_start\">\n");
+	echo("<input type=\"time\" name=\"event_start\" id=\"event_start\" onkeyup=\"REGEXCheckEvent(this.value, 'event_start')\">\n");
 	echo("<label>event end</label>\n");
-	echo("<input type=\"time\" name=\"event_end\" id=\"event_end\">\n");
+	echo("<input type=\"time\" name=\"event_end\" id=\"event_end\" onkeyup=\"REGEXCheckEvent(this.value, 'event_end')\">\n");
 	echo("<label>aproved</label>\n");
-	echo("<select id=\"final_aproval\" name=\"final_aproval\">\n");
+	echo("<select id=\"final_aproval\" name=\"final_aproval\" onclick=\"REGEXCheckEvent(this.value, 'final_aproval')\">\n");
 	echo("<option value=\"0\">not-aproved</option>\n");
 	echo("<option value=\"1\">aproved</option>\n");
 	echo("<option value=\"2\">aproval requested</option>\n");
 	echo("</select>\n");
 	echo("<label>event owner</label>\n");
 	echo("<input type=\"text\" name=\"event_owner_search_box\" id=\"event_owner_search_box\" onkeyup=\"showResutsSearchForOwner(this.value)\">\n");
-	echo("<div class=\"livesearch\" id=\"livesearch_owner\"></div>\n");
-	echo("<button>submit</button>\n");
+	echo("<div class=\"input_handeling\" id=\"livesearch_owner\"></div>\n");
+	echo("<div class=\"input_handeling\" id=\"event-input-handeling\"></div>\n");
+	echo("<button class=\"input_handeling\" id=\"add-event-submit\" disabled>submit</button>\n");
 	echo("</div>\n");
 	echo("</form>\n");
 	echo("</div>\n");
@@ -306,7 +307,7 @@ if(isset($_GET["search_first_name_owner"])){//search method for creating an even
 		return $result;
 	}	else{
 		//their are no symalar names
-		return "<a>no names match your prompt</a>";
+		echo "<a>no names match your prompt</a>";
 	}
 }
 
@@ -331,9 +332,9 @@ if(isset($_GET["search_first_name_owner_calendar"])){//search method for creatin
 		}
 		echo $output;
 		return $result;
-	}	else{
+	}else{
 		//their are no symalar names
-		return "<a>no names match your prompt</a>";
+		echo "<a>no names match your prompt</a>";
 	}
 }
 
