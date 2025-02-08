@@ -1,63 +1,95 @@
-ul {list-style-type: none;}
-body {font-family: Verdana, sans-serif;}
-
-/* Month header */
-.month {
-  padding: 30px 25px;
-  width: 100%;
-  background: #1abc9c;
-  text-align: center;
-}
-
-/* Month list */
-.month ul {
-  margin: 0;
-  padding: 0;
-}
-
-.month ul li {
-  color: white;
-  font-size: 20px;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-}
-
-/* Previous button inside month header */
-.month .prev {
-  float: left;
-  padding-top: 10px;
-}
-
-/* Next button */
-.month .next {
-  float: right;
-  padding-top: 10px;
-}
-
-.grid-container {
-  margin: 0;
-  padding: 10px 0;
-  background-color:#ddd;
+.container {
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
+  grid-template-rows: 15% 85%;
 }
 
-.grid-container .grid-item {
-  display:  inline-grid;
-  text-align: center;
-  background-color: #1abc9c;
-  margin-left: 5px;
-  margin-right: 5px;
+.banner {
+    border-radius: 10px;
+    margin-bottom: 5px;
+    padding: 10px 0;
+    background-color:#ddd;
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    text-align: center;
 }
 
-.grid-container .grid-item .event{
-  display:  inline-block;
-  margin-top: 5px;
-  margin-bottom: 50px;
+.calendar{
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    text-align: center;
 }
 
-#more-details-line{
-  display: inline-block;
-  margin-top: 10px;
-  margin-bottom: 10px;
+.event_not_aproved{
+    border-radius: 10px;
+    display: inline-block;
+    background-color: rgb(255, 117, 117);
+    margin: 3px;
+    width: 98%;
+}
+
+.event_aproved{
+    border-radius: 10px;
+    display: inline-block;
+    background-color: rgb(131, 255, 131);
+    margin: 3px;
+    width: 98%;
+}
+
+.event_aproval_requested{
+    border-radius: 10px;
+    display: inline-block;
+    background-color:rgb(255, 198, 93);
+    margin: 3px;
+    width: 98%;
+}
+
+.event{
+    border-radius: 10px;
+    display: inline-block;
+    background-color: #ddd;
+    margin: 3px;
+    width: 98%;
+}
+
+button {
+    grid-column: span 2;
+    margin-top: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #6b86c0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4c6baf;
+}
+
+button:disabled {
+    color: red;
+}
+.input_handeling{
+    grid-column: span 2;
+}
+
+label {
+    font-weight: bold;
+    line-height: 2;
+}
+
+input, select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.modify_event_form {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 10px;
+    padding-left: 10px;
+    padding-right:10px;
 }

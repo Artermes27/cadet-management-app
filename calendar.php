@@ -199,7 +199,7 @@ session_start();
 <html>
 <head>
   <title>my Dashbord</title>
-  <link rel="stylesheet" href="css/calendar-style1.css">
+  <link rel="stylesheet" href="css/calendar-style.css">
   <script src="js/calendar.js"></script>
   <script src="js/event_owner_form_handeling.js"></script>
 </head>

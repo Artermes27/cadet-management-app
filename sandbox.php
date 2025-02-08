@@ -1,5 +1,7 @@
 <?php
-include("functions.php");
-include("connection.php");
-echo(html_for_parade_on_callendar($con, "2025-01-24", 1))
+    session_start();
+	include("connection.php");
+	include("functions.php");
+	$user_data = check_login($con);
+    include("includes/nav.php"); 
 ?>

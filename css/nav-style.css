@@ -13,17 +13,25 @@ nav{
     padding-right: 20px;
     margin-bottom: 10px;
 }
-nav .links{
-    display: flex;
-    width: auto;
-}
+
 nav .left{
     margin-right: auto;
 }
+
 nav .right{
     margin-left: auto;
 }
+
 nav a{
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 35px;
+    transition: background-color 0.3s, colour 0.3;
+    color: black;
+    font-size: 18px;
+}
+
+.highlightable{
     text-decoration: none;
     display: inline-block;
     padding: 10px 35px;
@@ -31,8 +39,68 @@ nav a{
     color: #245990;
     font-size: 18px;
 }
-nav a:hover,
-nav a.active{
+
+.highlightable:hover {
+    background: #245990;
+    color: #fff;
+    border-radius: 3px;
+}
+
+img {
+    border-radius: 50%;
+    height: 38px;
+    width: 38px;
+}
+
+img:hover {
+    border-radius: 50%;
+}
+
+/* Dropdown Button */
+.dropdown-button {
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 35px;
+    transition: background-color 0.3s, colour 0.3;
+    color: #245990;
+    font-size: 18px;
+}
+
+.dropdown-button:hover{
+    background: #245990;
+    color: #fff;
+    border-radius: 3px;
+}
+
+/* the container for the dropdown menu */
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0; 
+    left: auto;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown-container:hover .dropdown-content {
+    display: block;
+}
+
+.logout-button{
+    display: block; 
+    text-align: center;
+}
+
+.logout-button:hover{
     background: #245990;
     color: #fff;
     border-radius: 3px;
