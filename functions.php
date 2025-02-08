@@ -33,16 +33,6 @@ function get_id(){
 	return $_SESSION['user_id'];
 }
 
-function get_rank($con, $id){
-	$query = "SELECT * FROM users Where user_id = '$id' limit 1;";
-	$result = mysqli_query($con, $query);
-	
-	if(mysqli_num_rows($result) > 0)
-	{
-		return mysqli_fetch_assoc($result)["rank"];
-	}
-}
-
 if(isset($_GET["add_user_id"]) and isset($_GET["event_id"])){//search method for adding a user to an event used by search.js for searching for user by first name on event.php
 	include("connection.php");	
 	$query = "INSERT INTO user_event (user_id, event_id, present) VALUES (" . $_GET["add_user_id"] . "," . $_GET["event_id"] . ",0);";

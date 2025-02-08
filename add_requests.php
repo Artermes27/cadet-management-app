@@ -74,7 +74,7 @@
     if(isset($_GET["search_first_name_user"])){//search method for user's first name used by add.js for searching for user by first name
         $name = $_GET["search_first_name_user"];
         include("connection.php");
-        $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "';";
+        $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "' ORDER BY first_name ASC;";
         $result = mysqli_query($con, $query);
         if(mysqli_num_rows($result) > 0)	{
             //their are names symalar
@@ -99,7 +99,7 @@
     if(isset($_GET["search_last_name_user"])){//search method for user's last name used by add.js for searching for user by last name
         $name = $_GET["search_last_name_user"];
         include("connection.php");
-        $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE last_name REGEXP '" . str_replace('"', "", $name) . "';";
+        $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE last_name REGEXP '" . str_replace('"', "", $name) . "' ORDER BY last_name ASC;";
         $result = mysqli_query($con, $query);
         if(mysqli_num_rows($result) > 0)	{
             //their are names symalar

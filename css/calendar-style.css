@@ -22,7 +22,7 @@
 .event_not_aproved{
     border-radius: 10px;
     display: inline-block;
-    background-color: rgb(255, 117, 117);
+    background-color: rgba(255, 105, 105, 0.582);
     margin: 3px;
     width: 98%;
 }
@@ -30,7 +30,7 @@
 .event_aproved{
     border-radius: 10px;
     display: inline-block;
-    background-color: rgb(131, 255, 131);
+    background-color: rgb(157, 241, 157);
     margin: 3px;
     width: 98%;
 }
@@ -38,7 +38,7 @@
 .event_aproval_requested{
     border-radius: 10px;
     display: inline-block;
-    background-color:rgb(255, 198, 93);
+    background-color:rgba(233, 215, 117, 0.952);
     margin: 3px;
     width: 98%;
 }
