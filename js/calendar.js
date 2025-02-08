@@ -9,8 +9,11 @@ function populateAdminEditEventForm(parade_id, event_id, event_type, event_name,
   document.getElementById("owner_id").value = owner_id;
   document.getElementById("final_aproval").value = final_aproval;
   document.getElementById("original_aproval").value = final_aproval;
-  document.getElementById("add-event-submit").disabled = false;
   document.getElementById("event-input-handeling").innerHTML = "";
+  document.getElementById("delete_event_id").value = event_id;
+  document.getElementById("delete_parade_id").value = parade_id;
+  document.getElementById("add-event-submit").disabled = false;
+  document.getElementById("delete-event-submit").disabled = false;
   displayCurrentOwnerOfEvent(owner_id);
   event_array = undefined
   event_feedback = undefined

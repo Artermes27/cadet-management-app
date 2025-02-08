@@ -39,7 +39,7 @@
                     <a>dob:  <?php echo($user_data["DOB"]);?></a>
                     <a>gender:  <?php echo($user_data["gender"]);?></a>
                     <form action="uploads.php" method="post" enctype="multipart/form-data">
-                        <button type="submit" name="submit">change profile photo</button>
+                        <input type="submit" name="submit">change profile photo</input>
                         <input type="file" name="fileToUpload" id="fileToUpload">
                     </form>
                     <a class="logout-button" href="logout.php">logout</a>

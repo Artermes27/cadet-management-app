@@ -104,7 +104,7 @@ session_start();
     if($user_data["admin"] == 1){//admin will see events they are not in | cadets must be in a lesson to see it
       $query = "SELECT events.* FROM events WHERE parade_id =" . $parade["parade_id"] . " ORDER BY events.event_start;";
     }else{
-      $query = "SELECT events.* FROM events, user_event WHERE parade_id =" . $parade["parade_id"] . " and events.event_id = user_event.event_id and user_event.user_id = " . $user_data["user_id"] . " ORDER BY events.event_start;";
+      $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade["parade_id"] . " AND user_event.user_id = " . $user_data["user_id"] . ") OR (events.owner = " . $user_data["user_id"] . " AND parade_id = " . $parade["parade_id"] . ") ORDER BY events.event_start;";
     }
     $result = mysqli_query($con, $query);
     $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -135,40 +135,47 @@ session_start();
     return $event_html;
   }
 
-  function html_for_admin_page_on_callandar($con){//generate the general form for the admin panle on calendar.php
-    echo("<h2>admin panel</h2>\n");
-    echo("<div>\n");
-    echo("<div id=\"curent_event_owner_full_name\"></div>\n");
-    echo("<form action = \"functions.php\" method = \"POST\">\n");
-    echo("<div class=\"modify_event_form\">\n");
-    echo("<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">\n");
-    echo("<input hidden value=\"\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n");
-    echo("<input hidden value=\"\" type=\"text\" name=\"event_id\" id=\"event_id\">\n");
-    echo("<input hidden value=\"\" type=\"text\" name=\"owner_id\" id=\"owner_id\">\n");
-    echo("<input hidden value=\"\" type=\"text\" name=\"original_aproval\" id=\"original_aproval\">\n");
-    echo("<label>event type</label>\n");
-    echo("<input type=\"text\" name=\"event_type\" id=\"event_type\" onkeyup=\"REGEXCheckEvent(this.value, 'event_type')\">\n");
-    echo("<label>event name</label>\n");
-    echo("<input type=\"text\" name=\"event_name\" id=\"event_name\" onkeyup=\"REGEXCheckEvent(this.value, 'event_name')\">\n");
-    echo("<label>event start</label>\n");
-    echo("<input type=\"time\" name=\"event_start\" id=\"event_start\" onkeyup=\"REGEXCheckEvent(this.value, 'event_start')\">\n");
-    echo("<label>event end</label>\n");
-    echo("<input type=\"time\" name=\"event_end\" id=\"event_end\" onkeyup=\"REGEXCheckEvent(this.value, 'event_end')\">\n");
-    echo("<label>aproved</label>\n");
-    echo("<select id=\"final_aproval\" name=\"final_aproval\" onclick=\"REGEXCheckEvent(this.value, 'final_aproval')\">\n");
-    echo("<option value=\"0\">not-aproved</option>\n");
-    echo("<option value=\"1\">aproved</option>\n");
-    echo("<option value=\"2\">aproval requested</option>\n");
-    echo("</select>\n");
-    echo("<label>event owner</label>\n");
-    echo("<input type=\"text\" name=\"event_owner_search_box\" id=\"event_owner_search_box\" onkeyup=\"showResutsSearchForOwner(this.value)\">\n");
-    echo("<div class=\"input_handeling\" id=\"livesearch_owner\"></div>\n");
-    echo("<div class=\"input_handeling\" id=\"event-input-handeling\"></div>\n");
-    echo("<div class=\"input_handeling\" id=\"display_current_owner\"></div>\n");
-    echo("<button class=\"input_handeling\" id=\"add-event-submit\" disabled>submit</button>\n");
-    echo("</div>\n");
-    echo("</form>\n");
-    echo("</div>\n");
+  function html_for_admin_page_on_callandar(){//generate the general form for the admin panle on calendar.php
+    $html = "<div class=\"event\">";
+    $html .= "<h2>admin panel</h2>";
+    $html .= "<div id=\"curent_event_owner_full_name\"></div>";
+    $html .= "<form action=\"functions.php\" method=\"POST\">";
+    $html .= "<div class=\"modify_event_form\">";
+    $html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"parade_id\" id=\"parade_id\">";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"event_id\" id=\"event_id\">";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"owner_id\" id=\"owner_id\">";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"original_aproval\" id=\"original_aproval\">";
+    $html .= "<label>event type</label>";
+    $html .= "<input type=\"text\" name=\"event_type\" id=\"event_type\" onkeyup=\"REGEXCheckEvent(this.value, 'event_type')\">";
+    $html .= "<label>event name</label>";
+    $html .= "<input type=\"text\" name=\"event_name\" id=\"event_name\" onkeyup=\"REGEXCheckEvent(this.value, 'event_name')\">";
+    $html .= "<label>event start</label>";
+    $html .= "<input type=\"time\" name=\"event_start\" id=\"event_start\" onkeyup=\"REGEXCheckEvent(this.value, 'event_start')\">";
+    $html .= "<label>event end</label>";
+    $html .= "<input type=\"time\" name=\"event_end\" id=\"event_end\" onkeyup=\"REGEXCheckEvent(this.value, 'event_end')\">";
+    $html .= "<label>approved</label>";
+    $html .= "<select id=\"final_aproval\" name=\"final_aproval\" onclick=\"REGEXCheckEvent(this.value, 'final_aproval')\">";
+    $html .= "<option value=\"0\">not-aproved</option>";
+    $html .= "<option value=\"1\">aproved</option>";
+    $html .= "<option value=\"2\">aproval requested</option>";
+    $html .= "</select>";
+    $html .= "<label>event owner</label>";
+    $html .= "<input type=\"text\" name=\"event_owner_search_box\" id=\"event_owner_search_box\" onkeyup=\"showResutsSearchForOwner(this.value)\">";
+    $html .= "<div class=\"input_handeling\" id=\"livesearch_owner\"></div>";
+    $html .= "<div class=\"input_handeling\" id=\"event-input-handeling\"></div>";
+    $html .= "<div class=\"input_handeling\" id=\"display_current_owner\"></div>";
+    $html .= "<button class=\"input_handeling\" id=\"add-event-submit\" disabled>submit</button>";
+    $html .= "</div>";
+    $html .= "</form>";
+    $html .= "<form action=\"functions.php\" method=\"POST\">";
+    $html .= "<input hidden value=\"1\" type=\"text\" name=\"delete_event\" id=\"delete_event\">";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_parade_id\" id=\"delete_parade_id\">";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_event_id\" id=\"delete_event_id\">";
+    $html .= "<button class=\"input_handeling\" id=\"delete-event-submit\" style=\"width: 100%;\" disabled>delete event</button>";
+    $html .= "</form>";
+    $html .= "</div>";
+    return $html;
   }  
 
   //checking for the current date variable from the previous page
@@ -224,7 +231,7 @@ session_start();
       <div class="parade1">
         <?php 
         if($user_data["admin"] == 1) {
-          echo(html_for_admin_page_on_callandar($con));
+          echo(html_for_admin_page_on_callandar());
         } else {
           echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data));
           $output_count = $output_count + 1;

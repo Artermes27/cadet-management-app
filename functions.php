@@ -59,55 +59,35 @@ if(isset($_GET["remove_user_id"]) and isset($_GET["event_id"])){//search method 
 
 if(isset($_GET["search_first_name"]) != "" and isset($_GET["event_id"]) != ""){//search method for adding a user to an event used by event.js for searching for user by first name on event.php
 	include("connection.php");
-	//echo("search for first name");
 	$first_name = $_GET["search_first_name"];
-	$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
+	$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE users.user_id NOT IN (SELECT user_event.user_id FROM user_event WHERE user_event.event_id = " . $_GET["event_id"] . ") AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0)	{
-		//their are names symalar
-		//print_r(mysqli_fetch_all($result));
 		$output = "";
 		while($cadet = mysqli_fetch_assoc($result)){
-			//echo $output;
-			if($output == ""){
-				$output = "<script src=\"js/search.js\"></script><a onclick='resultHasBeenClicked(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
-			}	else	{
-				$output = $output . "<a onclick='resultHasBeenClicked(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
-			}
+			$output .= "<script src=\"js/search.js\"></script><a onclick='resultHasBeenClickedAdd(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
 		}
 		echo $output;
-		return $result;
 	}	else{
 		//their are no symalar names
-		return "<a>no names match your prompt</a>";
+		echo "<a>no names match your prompt</a>";
 	}
 }
 
 if(isset($_GET["search_first_name_delete"]) != "" and isset($_GET["event_id"]) != ""){//search method for removing a user from an event used by search.js for searching for user by first name on event.php
 	include("connection.php");
-	//echo("search for first name");
 	$first_name = $_GET["search_first_name_delete"];
-	$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users, user_event WHERE users.first_name REGEXP '" . str_replace('"', "", $first_name) . "' AND user_event.user_id = users.user_id and user_event.event_id=" . $_GET["event_id"] . ";";
+	$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE users.user_id IN (SELECT user_event.user_id FROM user_event WHERE user_event.event_id = " . $_GET["event_id"] . ") AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
 	$result = mysqli_query($con, $query);
-	//echo($query);
 	if(mysqli_num_rows($result) > 0)	{
-		//their are names symalar
-		//print_r(mysqli_fetch_all($result));
-		//echo("hello");
 		$output = "";
 		while($cadet = mysqli_fetch_assoc($result)){
-			//echo $output;
-			if($output == ""){
-				$output = "<script src=\"js/search.js\"></script><a onclick='resultHasBeenClickedDelete(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
-			}	else	{
-				$output = $output . "<a onclick='resultHasBeenClickedDelete(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
-			}
+			$output .= "<script src=\"js/search.js\"></script><a onclick='resultHasBeenClickedDelete(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
 		}
 		echo $output;
-		return $result;
 	}	else{
 		//their are no symalar names
-		return "<a>no names match your prompt</a>";
+		echo "<a>no names match your prompt</a>";
 	}
 }
 
@@ -228,6 +208,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		echo("event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
 		header("location: event.php?parade_id=" . $parade_id . "&event_id=" . $event_id . ";");
 	}if(isset($_POST["modify_event_details"]) and $_POST["modify_event_details"] == "1"){
+		print_r($_POST);
 		include("connection.php");
 		$parade_id = $_POST["parade_id"];
 		$event_id = $_POST["event_id"];
@@ -240,6 +221,35 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$query = "UPDATE events SET event_type = '" . $event_type . "', event_name = '" . $event_name . "', event_start = '" . $event_start . "', event_end = '" . $event_end . "', owner = " . $owner . ", final_aproval = " . $final_aproval . " WHERE event_id = " . $event_id;
 		echo($query);
 		$result = mysqli_query($con, $query);
+		if($_POST["user_id"] == $owner){
+			header("location: event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
+		}else{
+			header("location: calendar.php");
+		}
+	}if(isset($_POST["delete_event"]) and $_POST["delete_event"] == "1"){
+		include("connection.php");
+		$parade_id = $_POST["delete_parade_id"];
+		$event_id = $_POST["delete_event_id"];
+		$query = "DELETE FROM user_event WHERE event_id = " . $event_id;
+		$result = mysqli_query($con, $query);
+		$query = "DELETE FROM events WHERE event_id = " . $event_id;
+		$result = mysqli_query($con, $query);
 		header("location: calendar.php");
+
+	}if(isset($_POST["modify_register"]) and $_POST["modify_register"] == "1"){
+		print_r($_POST);
+		include("connection.php");
+		$event_id = $_POST["event_id"];
+		unset($_POST["event_id"]);
+		$parade_id = $_POST["parade_id"];
+		unset($_POST["parade_id"]);
+		unset($_POST["modify_register"]);
+		print_r($_POST);
+		foreach ($_POST as $key => $value) {
+			$query = "UPDATE user_event SET present = " . $value . " WHERE user_id = " . $key . " AND event_id = " . $event_id . "";
+			echo($query);
+			$result = mysqli_query($con, $query);
+		}
+		header("location: event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
 	}
 }
