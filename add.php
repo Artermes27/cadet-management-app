@@ -39,19 +39,21 @@ session_start();
                     <a>the next parade should be: <?php echo(date("Y-m-d", strtotime($latest . " +7 days")));?></a>
                     <input hidden value="1" type="text" name="add_new_parade" id="add_new_parade">
                     <label>Date</label>
-                    <input type="date" name="date" id="date">
+                    <input type="date" name="date" id="date" onkeyup="REGEXCheckParade(this.value, 'date')">
                     <label>Start time</label>
-                    <input type="time" name="start" id="start">
+                    <input type="time" name="start" id="start" onkeyup="REGEXCheckParade(this.value, 'start')">
                     <label>Finish time</label>
-                    <input type="time" name="end" id="end">
-                    <button>submit</button>
+                    <input type="time" name="end" id="end" onkeyup="REGEXCheckParade(this.value, 'end')">
+                    <label>parade name</label>
+                    <input type="text" name="parade_name" id="parade_name" onkeyup="REGEXCheckParade(this.value, 'parade_name')">
+                    <div id="parade-input-handeling"></div>
+                    <button id="add-parade-submit" disabled>submit</button>
                 </form>
             </div>
             <div class="add-event">
                 <form id="add_new_event" action="functions.php" method="POST">
                     <h4 >add an event</h4>
-                    <label>parade date</label>
-                    <input type="date" name="parade_date" id="parade_date">
+                    <input hidden value="" type="text" name="parade_id" id="parade_id">
                     <input hidden value="1" type="text" name="add_new_event" id="add_new_event">
                     <input hidden value="" type="text" name="owner_id" id="owner_id">
                     <label>event type</label>
@@ -66,6 +68,10 @@ session_start();
                     <input type="text" name="event_owner_search_box" id="event_owner_search_box" onkeyup="showResutsSearchForOwner(this.value)">
                     <div class="input-error-handeling" id="display_current_owner"></div>
                     <div class="livesearch" id="livesearch_owner"></div>
+                    <label>parade</label>
+                    <input value="" type="text" name="parade_id_search_box" id="parade_id_search_box" onkeyup="ShowResultsSearchForParade(this.value)">
+                    <div class="input-error-handeling" id="display_current_parade"></div>
+                    <div class="livesearch" id="livesearch_parade_id"></div>
                     <div class="input-error-handeling" id="event-input-handeling"></div>
                     <button id="add-event-submit" disabled>submit</button>
                 </form>

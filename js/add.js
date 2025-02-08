@@ -36,6 +36,35 @@ function showResutsSearchForUserLastName(str) {//returns search results for a us
       xmlhttp.send();
 }
 
+function ShowResultsSearchForParade(str) {//returns search results for a parade's name in add event form
+  //console.log(str);
+  if (str.length==0) {
+      document.getElementById("livesearch_parade_id").innerHTML="";
+      document.getElementById("livesearch_parade_id").style.border="0px";
+      return;
+    }
+    var xmlhttp=new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function() {
+      if (this.readyState==4 && this.status==200) {
+        document.getElementById("livesearch_parade_id").innerHTML=this.responseText;
+        document.getElementById("livesearch_parade_id").style.border="1px solid #A5ACB2";
+      }
+    }
+    //console.log("add_requests.php?search_parade_name="+str);
+    xmlhttp.open("GET","add_requests.php?search_parade_name="+str,true);
+    xmlhttp.send();
+}
+
+function ResultHasBeenClickedParade(parade_id, parade_date, parade_name) {//returns the parade_id of the parade selected in the add event form
+  //console.log(parade_id);
+  document.getElementById("livesearch_parade_id").innerHTML="";
+  document.getElementById("livesearch_parade_id").style.border="0px";
+  document.getElementById("parade_id_search_box").value = "";
+  document.getElementById("parade_id").value = parade_id;
+  document.getElementById("display_current_parade").innerHTML = "current parade: " + parade_name + " " + parade_date;
+  return;
+}
+
 function resultHasBeenClickedUser(user_id) {//returns the user_id of the user selected in the modify user form
     //console.log(user_id);
     document.getElementById("livesearch_first_name").innerHTML="";
@@ -164,6 +193,62 @@ function returnFeedbackHTMl(obj){//returns the feedback messages in html format 
     }
   }
   return returnHTML;
+}
+
+function REGEXCheckParade(str, input_to_check){//checks the input of the add parade form for errors
+  if (typeof parade_array === 'undefined'){
+    parade_array = {date: 0, start: 0, end: 0, parade_name: 0};
+  }
+  if (typeof parade_feedback === 'undefined'){
+    parade_feedback = {date: "", start: "", end: "", parade_name: ""};
+  }
+  if (input_to_check === "date") {
+    if (!str.match(/^\d{4}-\d{2}-\d{2}$/)) {//checking the input is in the correct date format
+      parade_feedback["date"] = "<a>Invalid date format (YYYY-MM-DD)<a><br>";
+      parade_array["date"] = 0;
+    } else {
+      parade_feedback["date"] = "";
+      parade_array["date"] = 1;
+    }
+  } else if (input_to_check === "start") {
+    if (!str.match(/^\d{2}:\d{2}$/)) {//checking the input is in the correct time format
+      parade_feedback["start"] = "<a>Invalid time format (HH:MM)<a><br>";
+      parade_array["start"] = 0;
+    } else {
+      parade_feedback["start"] = "";
+      parade_array["start"] = 1;
+    }
+  } else if (input_to_check === "end") {
+    if (!str.match(/^\d{2}:\d{2}$/)) {//checking the input is in the correct time format
+      parade_feedback["end"] = "<a>Invalid time format (HH:MM)<a><br>";
+      parade_array["end"] = 0;
+    } else {
+      parade_feedback["end"] = "";
+      parade_array["end"] = 1;
+    }
+  } else if (input_to_check === "parade_name") {
+    if (str.match("^.{255,}$")){//checking the input is less than 255 in length
+      parade_feedback["parade_name"] = "<a>parade name is to long<a><br>";
+      parade_array["parade_name"] = 0;
+    } else if(str === ""){//checking the input isnt empty
+      parade_feedback["parade_name"] = "<a>parade name cant empty<a><br>";
+      parade_array["parade_name"] = 0;
+    } else {
+      parade_feedback["parade_name"] = "";
+      parade_array["parade_name"] = 1;
+    }
+  }
+  if (checkAreAllValuesOne(parade_array) === true){
+    //no error flags so activate the submit button
+    document.getElementById("add-parade-submit").disabled = false;
+    //emptying the input handeling notification div
+    document.getElementById("parade-input-handeling").innerHTML = "";
+  }else{
+    //error flags so deactivate the submit button
+    document.getElementById("add-parade-submit").disabled = true;
+    //populating the feedback box
+    document.getElementById("parade-input-handeling").innerHTML = returnFeedbackHTMl(parade_feedback);
+  }
 }
 
 function REGEXCheckEvent(str, input_to_check){//checks the input of the add event form for errors

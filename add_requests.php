@@ -50,6 +50,26 @@
             echo "<a>no names match your prompt</a>";
         }
     }
+
+    if(isset($_GET["search_parade_name"])){//search method for creating an event used by add.js for searching for user by last name
+        $parade_name = $_GET["search_parade_name"];
+        include("connection.php");
+        $query = "SELECT parade_id, date, parade_name FROM parades WHERE parade_name REGEXP '" . str_replace('"', "", $parade_name) . "';";
+        $result = mysqli_query($con, $query);
+        if(mysqli_num_rows($result) > 0)	{
+            //their are names symalar
+            //print_r(mysqli_fetch_all($result));
+            $output = "";
+            while($parade = mysqli_fetch_assoc($result)){
+                //echo $output;
+                $output .= "<a style=\"background-color:#ddd;\" onclick=\"ResultHasBeenClickedParade('" . $parade["parade_id"] . "', '" . $parade["date"] . "', '" . $parade["parade_name"] . "')\">" . $parade["parade_name"] . "</a><br>";
+            }
+            echo $output;
+        }	else{
+            //their are no symalar names
+            echo "<a>no names match your prompt</a>";
+        }
+    }
     
     if(isset($_GET["search_first_name_user"])){//search method for user's first name used by add.js for searching for user by first name
         $name = $_GET["search_first_name_user"];
