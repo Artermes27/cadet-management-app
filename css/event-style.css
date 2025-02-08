@@ -21,3 +21,56 @@
 .grid-container .right-side .register-box-all .remove-cadet-from-register {
   padding-top: 10px;
 }
+
+.lesson_details{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 10px;
+  padding-left: 10px;
+  padding-right:10px;
+}
+
+.modify_lesson_details{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 10px;
+  padding-left: 10px;
+  padding-right:10px;
+}
+
+.modify_lesson_details .submit_button{
+  grid-column: span 2;
+}
+
+.modify_lesson_details .input_error_handeling{
+  grid-column: span 2;
+}
+
+.modify_lesson_details .display_current_owner{
+  grid-column: span 2;
+}
+
+.modify_lesson_details .livesearch{
+  grid-column: span 2;
+}
+
+button {
+  grid-column: span 2;
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #6b86c0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: solid;
+}
+
+button:hover {
+  background-color: #4c6baf;
+}
+
+button:disabled {
+  color: red;
+}

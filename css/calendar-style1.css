@@ -4,7 +4,8 @@
 }
 
 .banner {
-    margin: 0;
+    border-radius: 10px;
+    margin-bottom: 5px;
     padding: 10px 0;
     background-color:#ddd;
     display: grid;

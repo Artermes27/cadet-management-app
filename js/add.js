@@ -1,30 +1,4 @@
-function showResutsSearchForOwner(str) {
-  //console.log(str);
-  if (str.length==0) {
-    document.getElementById("livesearch_owner").innerHTML="";
-    document.getElementById("livesearch_owner").style.border="0px";
-    return;
-  }
-  var xmlhttp=new XMLHttpRequest();
-  xmlhttp.onreadystatechange=function() {
-    if (this.readyState==4 && this.status==200) {
-      document.getElementById("livesearch_owner").innerHTML=this.responseText;
-      document.getElementById("livesearch_owner").style.border="1px solid #A5ACB2";
-    }
-  }
-  xmlhttp.open("GET","functions.php?search_first_name_owner="+str,true);
-  xmlhttp.send();
-}
-
-function resultHasBeenClickedOwner(user_id) {
-    //console.log(user_id);
-    document.getElementById("livesearch_owner").innerHTML="";
-    document.getElementById("livesearch_owner").style.border="0px";
-    document.getElementById("owner").value = user_id;
-    return;
-}
-
-function showResutsSearchForUserFirstName(str) {
+function showResutsSearchForUserFirstName(str) {//returns search results for a user's first name in the modify user form
     //console.log(str);
     if (str.length==0) {
         document.getElementById("livesearch_first_name").innerHTML="";
@@ -38,12 +12,12 @@ function showResutsSearchForUserFirstName(str) {
           document.getElementById("livesearch_first_name").style.border="1px solid #A5ACB2";
         }
       }
-      //console.log("functions.php?search_first_name_user="+str);
-      xmlhttp.open("GET","functions.php?search_first_name_user="+str,true);
+      //console.log("add_requests.php?search_first_name_user="+str);
+      xmlhttp.open("GET","add_requests.php?search_first_name_user="+str,true);
       xmlhttp.send();
 }
 
-function showResutsSearchForUserLastName(str) {
+function showResutsSearchForUserLastName(str) {//returns search results for a user's last name in the modify user form
     //console.log(str);
     if (str.length==0) {
         document.getElementById("livesearch_last_name").innerHTML="";
@@ -57,12 +31,12 @@ function showResutsSearchForUserLastName(str) {
           document.getElementById("livesearch_last_name").style.border="1px solid #A5ACB2";
         }
       }
-      //console.log("functions.php?search_last_name_user="+str);
-      xmlhttp.open("GET","functions.php?search_last_name_user="+str,true);
+      //console.log("add_requests.php?search_last_name_user="+str);
+      xmlhttp.open("GET","add_requests.php?search_last_name_user="+str,true);
       xmlhttp.send();
 }
 
-function resultHasBeenClickedUser(user_id) {
+function resultHasBeenClickedUser(user_id) {//returns the user_id of the user selected in the modify user form
     //console.log(user_id);
     document.getElementById("livesearch_first_name").innerHTML="";
     document.getElementById("livesearch_first_name").style.border="0px";
@@ -77,8 +51,8 @@ function resultHasBeenClickedUser(user_id) {
           document.getElementById("livesearch_last_name").style.border="1px solid #A5ACB2";
         }
       }
-    console.log("functions.php?user_id_info_dump="+user_id);
-    xmlhttp.open("GET","functions.php?user_id_info_dump="+user_id,true);
+    //console.log("add_requests.php?user_id_info_dump="+user_id);
+    xmlhttp.open("GET","add_requests.php?user_id_info_dump="+user_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
       if (this.readyState==4 && this.status==200) {
@@ -101,7 +75,7 @@ function resultHasBeenClickedUser(user_id) {
     return;
 }
 
-function showResutsSearchForEquipmentByName(str){
+function showResutsSearchForEquipmentByName(str){//returns search results for an equipment's name in the modify equipment form
     //console.log(str);
     if (str.length==0) {
         document.getElementById("livesearch_equipment_name").innerHTML="";
@@ -115,12 +89,12 @@ function showResutsSearchForEquipmentByName(str){
           document.getElementById("livesearch_equipment_name").style.border="1px solid #A5ACB2";
         }
       }
-      //console.log("functions.php?search_equipment_name="+str);
-      xmlhttp.open("GET","functions.php?search_equipment_name="+str,true);
+      //console.log("add_requests.php?search_equipment_name="+str);
+      xmlhttp.open("GET","add_requests.php?search_equipment_name="+str,true);
       xmlhttp.send();
 }
 
-function showResutsSearchForEquipmentByLocation(str){
+function showResutsSearchForEquipmentByLocation(str){//returns search results for an equipment's location in the modify equipment form
     //console.log(str);
     if (str.length==0) {
         document.getElementById("livesearch_equipment_location").innerHTML="";
@@ -134,12 +108,12 @@ function showResutsSearchForEquipmentByLocation(str){
           document.getElementById("livesearch_equipment_location").style.border="1px solid #A5ACB2";
         }
       }
-      //console.log("functions.php?search_equipment_name="+str);
-      xmlhttp.open("GET","functions.php?search_equipment_location="+str,true);
+      //console.log("add_requests.php?search_equipment_name="+str);
+      xmlhttp.open("GET","add_requests.php?search_equipment_location="+str,true);
       xmlhttp.send();
 }
 
-function resultHasBeenClickedEquipment(equipment_id){
+function resultHasBeenClickedEquipment(equipment_id){//returns the equipment_id of the equipment selected in the modify equipment form
     //console.log(equipment_id);
     document.getElementById("livesearch_equipment_name").innerHTML="";
     document.getElementById("livesearch_equipment_name").style.border="0px";
@@ -147,6 +121,7 @@ function resultHasBeenClickedEquipment(equipment_id){
     document.getElementById("livesearch_equipment_location").innerHTML="";
     document.getElementById("livesearch_equipment_location").style.border="0px";
     document.getElementById("input_search_equipment_location").value = "";
+    document.getElementById("modify-equipment-submit").disabled = false;
     var xmlhttp=new XMLHttpRequest();
       xmlhttp.onreadystatechange=function() {
         if (this.readyState==4 && this.status==200) {
@@ -154,8 +129,8 @@ function resultHasBeenClickedEquipment(equipment_id){
           document.getElementById("livesearch_equipment_location").style.border="1px solid #A5ACB2";
         }
       }
-    console.log("functions.php?equipment_id_info_dump="+equipment_id);
-    xmlhttp.open("GET","functions.php?equipment_id_info_dump="+equipment_id,true);
+    //console.log("add_requests.php?equipment_id_info_dump="+equipment_id);
+    xmlhttp.open("GET","add_requests.php?equipment_id_info_dump="+equipment_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
       if (this.readyState==4 && this.status==200) {
@@ -165,12 +140,14 @@ function resultHasBeenClickedEquipment(equipment_id){
         document.getElementById("modify_equipment_name").value = equipmentDetails.name;
         document.getElementById("modify_equipment_location").value = equipmentDetails.location;
         document.getElementById("modify_equipment_description").value = equipmentDetails.description;
+        //by defalt activate the form since the inputs will pass validation
+        document.getElementById("modify-user-submit").disabled = false;
         }
     }
     return;
 }
 
-function checkAreAllValuesOne(obj) {
+function checkAreAllValuesOne(obj) {//checks if all values in a dictionary are 1 indicating the form has been filled out corectly
   for (let key in obj) {
       if (obj.hasOwnProperty(key) && obj[key] !== 1) {
           return false;
@@ -179,7 +156,7 @@ function checkAreAllValuesOne(obj) {
   return true;
 }
 
-function returnFeedbackHTMl(obj){
+function returnFeedbackHTMl(obj){//returns the feedback messages in html format from an form_feedback dictionary
   returnHTML = ""
   for (let key in obj) {
     if (obj.hasOwnProperty(key) && obj[key] !== "") {
@@ -189,7 +166,7 @@ function returnFeedbackHTMl(obj){
   return returnHTML;
 }
 
-function REGEXCheckEvent(str, input_to_check){
+function REGEXCheckEvent(str, input_to_check){//checks the input of the add event form for errors
   if (typeof event_array === 'undefined'){
     event_array = {event_type: 0, event_name: 0};
   }
@@ -232,7 +209,7 @@ function REGEXCheckEvent(str, input_to_check){
   }
 }
 
-function REGEXCheckAddUser(str, input_to_check){
+function REGEXCheckAddUser(str, input_to_check){//checks the input of the add user form for errors
   if (typeof add_user_array === 'undefined'){
     add_user_array = {email: 0, password: 0, first_name: 0, last_name: 0, DOB: 0, gender: 0, rank: 0};
   }
@@ -330,7 +307,7 @@ function REGEXCheckAddUser(str, input_to_check){
   }
 }
  
-function REGEXCheckModifyUser(str, input_to_check){
+function REGEXCheckModifyUser(str, input_to_check){//checks the input of the modify user form for errors
   if (typeof modify_user_array === 'undefined'){
     modify_user_array = {modify_email: 1, modify_password: 1, modify_first_name: 1, modify_last_name: 1, modify_DOB: 1, modify_gender: 1, modify_rank: 1};
   }
@@ -429,7 +406,7 @@ function REGEXCheckModifyUser(str, input_to_check){
   }
 }
 
-function REGEXCheckAddEquipment(str, input_to_check){
+function REGEXCheckAddEquipment(str, input_to_check){//checks the input of the add equipment form for errors
   if (typeof add_equipment_array === 'undefined'){
     add_equipment_array = {name: 0, description: 0, location: 0};
   }
@@ -480,7 +457,7 @@ function REGEXCheckAddEquipment(str, input_to_check){
   }
 }
 
-function REGEXCheckModifyEquipment(str, input_to_check){
+function REGEXCheckModifyEquipment(str, input_to_check){//checks the input of the modify equipment form for errors
   if (typeof modify_equipment_array === 'undefined'){
     modify_equipment_array = {modify_name: 0, modify_description: 0, modify_location: 0};
   }

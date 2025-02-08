@@ -27,7 +27,7 @@ session_start();
 					{
 						echo "password match";
 						$_SESSION['user_id'] = $user_data['user_id'];
-						header("Location: dashbord.php");
+						header("Location: calendar.php");
 						die;
 					}
 				}

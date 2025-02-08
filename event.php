@@ -35,27 +35,93 @@ session_start();
             return "enabled";
         }
     }
+
+    function get_parade_name_and_date_as_html_h1($con, $parade_id){
+        $query = "SELECT parade_name, date FROM parades WHERE parade_id = " . $parade_id . ";";
+        $result = mysqli_query($con, $query);
+        $parade = mysqli_fetch_assoc($result);
+        return "<h1>" . $parade["parade_name"] . "</h1><h1>" . $parade["date"] . "</h1>";
+    }
+
+    function generate_html_for_lesson_plan($con, $event_id){
+        $query = "SELECT `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval` FROM events WHERE event_id = $event_id;";
+        $result = mysqli_query($con, $query);
+        $event = mysqli_fetch_assoc($result);
+        $query = "SELECT `rank`, `first_name`, `last_name` FROM users WHERE user_id = " . $event["owner"] . ";";
+        $result = mysqli_query($con, $query);
+        $owner_info_dump = mysqli_fetch_assoc($result);
+        $lesson_plan_html = "";
+        $lesson_plan_html .= "<h4>modify lesson details</h4>\n";
+        $lesson_plan_html .= "<div class=\"lesson_details\">\n";
+        $lesson_plan_html .= "<form class=\"modify_lesson_details\" id=\"add_new_event\" action=\"functions.php\" method=\"POST\">\n";
+        $lesson_plan_html .= "<label>parade date</label>\n";
+        $lesson_plan_html .= "<input value=\"" . "\" type=\"date\" name=\"parade_date\" id=\"parade_date\">\n";
+        $lesson_plan_html .= "<input hidden value=\"1\" type=\"text\" name=\"add_new_event\" id=\"add_new_event\">\n";
+        $lesson_plan_html .= "<input hidden value=\"\" type=\"text\" name=\"owner_id\" id=\"owner_id\">\n";
+        $lesson_plan_html .= "<label>event type</label>\n";
+        $lesson_plan_html .= "<input value=\"" . $event["event_type"] . "\" type=\"text\" name=\"event_type\" id=\"event_type\" onkeyup=\"REGEXCheckEvent(this.value, 'event_type')\">\n";
+        $lesson_plan_html .= "<label>event name</label>\n";
+        $lesson_plan_html .= "<input  value=\"" . $event["event_name"] . "\"type=\"text\" name=\"event_name\" id=\"event_name\" onkeyup=\"REGEXCheckEvent(this.value, 'event_name')\">\n";
+        $lesson_plan_html .= "<label>event start</label>\n";
+        $lesson_plan_html .= "<input  value=\"" . $event["event_start"] . "\" type=\"time\" name=\"event_start\" id=\"event_start\">\n";
+        $lesson_plan_html .= "<label>event end</label>\n";
+        $lesson_plan_html .= "<input  value=\"" . $event["event_end"] . "\"type=\"time\" name=\"event_end\" id=\"event_end\">\n";
+        $lesson_plan_html .= "<label>final approval</label>\n";
+        $lesson_plan_html .= "<select value=\"" . $event["final_aproval"] . "\" id=\"final_aproval\" name=\"final_aproval\" onclick=\"REGEXCheckEvent(this.value, 'final_aproval')\">\n";
+        $lesson_plan_html .= "<option value=\"0\">not-aproved</option>\n";
+        $lesson_plan_html .= "<option value=\"1\">aproved</option>\n";
+        $lesson_plan_html .= "<option value=\"2\">aproval requested</option>\n";
+        $lesson_plan_html .= "</select>\n";
+        $lesson_plan_html .= "<label>event owner</label>\n";
+        $lesson_plan_html .= "<input type=\"text\" name=\"event_owner_search_box\" id=\"event_owner_search_box\" onkeyup=\"showResutsSearchForOwner(this.value)\">\n";
+        $lesson_plan_html .= "<div class=\"livesearch\" id=\"livesearch_owner\"></div>\n";
+        $lesson_plan_html .= "<div class=\"input_error_handeling\" id=\"event-input-handeling\"></div>\n";
+        $lesson_plan_html .= "<div class=\"display_current_owner\" id=\"display_current_owner\"><a>curent owner: " . $owner_info_dump["rank"] . " " . $owner_info_dump["first_name"] . " " . $owner_info_dump["last_name"] . "</a></div>\n";
+        $lesson_plan_html .= "<button class=\"submit_button\" id=\"add-event-submit\" disabled>update lesson details</button>\n";
+        $lesson_plan_html .= "</form>\n";
+        $lesson_plan_html .= "</div>\n";
+        return $lesson_plan_html;
+    }
+
+    function html_for_list_of_parades_events($con, $parade_id, $user_id){//echo the HTML for the parade on the calendar
+        $query = "SELECT events.* FROM events, user_event WHERE parade_id =" . $parade_id . " and events.event_id = user_event.event_id and user_event.user_id = " . $user_id . " ORDER BY events.event_start;";
+        $result = mysqli_query($con, $query);
+        $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $event_count = 0;
+        $event_html = "<div class=\"event\">\n";
+        while($event_count < count($events)){
+            if($user_id == $events[$event_count]["owner"]){
+                $event_html .= "<div class=\"event\">\n";
+                $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
+                $event_html .= "<a href=\"event.php?parade_id=" . $parade_id . "&event_id=" . $events[$event_count]["event_id"] . "\">" . $events[$event_count]["event_name"] . "</a>\n";
+                $event_html .= "</div>\n";
+            }else {//non owner so they can only view the event
+                $event_html .= "<div class=\"event\">\n";
+                $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
+                $event_html .= "<a>" . $events[$event_count]["event_name"] . "</a>\n";
+                $event_html .= "</div>\n";
+            }
+            $event_count = $event_count + 1;
+        }
+        $event_html .= "</div>\n";
+        return $event_html;
+    }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <script src="js/event.js"></script>
+    <script src="js/event_owner_form_handeling.js"></script>
 	<title>my Dashbord</title>
 	<link rel="stylesheet" href="css/event-style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
 </head>
 <body>
     <?php include("includes/nav.php");?>
     <div class="grid-container">
         <div class="left-side">
-            <h1>parade <?php echo($user_data["parade_id"]);?></h1>
-            <div class="event">
-                <a href="event.php?parade_id=1&event_id=1">lesson 1</a>
-            </div>
-            <div class="event">
-                <h4>lesson 2</h4>
-            </div>
+            <h1><?php include("connection.php"); echo(get_parade_name_and_date_as_html_h1($con, $user_data["parade_id"]));?></h1>
+            <?php include("connection.php"); echo(html_for_list_of_parades_events($con, $user_data["parade_id"], $user_data["user_id"])); ?>
         </div>
         <div class="right-side">
             <h1><?php echo(get_event_name($con, $user_data["event_id"]));?></h1><h1></h1><h1></h1><h1></h1>
@@ -134,7 +200,7 @@ session_start();
                 ?>
             </div>
             <div class="lesson-plan">
-                <h4>this is the lesson plan</h4>
+                <?php echo(generate_html_for_lesson_plan($con, $user_data["event_id"]));?>
             </div>
             <div class="status">
                 <h4>this is the section to show approval status</h4>

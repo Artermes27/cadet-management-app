@@ -8,13 +8,23 @@ session_start();
     if($user_data["admin"] == 0) {
         header("Location: calendar.php");
     }
+
+    function get_latest_parade($con)	{//get latest parade for next parade date sugestion on add.php
+        $query = "SELECT date FROM parades ORDER BY date DESC LIMIT 1;";
+        $result = mysqli_query($con, $query);
+        
+        if(mysqli_num_rows($result) > 0)
+        {
+            return mysqli_fetch_assoc($result)["date"];
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>my Dashbord</title>
 	<link rel="stylesheet" href="css/add-style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js" integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU=" crossorigin="anonymous"></script>
+    <script src="js/event_owner_form_handeling.js"></script>
   <script src="js/add.js"></script>
 </head>
 <body>
@@ -53,7 +63,8 @@ session_start();
                     <label>event end</label>
                     <input type="time" name="event_end" id="event_end">
                     <label>event owner</label>
-                    <input type="text" name="event_owner" id="event_owner" onkeyup="showResutsSearchForOwner(this.value)">
+                    <input type="text" name="event_owner_search_box" id="event_owner_search_box" onkeyup="showResutsSearchForOwner(this.value)">
+                    <div class="input-error-handeling" id="display_current_owner"></div>
                     <div class="livesearch" id="livesearch_owner"></div>
                     <div class="input-error-handeling" id="event-input-handeling"></div>
                     <button id="add-event-submit" disabled>submit</button>
@@ -174,7 +185,7 @@ session_start();
                         <option value="delete">delete</option>
                     </select><br>
                     <div id="modify-equipment-input-handeling"></div>
-                    <button type="submit" onclick="setModifyEquipment()" id="modify-equipment-submit">update equipment</button>
+                    <button type="submit" onclick="setModifyEquipment()" id="modify-equipment-submit" disabled>update equipment</button>
                 </form>
             </div>
         </div>
