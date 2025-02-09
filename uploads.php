@@ -33,23 +33,23 @@ if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg
 }
 
 // Check if file already exists to avoid colisions jpg
-$target_file = $target_dir . get_id($con) . ".jpg";
+$target_file = $target_dir . $user_data["user_id"] . ".jpg";
 if (file_exists($target_file) == true) {
     unlink($target_file);
 }
 // Check if file already exists to avoid colisions jpeg
-$target_file = $target_dir . get_id($con) . ".jpeg";
+$target_file = $target_dir . $user_data["user_id"] . ".jpeg";
 if (file_exists($target_file) == true) {
     unlink($target_file);
 }
 // Check if file already exists to avoid colisions png
-$target_file = $target_dir . get_id($con) . ".png";
+$target_file = $target_dir . $user_data["user_id"] . ".png";
 if (file_exists($target_file) == true) {
     unlink($target_file);
   }
 
 //give file the correct path
-$target_file = $target_dir . get_id($con) . "." . $imageFileType;
+$target_file = $target_dir . $user_data["user_id"] . "." . $imageFileType;
 
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {

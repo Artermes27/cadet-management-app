@@ -38,7 +38,11 @@ session_start();
       if(mysqli_num_rows($result) == 0){
         return "null";
       } else {
-        return $dates[0]["date"];
+        if(count($dates) >= 5){
+          return $dates[4]["date"];
+        }else{
+          return $dates[count($dates) - 1]["date"];
+        }
       }
     }if($skip == "+5"){
       include("connection.php");
@@ -53,14 +57,18 @@ session_start();
       }
     }if($skip == "-4"){
       include("connection.php");
-      $query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date DESC limit 4;";
+      $query = "SELECT date FROM parades WHERE date < '$current_date' ORDER BY date DESC limit 4;";
       //echo($query);
       $result = mysqli_query($con, $query);
       $dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
       if(mysqli_num_rows($result) == 0){
         return "null";
       } else {
-        return $dates[0]["date"];
+        if(count($dates) >= 4){
+          return $dates[3]["date"];
+        }else{
+          return $dates[count($dates) - 1]["date"];
+        }
       }
     }if($skip == "+4"){
       include("connection.php");
@@ -109,7 +117,7 @@ session_start();
     $result = mysqli_query($con, $query);
     $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $event_count = 0;
-    $event_html = "<div class=\"event\"><h2>" . $parade_date . "</h2><h2>" . $parade["parade_name"]. "</h2></div>";
+    $event_html = "<div class=\"event\"><h2>" . $parade_date . "</h2><h2>" . $parade["parade_name"]. " parade_id:" . $parade["parade_id"] . "</h2></div>";
     if(count($events) == 0){//the user has no events on this parade night
       $event_html = $event_html . "<div class=\"event\"><a>you have no events on this parade night</a></div>";
     }else{//the user has events on this parade night

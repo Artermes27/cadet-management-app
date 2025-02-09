@@ -36,6 +36,27 @@ function showResultDeleteCadet(str, search_for, event_id) {
     xmlhttp.send();
   }
 }
+
+function showResultSearchOtherCadet(str, event_id) {
+  //console.log(str);
+  if (str.length==0) {
+    document.getElementById("livesearch_other_cadet").innerHTML="";
+    document.getElementById("livesearch_other_cadet").style.border="0px";
+    return;
+  }
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      console.log(this.responseText);
+      document.getElementById("livesearch_other_cadet").innerHTML=this.responseText;
+      document.getElementById("livesearch_other_cadet").style.border="1px solid #A5ACB2";
+    }
+  }
+  console.log("functions.php?search_first_name_other_cadet="+str+"&event_id=" + event_id);
+  xmlhttp.open("GET","functions.php?search_first_name_other_cadet="+str+"&event_id=" + event_id,true);
+  xmlhttp.send();
+
+}
   
 function resultHasBeenClickedAdd(user_id, event_id) {
   //document.write(user_id);

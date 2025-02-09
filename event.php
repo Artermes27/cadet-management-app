@@ -128,6 +128,10 @@ session_start();
         $all_html .= "<input style=\"width: 180px;\" placeholder=\"remove a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name_delete\" value=\"\" onkeyup=\"showResultDeleteCadet(this.value, 'search_first_name_delete', '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch_delete\"></div>";
         $all_html .= "</div>\n";
+        $all_html .= "<div class=\"search-for-other-cadet\">\n";
+        $all_html .= "<input style=\"width: 180px;\" placeholder=\"search for another cadets event\" type=\"text\" size=\"30\" id=\"search_first_name_delete\" value=\"\" onkeyup=\"showResultSearchOtherCadet(this.value, '" . $event_id . "')\"><br>\n";
+        $all_html .= "<div id=\"livesearch_other_cadet\"></div>";
+        $all_html .= "</div>\n";
         return $all_html;
     }
 ?>
@@ -163,7 +167,7 @@ session_start();
             <div class="lesson-plan">
                 <?php 
                 if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
-                    echo("<h4>event aproved lesson plan not modifiable</h4>");
+                    echo("<h4>event aproved, lesson plan not modifiable</h4>");
                 } else {
                     echo(generate_html_for_lesson_plan($con, $user_data["event_id"]));
                 }?>

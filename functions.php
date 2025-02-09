@@ -29,10 +29,6 @@ function check_login($con){
 
 }
 
-function get_id(){
-	return $_SESSION['user_id'];
-}
-
 if(isset($_GET["add_user_id"]) and isset($_GET["event_id"])){//search method for adding a user to an event used by search.js for searching for user by first name on event.php
 	include("connection.php");	
 	$query = "INSERT INTO user_event (user_id, event_id, present) VALUES (" . $_GET["add_user_id"] . "," . $_GET["event_id"] . ",0);";
@@ -50,7 +46,24 @@ if(isset($_GET["remove_user_id"]) and isset($_GET["event_id"])){//search method 
 if(isset($_GET["search_first_name"]) != "" and isset($_GET["event_id"]) != ""){//search method for adding a user to an event used by event.js for searching for user by first name on event.php
 	include("connection.php");
 	$first_name = $_GET["search_first_name"];
-	$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE users.user_id NOT IN (SELECT user_event.user_id FROM user_event WHERE user_event.event_id = " . $_GET["event_id"] . ") AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
+	//$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE users.user_id NOT IN (SELECT user_event.user_id FROM user_event WHERE user_event.event_id = " . $_GET["event_id"] . ") AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
+	//echo $query;
+	$query = "SELECT event_id, parade_id, event_start, event_end FROM events WHERE event_id = " . $_GET["event_id"] . ";";
+	$result = mysqli_query($con, $query);
+	$event = mysqli_fetch_assoc($result);
+	$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id
+	FROM users 
+	WHERE users.user_id NOT IN 
+	(SELECT user_event.user_id FROM user_event, events 
+	WHERE user_event.event_id = events.event_id 
+	AND events.parade_id = " . $event["parade_id"] . "
+	AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
+	OR (events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_end"] . "')
+	OR (events.event_start > '" . $event["event_start"] . "' AND events.event_end < '" . $event["event_end"] . "')
+	OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end > '" . $event["event_end"] . "')
+	OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')
+	OR (events.event_id = " . $event["event_id"] . "))) 
+	AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0)	{
 		$output = "";
@@ -73,6 +86,42 @@ if(isset($_GET["search_first_name_delete"]) != "" and isset($_GET["event_id"]) !
 		$output = "";
 		while($cadet = mysqli_fetch_assoc($result)){
 			$output .= "<script src=\"js/search.js\"></script><a onclick='resultHasBeenClickedDelete(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
+		}
+		echo $output;
+	}	else{
+		//their are no symalar names
+		echo "<a>no names match your prompt</a>";
+	}
+}
+
+if(isset($_GET["search_first_name_other_cadet"]) != "" and isset($_GET["event_id"]) != ""){//search method for viewing other cadets lesson used by event.js for searching for user by first name on event.php
+	include("connection.php");
+	$first_name = $_GET["search_first_name_other_cadet"];
+	$event_id = $_GET["event_id"];
+	$query = "SELECT events.event_start, events.event_end, events.parade_id FROM events WHERE events.event_id = " . $event_id . ";";
+	$result = mysqli_query($con, $query);
+	$event = mysqli_fetch_assoc($result);
+	$query = "SELECT users.first_name, users.last_name, users.rank, events.event_start, events.event_end, events.event_name, events.owner 
+	FROM users, user_event, events 
+	WHERE users.user_id = user_event.user_id 
+	AND user_event.event_id = events.event_id
+	AND events.event_end != '" . $event["event_start"] . "'
+	AND events.event_start != '" . $event["event_end"] . "'
+	AND events.parade_id = " . $event["parade_id"] . " 
+	AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "' 
+	AND users.user_id IN (SELECT user_event.user_id FROM user_event, events 
+	WHERE user_event.event_id = events.event_id 
+	AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
+	OR (events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_end"] . "')
+	OR (events.event_start > '" . $event["event_start"] . "' AND events.event_end < '" . $event["event_end"] . "')
+	OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end > '" . $event["event_end"] . "')
+	OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')));";
+	//echo($query);
+	$result = mysqli_query($con, $query);
+	if(mysqli_num_rows($result) > 0)	{
+		$output = "";
+		while($cadet = mysqli_fetch_assoc($result)){
+			$output .= "<a>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . " " . $cadet["event_name"] . " " . $cadet["event_start"] . " " . $cadet["event_end"] . "</a><br>";
 		}
 		echo $output;
 	}	else{

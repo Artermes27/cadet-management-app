@@ -22,6 +22,9 @@
 .grid-container .right-side .register-box-all .remove-cadet-from-register {
   padding-top: 10px;
 }
+.grid-container .right-side .register-box-all .search-for-other-cadet {
+  padding-top: 10px;
+}
 
 .lesson_details{
   display: grid;
