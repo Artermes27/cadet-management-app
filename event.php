@@ -25,7 +25,7 @@ session_start();
         return "<h1>" . $parade["parade_name"] . "</h1><h1>" . $parade["date"] . "</h1>";
     }
 
-    function generate_html_for_lesson_plan($con, $event_id){
+    function generate_html_for_lesson_plan($con, $event_id, $admin){
         $query = "SELECT `parade_id`, `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval` FROM events WHERE event_id = $event_id;";
         $result = mysqli_query($con, $query);
         $event = mysqli_fetch_assoc($result);
@@ -43,15 +43,15 @@ session_start();
         $lesson_plan_html .= "<input hidden value=\"" . $event["parade_id"] . "\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["final_aproval"] . "\" type=\"text\" name=\"original_aproval\" id=\"original_aproval\">\n";
         $lesson_plan_html .= "<label>event type</label>\n";
-        $lesson_plan_html .= "<input value=\"" . $event["event_type"] . "\" type=\"text\" name=\"event_type\" id=\"event_type\" onkeyup=\"REGEXCheckEvent(this.value, 'event_type')\">\n";
+        $lesson_plan_html .= "<input value=\"" . $event["event_type"] . "\" type=\"text\" name=\"event_type\" id=\"event_type\" onkeyup=\"REGEXCheckEvent(this.value, 'event_type', '" . $admin . "')\">\n";
         $lesson_plan_html .= "<label>event name</label>\n";
-        $lesson_plan_html .= "<input  value=\"" . $event["event_name"] . "\"type=\"text\" name=\"event_name\" id=\"event_name\" onkeyup=\"REGEXCheckEvent(this.value, 'event_name')\">\n";
+        $lesson_plan_html .= "<input  value=\"" . $event["event_name"] . "\"type=\"text\" name=\"event_name\" id=\"event_name\" onkeyup=\"REGEXCheckEvent(this.value, 'event_name', '" . $admin . "')\">\n";
         $lesson_plan_html .= "<label>event start</label>\n";
-        $lesson_plan_html .= "<input  value=\"" . $event["event_start"] . "\" type=\"time\" name=\"event_start\" id=\"event_start\" onkeyup=\"REGEXCheckEvent(this.value, 'event_start')\">\n";
+        $lesson_plan_html .= "<input  value=\"" . $event["event_start"] . "\" type=\"time\" name=\"event_start\" id=\"event_start\" onkeyup=\"REGEXCheckEvent(this.value, 'event_start', '" . $admin . "')\">\n";
         $lesson_plan_html .= "<label>event end</label>\n";
-        $lesson_plan_html .= "<input  value=\"" . $event["event_end"] . "\"type=\"time\" name=\"event_end\" id=\"event_end\" onkeyup=\"REGEXCheckEvent(this.value, 'event_end')\">\n";
+        $lesson_plan_html .= "<input  value=\"" . $event["event_end"] . "\"type=\"time\" name=\"event_end\" id=\"event_end\" onkeyup=\"REGEXCheckEvent(this.value, 'event_end', '" . $admin . "')\">\n";
         $lesson_plan_html .= "<label>final approval</label>\n";
-        $lesson_plan_html .= "<select value=\"" . $event["final_aproval"] . "\" id=\"final_aproval\" name=\"final_aproval\" onclick=\"REGEXCheckEvent(this.value, 'final_aproval')\">\n";
+        $lesson_plan_html .= "<select value=\"" . $event["final_aproval"] . "\" id=\"final_aproval\" name=\"final_aproval\" onclick=\"REGEXCheckEvent(this.value, 'final_aproval', '" . $admin . "')\">\n";
         $lesson_plan_html .= "<option value=\"0\">not-aproved</option>\n";
         $lesson_plan_html .= "<option value=\"1\">aproved</option>\n";
         $lesson_plan_html .= "<option value=\"2\">aproval requested</option>\n";
@@ -169,7 +169,7 @@ session_start();
                 if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
                     echo("<h4>event aproved, lesson plan not modifiable</h4>");
                 } else {
-                    echo(generate_html_for_lesson_plan($con, $user_data["event_id"]));
+                    echo(generate_html_for_lesson_plan($con, $user_data["event_id"], $user_data["admin"]));
                 }?>
             </div>
             <div class="equipment-requests">

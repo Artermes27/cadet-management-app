@@ -109,7 +109,7 @@ function returnFeedbackHTMl(obj){
   return returnHTML;
 }
 
-function REGEXCheckEvent(str, input_to_check){
+function REGEXCheckEvent(str, input_to_check, admin){
   console.log(str);
   if (typeof event_array === 'undefined'){
     event_array = {event_type: 1, event_name: 1, event_start: 1, event_end: 1, final_aproval: 1};
@@ -167,7 +167,7 @@ function REGEXCheckEvent(str, input_to_check){
       }
     } else if (input_to_check === "final_aproval"){
       console.log(str);
-      if (str === "1") {
+      if (str === "1" && admin === "0"){
         event_feedback["final_aproval"] = "<a>only the admin can aprove an event<a><br>";
         event_array["final_aproval"] = 0;
       } else {
