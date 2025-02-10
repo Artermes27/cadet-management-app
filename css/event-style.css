@@ -16,13 +16,14 @@
   grid-template-columns: 100%;
   grid-template-rows: auto auto auto auto;
 }
-.grid-container .right-side .register-box-all .add-cadet-to-register {
-  padding-top: 10px;
+
+.grid-container .right-side .equipemnt-display-register-main{
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto auto auto;
 }
-.grid-container .right-side .register-box-all .remove-cadet-from-register {
-  padding-top: 10px;
-}
-.grid-container .right-side .register-box-all .search-for-other-cadet {
+
+.grid-container .right-side .search-box-all {
   padding-top: 10px;
 }
 

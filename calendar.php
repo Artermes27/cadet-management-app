@@ -117,7 +117,7 @@ session_start();
     $result = mysqli_query($con, $query);
     $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $event_count = 0;
-    $event_html = "<div class=\"event\"><h2>" . $parade_date . "</h2><h2>" . $parade["parade_name"]. " parade_id:" . $parade["parade_id"] . "</h2></div>";
+    $event_html = "<div class=\"event\"><h2>" . $parade_date . "</h2><h2>" . $parade["parade_name"]. "</h2></div>";
     if(count($events) == 0){//the user has no events on this parade night
       $event_html = $event_html . "<div class=\"event\"><a>you have no events on this parade night</a></div>";
     }else{//the user has events on this parade night

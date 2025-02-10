@@ -59,7 +59,6 @@ function showResultSearchOtherCadet(str, event_id) {
 }
   
 function resultHasBeenClickedAdd(user_id, event_id) {
-  //document.write(user_id);
   var xmlhttp=new XMLHttpRequest();
   xmlhttp.open("POST", "functions.php?add_user_id=" + user_id + "&event_id=" + event_id + "")
   xmlhttp.send();
@@ -86,8 +85,95 @@ function resultHasBeenClickedDelete(user_id, event_id) {
   return;
 }
 
+function showResultAddEquipment(str, event_id) {
+  if (str.length==0) {
+    document.getElementById("livesearch_equipment_add").innerHTML="";
+    document.getElementById("livesearch_equipment_add").style.border="0px";
+    return;
+  }
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      console.log(this.responseText);
+      document.getElementById("livesearch_equipment_add").innerHTML=this.responseText;
+      document.getElementById("livesearch_equipment_add").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","functions.php?search_equipment_add="+str+"&event_id=" + event_id,true);
+  xmlhttp.send();
+}
+
+function showResultDeleteEquipment(str, event_id){
+  if (str.length == 0) {
+    document.getElementById("livesearch_delete_equipment").innerHTML = "";
+    document.getElementById("livesearch_delete_equipment").style.border = "0px";
+    return;
+  }
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("livesearch_delete_equipment").innerHTML = this.responseText;
+      document.getElementById("livesearch_delete_equipment").style.border = "1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET", "functions.php?search_equipment_delete=" + str + "&event_id=" + event_id, true);
+  xmlhttp.send();
+}
+
+function showResultSearchOtherEquipment(str, event_id){
+  if (str.length == 0) {
+    document.getElementById("livesearch_other_equipment").innerHTML = "";
+    document.getElementById("livesearch_other_equipment").style.border = "0px";
+    return;
+  }
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("livesearch_other_equipment").innerHTML = this.responseText;
+      document.getElementById("livesearch_other_equipment").style.border = "1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET", "functions.php?search_equipment_other=" + str + "&event_id=" + event_id, true);
+  xmlhttp.send();
+}
+
+function resultHasBeenClickedAddEquipment(equipment_id, event_id){
+  let xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("POST", "functions.php?add_equipment_id=" + equipment_id + "&event_id=" + event_id);
+  xmlhttp.send();
+  document.getElementById("livesearch_equipment_add").innerHTML = "";
+  document.getElementById("livesearch_equipment_add").style.border = "0px";
+  document.getElementById("search_equipment_name_add").value = "";
+  setTimeout(function() {
+    window.location.reload();
+  }, 200);
+  return;
+
+}
+
+function resultHasBeenClickedDeleteEquipment(equipment_id, event_id){
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("POST", "functions.php?remove_equipment_id=" + equipment_id + "&event_id=" + event_id);
+  xmlhttp.send();
+  document.getElementById("livesearch_delete_equipment").innerHTML = "";
+  document.getElementById("livesearch_delete_equipment").style.border = "0px";
+  document.getElementById("search_equipment_name_delete").value = "";
+  setTimeout(function() {
+    window.location.reload();
+  }, 200);
+  return;
+}
+
 function setStateOfEventApproval(state){
-  document.getElementById("final_aproval").value = state;
+  //method to test if element final_aproval exists and act acordingly
+  console.log(document.getElementById("final_aproval"));
+  if(document.getElementById("final_aproval") !== "null"){
+    document.getElementById("final_aproval").value = state;
+  }
+}
+
+function setStateOfEquipmentRequest(state, equipment_id){
+  document.getElementsByid(equipment_id).value = state;
 }
 
 function checkAreAllValuesOne(obj) {
@@ -187,4 +273,8 @@ function REGEXCheckEvent(str, input_to_check, admin){
     //populating the feedback box
     document.getElementById("event-input-handeling").innerHTML = returnFeedbackHTMl(event_feedback);
   }
+}
+
+function REGEXCheckEquipment(str, original_state){
+  return null
 }

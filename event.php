@@ -120,17 +120,69 @@ session_start();
 
     function html_for_amending_the_register($event_id){
         $all_html = "";
-        $all_html .= "<div class=\"add-cadet-to-register\">\n";
+        $all_html .= "<div class=\"search-box-all\">\n";
         $all_html .= "<input style=\"width: 180px;\" placeholder=\"add a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name\" value=\"\" onkeyup=\"showResultAddCadet(this.value, 'search_first_name', '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch\"></div>";
         $all_html .= "</div>\n";
-        $all_html .= "<div class=\"remove-cadet-from-register\">\n";
+        $all_html .= "<div class=\"search-box-all\">\n";
         $all_html .= "<input style=\"width: 180px;\" placeholder=\"remove a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name_delete\" value=\"\" onkeyup=\"showResultDeleteCadet(this.value, 'search_first_name_delete', '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch_delete\"></div>";
         $all_html .= "</div>\n";
-        $all_html .= "<div class=\"search-for-other-cadet\">\n";
-        $all_html .= "<input style=\"width: 180px;\" placeholder=\"search for another cadets event\" type=\"text\" size=\"30\" id=\"search_first_name_delete\" value=\"\" onkeyup=\"showResultSearchOtherCadet(this.value, '" . $event_id . "')\"><br>\n";
+        $all_html .= "<div class=\"search-box-all\">\n";
+        $all_html .= "<input style=\"width: 180px;\" placeholder=\"search for another cadets event\" type=\"text\" size=\"30\" id=\"search_first_name_other\" value=\"\" onkeyup=\"showResultSearchOtherCadet(this.value, '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch_other_cadet\"></div>";
+        $all_html .= "</div>\n";
+        return $all_html;
+    }
+
+    function html_for_equipment($event_id, $parade_id){
+        include("connection.php");
+        $query = "SELECT equipment_requests.equipment_id, equipment_requests.aproved, equipment.name FROM equipment_requests, equipment WHERE event_id = " . $event_id . " AND equipment_requests.equipment_id = equipment.equipment_id;";
+        $result = mysqli_query($con, $query);
+        $all_html = "";
+        if(mysqli_num_rows($result) == 0){
+            $all_html .= "<h4>no equipment requests</h4>\n";
+            $all_html .= "<div class=\"equipemnt-display-register-main\"\n>";
+            $all_html .= "<a>no equipment requests have been made</a>\n";
+            $all_html .= "</div>\n";
+        } else{
+            $all_html .= "<h4>equipment requests displayed here</h4>\n";
+            $all_html .= "<div class=\"equipemnt-display-register-main\">\n";
+            $all_html .= "<table>\n";
+            $all_html .= "<form method=\"post\" action=\"functions.php\">\n";
+            $all_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_equipment_register\" id=\"modify_equipment_register\">\n";
+            $all_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
+            $all_html .= "<input hidden value=\"" . $parade_id . "\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
+            while($equipment_request = mysqli_fetch_assoc($result)){
+                $all_html .= "<tr>\n";
+                $all_html .= "<td><label>" . $equipment_request["name"] . "</label></td>\n";
+                $all_html .= "<td><select onload=\"//setStateOfEquipmentRequest('" . $equipment_request["aproved"] . "', '" . $equipment_request["equipment_id"] . "')\" value=\"" . $equipment_request["aproved"] . "\" id=\"" . $equipment_request["equipment_id"] . "\" name=\"" . $equipment_request["equipment_id"] . "\" onclick=\"REGEXCheckEquipment(this.value, '" . $equipment_request["aproved"] . "')\">\n";
+                $all_html .= "<option value=\"0\">requested</option>\n";
+                $all_html .= "<option value=\"1\">aproved</option>\n";
+                $all_html .= "<option value=\"2\">denied</option>\n";
+                $all_html .= "</select></td>\n";
+                $all_html .= "</tr>\n";
+            }
+            $all_html .= "</table><div style=\"padding-top:10px\" class=\"submit-the-equipment\"><input type=\"submit\" value=\"update equipment request log\" class=\"register-button\">\n";
+            $all_html .= "</form></div>\n";
+            $all_html .= "</div>\n";
+            }
+        return $all_html;
+    }
+
+    function html_for_amending_the_equipment($event_id){
+        $all_html = "";
+        $all_html .= "<div class=\"search-box-all\">\n";
+        $all_html .= "<input style=\"width: 180px;\" placeholder=\"add equipment request (search name)\" type=\"text\" size=\"30\" id=\"search_equipment_name_add\" name=\"search_equipment_name_add\" value=\"\" onkeyup=\"showResultAddEquipment(this.value, '" . $event_id . "')\"><br>\n";
+        $all_html .= "<div id=\"livesearch_equipment_add\"></div>";
+        $all_html .= "</div>\n";
+        $all_html .= "<div class=\"search-box-all\">\n";
+        $all_html .= "<input style=\"width: 180px;\" placeholder=\"remove equipment request (search name)\" type=\"text\" size=\"30\" id=\"search_equipment_name_delete\" value=\"\" onkeyup=\"showResultDeleteEquipment(this.value, '" . $event_id . "')\"><br>\n";
+        $all_html .= "<div id=\"livesearch_delete_equipment\"></div>";
+        $all_html .= "</div>\n";
+        $all_html .= "<div class=\"search-box-all\">\n";
+        $all_html .= "<input style=\"width: 180px;\" placeholder=\"search for another equipment request\" type=\"text\" size=\"30\" id=\"search_equipment_name_other\" value=\"\" onkeyup=\"showResultSearchOtherEquipment(this.value, '" . $event_id . "')\"><br>\n";
+        $all_html .= "<div id=\"livesearch_other_equipment\"></div>";
         $all_html .= "</div>\n";
         return $all_html;
     }
@@ -173,7 +225,14 @@ session_start();
                 }?>
             </div>
             <div class="equipment-requests">
-                <h4>equipment requests displayed here</h4>
+                <?php 
+                if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
+                    echo(html_for_equipment($user_data["event_id"], $user_data["parade_id"]));
+                    echo(html_for_amending_the_equipment($user_data["event_id"]));
+                } else {
+                    echo("<a>equipment requests are not available untill event is aproved</a>");
+                }
+                ?>
             </div>
         </div>
     </div>
