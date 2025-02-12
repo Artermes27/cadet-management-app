@@ -1,16 +1,14 @@
 <?php 
 session_start();
 
-	include("connection.php");
+	include_once("connection.php");
 	include("functions.php");
 
   $user_data = check_login($con);
 
   function date_skip_method($con, $current_date, $skip){//retreving the dates for the skip buttons on calendar.php
     if($skip == "-1"){
-      include("connection.php");
       $query = "SELECT date FROM parades WHERE date < '$current_date' ORDER BY date DESC limit 1;";
-      //echo($query);
       $result = mysqli_query($con, $query);
       $dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
       if (count($dates) == 0)  {
@@ -19,9 +17,7 @@ session_start();
       return $dates[0]["date"];
       }
     }if($skip == "+1"){
-      include("connection.php");
       $query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date ASC limit 1;";
-      //echo($query);
       $result = mysqli_query($con, $query);
       $dates = mysqli_fetch_all($result, MYSQLI_ASSOC);
       if (count($dates) == 0)  {
@@ -30,7 +26,6 @@ session_start();
       return $dates[0]["date"];
       }
     }if($skip == "-5"){
-      include("connection.php");
       $query = "SELECT date FROM parades WHERE date < '$current_date' ORDER BY date DESC limit 5;";
       //echo($query);
       $result = mysqli_query($con, $query);
@@ -45,7 +40,6 @@ session_start();
         }
       }
     }if($skip == "+5"){
-      include("connection.php");
       $query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date ASC limit 5;";
       //echo($query);
       $result = mysqli_query($con, $query);
@@ -56,7 +50,6 @@ session_start();
         return $dates[count($dates)-1]["date"];
       }
     }if($skip == "-4"){
-      include("connection.php");
       $query = "SELECT date FROM parades WHERE date < '$current_date' ORDER BY date DESC limit 4;";
       //echo($query);
       $result = mysqli_query($con, $query);
@@ -71,7 +64,6 @@ session_start();
         }
       }
     }if($skip == "+4"){
-      include("connection.php");
       $query = "SELECT date FROM parades WHERE date > '$current_date' ORDER BY date ASC limit 4;";
       //echo($query);
       $result = mysqli_query($con, $query);
@@ -85,7 +77,6 @@ session_start();
   }
 
   function get_parade_date_range($con, $current_date, $admin)	{//retreving the next 5 parade dates
-    include("connection.php");
     $query = "SELECT date FROM parades WHERE date >= '$current_date' ORDER BY date ASC limit 5;";
     //echo($query);
     $result = mysqli_query($con, $query);
@@ -265,3 +256,4 @@ session_start();
   </div>
 </body>
 </html>
+<?php mysqli_close($con)?>

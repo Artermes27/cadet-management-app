@@ -1,7 +1,7 @@
 <a href="profile.php">click here to go back to the profile page</a><br>
 <?php 
 session_start();
-	include("connection.php");
+	include_once("connection.php");
 	include("functions.php");
 	$user_data = check_login($con);
 

@@ -1,5 +1,5 @@
 <?php
-    include("connection.php");
+    include_once("connection.php");
 
 	$user_data = check_login($con);
 

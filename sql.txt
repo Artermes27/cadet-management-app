@@ -84,5 +84,5 @@ ADD FOREIGN KEY (`parade_id`) REFERENCES `parades` (`parade_id`)
 ALTER TABLE `user_event`
 ADD FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`)
 
-
-
+CREATE USER 'apache_user'@'localhost' IDENTIFIED BY 'Cadet2025';
+GRANT SELECT, UPDATE, INSERT, DELETE ON main_v2 TO 'apache_user'@'localhost';

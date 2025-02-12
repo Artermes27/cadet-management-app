@@ -30,33 +30,33 @@ function check_login($con){
 }
 
 if(isset($_GET["add_user_id"]) and isset($_GET["event_id"])){
-	include("connection.php");	
+	include_once("connection.php");	
 	$query = "INSERT INTO user_event (user_id, event_id, present) VALUES (" . $_GET["add_user_id"] . "," . $_GET["event_id"] . ",0);";
 	//echo $query;
 	$result = mysqli_query($con, $query);
 }
 
 if(isset($_GET["remove_user_id"]) and isset($_GET["event_id"])){
-	include("connection.php");	
+	include_once("connection.php");	
 	$query = "DELETE FROM user_event WHERE user_id=" . $_GET["remove_user_id"] . " AND event_id=" . $_GET["event_id"]. ";";
 	//echo $query;
 	$result = mysqli_query($con, $query);
 }
 
 if(isset($_GET["add_equipment_id"]) and isset($_GET["event_id"])){
-	include("connection.php");
+	include_once("connection.php");
 	$query = "INSERT INTO equipment_requests (equipment_id, event_id, aproved) VALUES (" . $_GET["add_equipment_id"] . "," . $_GET["event_id"] . ",0);";
 	$result = mysqli_query($con, $query);
 }
 
 if(isset($_GET["remove_equipment_id"]) and isset($_GET["event_id"])){
-	include("connection.php");
+	include_once("connection.php");
 	$query = "DELETE FROM equipment_requests WHERE equipment_id=" . $_GET["remove_equipment_id"] . " AND event_id=" . $_GET["event_id"] . ";";
 	$result = mysqli_query($con, $query);
 }
 
 if(isset($_GET["search_first_name"]) != "" and isset($_GET["event_id"]) != ""){
-	include("connection.php");
+	include_once("connection.php");
 	$first_name = $_GET["search_first_name"];
 	//$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE users.user_id NOT IN (SELECT user_event.user_id FROM user_event WHERE user_event.event_id = " . $_GET["event_id"] . ") AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
 	//echo $query;
@@ -90,7 +90,7 @@ if(isset($_GET["search_first_name"]) != "" and isset($_GET["event_id"]) != ""){
 }
 
 if(isset($_GET["search_first_name_delete"]) != "" and isset($_GET["event_id"]) != ""){
-	include("connection.php");
+	include_once("connection.php");
 	$first_name = $_GET["search_first_name_delete"];
 	$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE users.user_id IN (SELECT user_event.user_id FROM user_event WHERE user_event.event_id = " . $_GET["event_id"] . ") AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
 	$result = mysqli_query($con, $query);
@@ -107,7 +107,7 @@ if(isset($_GET["search_first_name_delete"]) != "" and isset($_GET["event_id"]) !
 }
 
 if(isset($_GET["search_first_name_other_cadet"]) != "" and isset($_GET["event_id"]) != ""){
-	include("connection.php");
+	include_once("connection.php");
 	$first_name = $_GET["search_first_name_other_cadet"];
 	$event_id = $_GET["event_id"];
 	$query = "SELECT events.event_start, events.event_end, events.parade_id FROM events WHERE events.event_id = " . $event_id . ";";
@@ -144,7 +144,7 @@ if(isset($_GET["search_first_name_other_cadet"]) != "" and isset($_GET["event_id
 }
 
 if(isset($_GET["search_equipment_add"]) != "" and isset($_GET["event_id"]) != ""){
-	include("connection.php");
+	include_once("connection.php");
 	$equipment_name = $_GET["search_equipment_add"];
 	$event_id = $_GET["event_id"];
 	$query = "SELECT event_id, parade_id, event_start, event_end FROM events WHERE event_id = " . $_GET["event_id"] . ";";
@@ -177,7 +177,7 @@ if(isset($_GET["search_equipment_add"]) != "" and isset($_GET["event_id"]) != ""
 }
 
 if(isset($_GET["search_equipment_delete"]) and isset($_GET["event_id"])){
-	include("connection.php");
+	include_once("connection.php");
 	$equipment_name = $_GET["search_equipment_delete"];
 	$query = "SELECT equipment.equipment_id, equipment.name FROM equipment WHERE equipment.equipment_id IN (SELECT equipment_requests.equipment_id FROM equipment_requests WHERE equipment_requests.event_id = " . $_GET["event_id"] . ") AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "';";
 	$result = mysqli_query($con, $query);
@@ -193,7 +193,7 @@ if(isset($_GET["search_equipment_delete"]) and isset($_GET["event_id"])){
 }
 
 if(isset($_GET["search_equipment_other"]) and isset($_GET["event_id"])){
-	include("connection.php");
+	include_once("connection.php");
 	$equipment_name = $_GET["search_equipment_other"];
 	$event_id = $_GET["event_id"];
 	$query = "SELECT events.event_start, events.event_end, events.parade_id FROM events WHERE events.event_id = " . $event_id . ";";
@@ -230,7 +230,7 @@ if(isset($_GET["search_equipment_other"]) and isset($_GET["event_id"])){
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the database from add.php
 	if(isset($_POST["add_new_user"]) and $_POST["add_new_user"] == "1"){
-		include("connection.php");
+		include_once("connection.php");
 		echo("add new user process");
 		$query = "SELECT MAX(user_id) FROM users;";
 		$result = mysqli_query($con, $query);
@@ -248,7 +248,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$result = mysqli_query($con, $query);
 		header("Location: add.php");
 	}if(isset($_POST["add_new_equipment"]) and $_POST["add_new_equipment"] == "1"){
-		include("connection.php");
+		include_once("connection.php");
 		echo("add new equipment process");
 		$query = "SELECT MAX(equipment_id) FROM equipment;";
 		$result = mysqli_query($con, $query);
@@ -261,7 +261,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$result = mysqli_query($con, $query);
 		header("Location: add.php");
 	}if(isset($_POST["add_new_parade"]) and $_POST["add_new_parade"] == "1"){
-		include("connection.php");
+		include_once("connection.php");
 		echo("add new parade process");
 		$query = "SELECT MAX(parade_id) FROM parades;";
 		$result = mysqli_query($con, $query);
@@ -282,7 +282,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$event_start = $_POST["event_start"];
 		$event_end = $_POST["event_end"];
 		$owner = $_POST["owner_id"];
-		include("connection.php");
+		include_once("connection.php");
 		$query = "SELECT MAX(event_id) FROM events;";
 		$result = mysqli_query($con, $query);
 		$event_id = mysqli_fetch_assoc($result)["MAX(event_id)"] + 1;
@@ -291,7 +291,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$result = mysqli_query($con, $query);
 		header("Location: add.php");
 	}if(isset($_POST["modify_user"]) and $_POST["modify_user"] == "1"){
-		include("connection.php");
+		include_once("connection.php");
 		echo("modify user process");
 		$user_id = $_POST["modify_user_id"];
 		$email = $_POST["modify_email"];
@@ -313,7 +313,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		header("Location: add.php");
 	}if(isset($_POST["modify_equipment"]) and $_POST["modify_equipment"] == "1"){
 		if($_POST["operation"] == "delete"){
-			include("connection.php");
+			include_once("connection.php");
 			echo("delete equipment process");
 			$equipment_id = $_POST["modify_equipment_id"];
 			$query = "DELETE FROM `equipment` WHERE `equipment`.`equipment_id` = " . $equipment_id . ";";
@@ -321,7 +321,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 			$result = mysqli_query($con, $query);
 			header("Location: add.php");
 		}else{
-			include("connection.php");
+			include_once("connection.php");
 			echo("modify equipment process");
 			$equipment_id = $_POST["modify_equipment_id"];
 			$name = $_POST["modify_equipment_name"];
@@ -333,7 +333,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 			header("Location: add.php");
 		}
 	}if(isset($_POST["request_approval"]) and $_POST["request_approval"] == "1"){
-		include("connection.php");
+		include_once("connection.php");
 		$event_id = $_POST["event_id"];
 		$parade_id = $_POST["parade_id"];
 		$query = "UPDATE events SET final_aproval = 2 WHERE event_id = " . $event_id;
@@ -342,8 +342,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		echo("event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
 		header("location: event.php?parade_id=" . $parade_id . "&event_id=" . $event_id . ";");
 	}if(isset($_POST["modify_event_details"]) and $_POST["modify_event_details"] == "1"){
-		print_r($_POST);
-		include("connection.php");
+		include_once("connection.php");
 		$parade_id = $_POST["parade_id"];
 		$event_id = $_POST["event_id"];
 		$event_type = $_POST["event_type"];
@@ -361,7 +360,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 			header("location: calendar.php");
 		}
 	}if(isset($_POST["delete_event"]) and $_POST["delete_event"] == "1"){
-		include("connection.php");
+		include_once("connection.php");
 		$parade_id = $_POST["delete_parade_id"];
 		$event_id = $_POST["delete_event_id"];
 		$query = "DELETE FROM user_event WHERE event_id = " . $event_id;
@@ -371,7 +370,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		header("location: calendar.php");
 
 	}if(isset($_POST["modify_register"]) and $_POST["modify_register"] == "1"){
-		include("connection.php");
+		include_once("connection.php");
 		$event_id = $_POST["event_id"];
 		unset($_POST["event_id"]);
 		$parade_id = $_POST["parade_id"];
@@ -385,7 +384,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		}
 		header("location: event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
 	}if(isset($_POST["modify_equipment_register"]) and $_POST["modify_equipment_register"] == 1){
-		include("connection.php");
+		include_once("connection.php");
 		$event_id = $_POST["event_id"];
 		unset($_POST["event_id"]);
 		$parade_id = $_POST["parade_id"];

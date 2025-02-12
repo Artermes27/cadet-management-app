@@ -1,7 +1,7 @@
 <?php 
 session_start();
 
-	include("connection.php");
+	include_once("connection.php");
 	include("functions.php");
 
 	$user_data = check_login($con);
@@ -135,8 +135,7 @@ session_start();
         return $all_html;
     }
 
-    function html_for_equipment($event_id, $parade_id){
-        include("connection.php");
+    function html_for_equipment($con, $event_id, $parade_id){
         $query = "SELECT equipment_requests.equipment_id, equipment_requests.aproved, equipment.name FROM equipment_requests, equipment WHERE event_id = " . $event_id . " AND equipment_requests.equipment_id = equipment.equipment_id;";
         $result = mysqli_query($con, $query);
         $all_html = "";
@@ -196,12 +195,12 @@ session_start();
 	<title>my Dashbord</title>
 	<link rel="stylesheet" href="css/event-style.css">
 </head>
-<body onload='setStateOfEventApproval(<?php include("connection.php"); echo(get_event_aproval_value($con, $user_data["event_id"]))?>);'>
+<body onload='setStateOfEventApproval(<?php echo(get_event_aproval_value($con, $user_data["event_id"]))?>);'>
     <?php include("includes/nav.php");?>
     <div class="grid-container">
         <div class="left-side">
-            <h1><?php include("connection.php"); echo(get_parade_name_and_date_as_html_h1($con, $user_data["parade_id"]));?></h1>
-            <?php include("connection.php"); echo(html_for_list_of_parades_events($con, $user_data["parade_id"], $user_data["user_id"])); ?>
+            <h1><?php echo(get_parade_name_and_date_as_html_h1($con, $user_data["parade_id"]));?></h1>
+            <?php echo(html_for_list_of_parades_events($con, $user_data["parade_id"], $user_data["user_id"])); ?>
         </div>
         <div class="right-side">
             <h1><?php echo(get_event_name($con, $user_data["event_id"]));?></h1><h1></h1><h1></h1>
@@ -227,7 +226,7 @@ session_start();
             <div class="equipment-requests">
                 <?php 
                 if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
-                    echo(html_for_equipment($user_data["event_id"], $user_data["parade_id"]));
+                    echo(html_for_equipment($con, $user_data["event_id"], $user_data["parade_id"]));
                     echo(html_for_amending_the_equipment($user_data["event_id"]));
                 } else {
                     echo("<a>equipment requests are not available untill event is aproved</a>");
@@ -240,3 +239,4 @@ session_start();
     
 </body>
 </html>
+<?php mysqli_close($con)?>

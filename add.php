@@ -1,7 +1,7 @@
 <?php 
 session_start();
 
-	include("connection.php");
+	include_once("connection.php");
 	include("functions.php");
 
 	$user_data = check_login($con);
@@ -197,3 +197,4 @@ session_start();
         </div>
     </div>
 </body>
+<?php mysqli_close($con)?>
