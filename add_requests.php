@@ -23,33 +23,6 @@
             echo "<a>no names match your prompt</a>";
         }
     }
-    
-    if(isset($_GET["search_first_name_owner_calendar"])){//search method for creating an event used by add.js for searching for user by first name
-        $name = $_GET["search_first_name_owner_calendar"];
-        $parade_id = $_GET["parade_id"];
-        $event_id = $_GET["event_id"];
-        include_once("connection.php");
-        $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "';";
-        $result = mysqli_query($con, $query);
-        if(mysqli_num_rows($result) > 0)	{
-            //their are names symalar
-            //print_r(mysqli_fetch_all($result));
-            $output = "";
-            while($cadet = mysqli_fetch_assoc($result)){
-                //echo $output;
-                if($output == ""){
-                    $output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . "," . $parade_id . "," . $event_id .  ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
-                }	else	{
-                    $output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . "," . $parade_id . "," . $event_id .  ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
-                }
-            }
-            echo $output;
-            return $result;
-        }else{
-            //their are no symalar names
-            echo "<a>no names match your prompt</a>";
-        }
-    }
 
     if(isset($_GET["search_parade_name"])){//search method for creating an event used by add.js for searching for user by last name
         $parade_name = $_GET["search_parade_name"];

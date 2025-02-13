@@ -1,28 +1,26 @@
 <?php
 
 function check_login($con){
-
-	if(isset($_SESSION['user_id']))
-	{
-
+	//testing for session data
+	if(isset($_SESSION['user_id']) && isset($_SESSION['password'])){
+		//retreving session data 
 		$id = $_SESSION['user_id'];
-		$query = "SELECT * FROM users Where user_id = '$id' limit 1;";
-
+		$password = $_SESSION['password'];
+		//querying the database for users data
+		$query = "SELECT * FROM users Where `user_id` = '$id' AND `password` = '$password' limit 1;";
 		$result = mysqli_query($con,$query);
-		if($result && mysqli_num_rows($result) > 0)
-		{
+		//attaching user data if user found
+		if($result && mysqli_num_rows($result) > 0){
 			$user_data = mysqli_fetch_assoc($result);
-			if (isset($_GET["parade_id"]) and isset($_GET["event_id"])){
+			//testing for more data sent in get request
+			if (isset($_GET["parade_id"])){
 				$user_data["parade_id"] = $_GET["parade_id"];
+			}if (isset($_GET["event_id"])){
 				$user_data["event_id"] = $_GET["event_id"];
-				return $user_data;
-			}else{
-				return $user_data;
 			}
 			return $user_data;
 		}
 	}
-
 	//redirect to login
 	header("Location: login.php");
 	die;
@@ -55,11 +53,9 @@ if(isset($_GET["remove_equipment_id"]) and isset($_GET["event_id"])){
 	$result = mysqli_query($con, $query);
 }
 
-if(isset($_GET["search_first_name"]) != "" and isset($_GET["event_id"]) != ""){
+if(isset($_GET["search_first_name"]) and isset($_GET["event_id"])){
 	include_once("connection.php");
-	$first_name = $_GET["search_first_name"];
-	//$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE users.user_id NOT IN (SELECT user_event.user_id FROM user_event WHERE user_event.event_id = " . $_GET["event_id"] . ") AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
-	//echo $query;
+	$search_first_name = $_GET["search_first_name"];
 	$query = "SELECT event_id, parade_id, event_start, event_end FROM events WHERE event_id = " . $_GET["event_id"] . ";";
 	$result = mysqli_query($con, $query);
 	$event = mysqli_fetch_assoc($result);
@@ -75,38 +71,36 @@ if(isset($_GET["search_first_name"]) != "" and isset($_GET["event_id"]) != ""){
 	OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end > '" . $event["event_end"] . "')
 	OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')
 	OR (events.event_id = " . $event["event_id"] . "))) 
-	AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
+	AND users.first_name REGEXP '" . str_replace('"', "", $search_first_name) . "';";
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0)	{
-		$output = "";
+		$output_html = "";
 		while($cadet = mysqli_fetch_assoc($result)){
 			$output .= "<a onclick='resultHasBeenClickedAdd(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")'>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
 		}
-		echo $output;
+		echo $output_html;
 	}	else{
-		//their are no symalar names
 		echo "<a>no names match your prompt</a>";
 	}
 }
 
-if(isset($_GET["search_first_name_delete"]) != "" and isset($_GET["event_id"]) != ""){
+if(isset($_GET["search_first_name_delete"]) and isset($_GET["event_id"])){
 	include_once("connection.php");
 	$first_name = $_GET["search_first_name_delete"];
 	$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE users.user_id IN (SELECT user_event.user_id FROM user_event WHERE user_event.event_id = " . $_GET["event_id"] . ") AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0)	{
-		$output = "";
+		$output_html = "";
 		while($cadet = mysqli_fetch_assoc($result)){
-			$output .= "<script src=\"js/search.js\"></script><a onclick='resultHasBeenClickedDelete(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
+			$output_html .= "<script src=\"js/search.js\"></script><a onclick='resultHasBeenClickedDelete(" . $cadet["user_id"] . ", " . $_GET["event_id"] . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
 		}
-		echo $output;
+		echo $output_html;
 	}	else{
-		//their are no symalar names
 		echo "<a>no names match your prompt</a>";
 	}
 }
 
-if(isset($_GET["search_first_name_other_cadet"]) != "" and isset($_GET["event_id"]) != ""){
+if(isset($_GET["search_first_name_other_cadet"]) and isset($_GET["event_id"])){
 	include_once("connection.php");
 	$first_name = $_GET["search_first_name_other_cadet"];
 	$event_id = $_GET["event_id"];
@@ -129,21 +123,19 @@ if(isset($_GET["search_first_name_other_cadet"]) != "" and isset($_GET["event_id
 	OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end > '" . $event["event_end"] . "')
 	OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')
 	OR (events.event_id != '" . $event_id . "')));";
-	//echo($query);
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0)	{
-		$output = "";
+		$output_html = "";
 		while($cadet = mysqli_fetch_assoc($result)){
-			$output .= "<a>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . " " . $cadet["event_name"] . " " . $cadet["event_start"] . " " . $cadet["event_end"] . "</a><br>";
+			$output_html .= "<a>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . " " . $cadet["event_name"] . " " . $cadet["event_start"] . " " . $cadet["event_end"] . "</a><br>";
 		}
-		echo $output;
+		echo $output_html;
 	}	else{
-		//their are no symalar names
 		echo "<a>no names match your prompt</a>";
 	}
 }
 
-if(isset($_GET["search_equipment_add"]) != "" and isset($_GET["event_id"]) != ""){
+if(isset($_GET["search_equipment_add"]) and isset($_GET["event_id"])){
 	include_once("connection.php");
 	$equipment_name = $_GET["search_equipment_add"];
 	$event_id = $_GET["event_id"];
@@ -165,15 +157,15 @@ if(isset($_GET["search_equipment_add"]) != "" and isset($_GET["event_id"]) != ""
 	OR (events.event_id = " . $event["event_id"] . "))) 
 	AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "';";
 	$result = mysqli_query($con, $query);
-	$output_html = "";
 	if(mysqli_num_rows($result) > 0){
+		$output_html = "";
 		while($equipment = mysqli_fetch_assoc($result)){
 			$output_html .= "<a onclick=\"resultHasBeenClickedAddEquipment('" . $equipment["equipment_id"] . "', '" . $event_id . "')\">" . $equipment["name"] . "</a><br>";
 		}
+		echo $output_html;
 	}else{
-		$output_html .= "no pieces of equipment match your prompt";
+		echo "<a>no equipment matches your prompt</a>";
 	}
-	echo($output_html);
 }
 
 if(isset($_GET["search_equipment_delete"]) and isset($_GET["event_id"])){
@@ -182,11 +174,11 @@ if(isset($_GET["search_equipment_delete"]) and isset($_GET["event_id"])){
 	$query = "SELECT equipment.equipment_id, equipment.name FROM equipment WHERE equipment.equipment_id IN (SELECT equipment_requests.equipment_id FROM equipment_requests WHERE equipment_requests.event_id = " . $_GET["event_id"] . ") AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "';";
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0) {
-		$output = "";
+		$output_html = "";
 		while($equipment = mysqli_fetch_assoc($result)) {
-			$output .= "<a onclick='resultHasBeenClickedDeleteEquipment(" . $equipment["equipment_id"] . ", " . $_GET["event_id"] . ")'>" . $equipment["name"] . "</a><br>";
+			$output_html .= "<a onclick='resultHasBeenClickedDeleteEquipment(" . $equipment["equipment_id"] . ", " . $_GET["event_id"] . ")'>" . $equipment["name"] . "</a><br>";
 		}
-		echo $output;
+		echo $output_html;
 	} else {
 		echo "<a>no equipment matches your prompt</a>";
 	}
@@ -218,11 +210,11 @@ if(isset($_GET["search_equipment_other"]) and isset($_GET["event_id"])){
 	OR (events.event_id != '" . $event_id . "')));";
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0) {
-		$output = "";
+		$output_html = "";
 		while($equipment = mysqli_fetch_assoc($result)) {
-			$output .= "<a>" . $equipment["name"] . " " . $equipment["event_name"] . " " . $equipment["event_start"] . " " . $equipment["event_end"] . "</a><br>";
+			$output_html .= "<a>" . $equipment["name"] . " " . $equipment["event_name"] . " " . $equipment["event_start"] . " " . $equipment["event_end"] . "</a><br>";
 		}
-		echo $output;
+		echo $output_html;
 	} else {
 		echo "<a>no equipment matches your prompt</a>";
 	}
@@ -231,7 +223,6 @@ if(isset($_GET["search_equipment_other"]) and isset($_GET["event_id"])){
 if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the database from add.php
 	if(isset($_POST["add_new_user"]) and $_POST["add_new_user"] == "1"){
 		include_once("connection.php");
-		echo("add new user process");
 		$query = "SELECT MAX(user_id) FROM users;";
 		$result = mysqli_query($con, $query);
 		$user_id = mysqli_fetch_assoc($result)["MAX(user_id)"] + 1;
@@ -249,7 +240,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		header("Location: add.php");
 	}if(isset($_POST["add_new_equipment"]) and $_POST["add_new_equipment"] == "1"){
 		include_once("connection.php");
-		echo("add new equipment process");
 		$query = "SELECT MAX(equipment_id) FROM equipment;";
 		$result = mysqli_query($con, $query);
 		$equipment_id = mysqli_fetch_assoc($result)["MAX(equipment_id)"] + 1;
@@ -257,12 +247,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$description = $_POST["description"];
 		$location = $_POST["location"];
 		$query = "INSERT INTO `equipment` (`equipment_id`, `name`, `description`, `location`) VALUES ('" . $equipment_id . "', '" . $name . "', '" . $description . "', '" . $location . "');";
-		echo($query);
 		$result = mysqli_query($con, $query);
 		header("Location: add.php");
 	}if(isset($_POST["add_new_parade"]) and $_POST["add_new_parade"] == "1"){
 		include_once("connection.php");
-		echo("add new parade process");
 		$query = "SELECT MAX(parade_id) FROM parades;";
 		$result = mysqli_query($con, $query);
 		$parade_id = mysqli_fetch_assoc($result)["MAX(parade_id)"] + 1;
@@ -271,9 +259,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$end = $_POST["end"];
 		$parade_name = $_POST["parade_name"];
 		$query = "INSERT INTO `parades` (`parade_id`, `date`, `start`, `end`, `parade_name`) VALUES ('" . $parade_id . "', '" . $date . "', '" . $start . "', '" . $end . "', '" . $parade_name . "');";
-		echo($query);
 		$result = mysqli_query($con, $query);
-		echo($query);
 		header("Location: add.php");
 	}if(isset($_POST["add_new_event"]) and $_POST["add_new_event"] == "1"){
 		$parade_id = $_POST["parade_id"];
@@ -287,12 +273,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$result = mysqli_query($con, $query);
 		$event_id = mysqli_fetch_assoc($result)["MAX(event_id)"] + 1;
 		$query = "INSERT INTO `events` (`event_id`, `parade_id`, `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval`) VALUES ('" . $event_id . "', '" . $parade_id . "', '" . $event_type . "', '" . $event_name . "', '" . $event_start . "', '" . $event_end . "', '" . $owner . "', '0');";
-		echo($query);
 		$result = mysqli_query($con, $query);
 		header("Location: add.php");
 	}if(isset($_POST["modify_user"]) and $_POST["modify_user"] == "1"){
 		include_once("connection.php");
-		echo("modify user process");
 		$user_id = $_POST["modify_user_id"];
 		$email = $_POST["modify_email"];
 		$first_name = $_POST["modify_first_name"];
@@ -314,33 +298,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 	}if(isset($_POST["modify_equipment"]) and $_POST["modify_equipment"] == "1"){
 		if($_POST["operation"] == "delete"){
 			include_once("connection.php");
-			echo("delete equipment process");
 			$equipment_id = $_POST["modify_equipment_id"];
 			$query = "DELETE FROM `equipment` WHERE `equipment`.`equipment_id` = " . $equipment_id . ";";
-			echo($query);
 			$result = mysqli_query($con, $query);
 			header("Location: add.php");
 		}else{
 			include_once("connection.php");
-			echo("modify equipment process");
 			$equipment_id = $_POST["modify_equipment_id"];
 			$name = $_POST["modify_equipment_name"];
 			$description = $_POST["modify_equipment_description"];
 			$location = $_POST["modify_equipment_location"];
 			$query = "UPDATE `equipment` SET `name` = '" . $name . "', `description` = '" . $description . "', `location` = '" . $location . "' WHERE `equipment`.`equipment_id` = " . $equipment_id . ";";
-			echo($query);
 			$result = mysqli_query($con, $query);
 			header("Location: add.php");
 		}
-	}if(isset($_POST["request_approval"]) and $_POST["request_approval"] == "1"){
-		include_once("connection.php");
-		$event_id = $_POST["event_id"];
-		$parade_id = $_POST["parade_id"];
-		$query = "UPDATE events SET final_aproval = 2 WHERE event_id = " . $event_id;
-		echo($query);
-		$result = mysqli_query($con, $query);
-		echo("event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
-		header("location: event.php?parade_id=" . $parade_id . "&event_id=" . $event_id . ";");
 	}if(isset($_POST["modify_event_details"]) and $_POST["modify_event_details"] == "1"){
 		include_once("connection.php");
 		$parade_id = $_POST["parade_id"];
@@ -368,7 +339,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$query = "DELETE FROM events WHERE event_id = " . $event_id;
 		$result = mysqli_query($con, $query);
 		header("location: calendar.php");
-
 	}if(isset($_POST["modify_register"]) and $_POST["modify_register"] == "1"){
 		include_once("connection.php");
 		$event_id = $_POST["event_id"];

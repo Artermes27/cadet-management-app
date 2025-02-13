@@ -18,6 +18,7 @@ session_start();
 					if($user_data['password'] === hash("sha256", $password));{
 						echo "password match";
 						$_SESSION['user_id'] = $user_data['user_id'];
+						$_SESSION['password'] = $user_data['password'];
 						header("Location: calendar.php");
 						die;
 					}
