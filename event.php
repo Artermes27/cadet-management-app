@@ -174,7 +174,7 @@ session_start();
                 $all_html .= "</select></td>\n";
                 $all_html .= "</tr>\n";
             }
-            $all_html .= "</table><div style=\"padding-top:10px\" class=\"submit-the-equipment\"><input type=\"submit\" value=\"update equipment request log\" class=\"register-button\" id=\"equipment-submit\">\n";
+            $all_html .= "</table><div style=\"padding-top:10px\" class=\"submit-the-equipment\"><input type=\"submit\" value=\"submit the equipment request log\" class=\"register-button\" id=\"equipment-submit\">\n";
             $all_html .= "</form></div>\n";
             $all_html .= "<div class=\"input_error_handeling\" id=\"equipment-input-handeling\"></div>\n"; 
             $all_html .= "</div>\n";
