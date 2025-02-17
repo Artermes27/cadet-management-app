@@ -7,45 +7,6 @@
 }
 
 
-
-.grid-container .left-side .event_not_aproved{
-  text-align: center;
-  border-radius: 10px;
-  display: inline-block;
-  background-color: rgba(255, 105, 105, 0.582);
-  margin: 3px;
-  width: 98%;
-}
-
-.grid-container .left-side .event_aproved{
-  text-align: center;
-  border-radius: 10px;
-  display: inline-block;
-  background-color: rgb(157, 241, 157);
-  margin: 3px;
-  width: 98%;
-}
-
-.grid-container .left-side .event_aproval_requested{
-  text-align: center;
-  border-radius: 10px;
-  display: inline-block;
-  background-color:rgba(233, 215, 117, 0.952);
-  margin: 3px;
-  width: 98%;
-}
-
-.grid-container .left-side .event{
-  text-align: center;
-  border-radius: 10px;
-  display: inline-block;
-  background-color: #ddd;
-  margin: 3px;
-  width: 98%;
-}
-
-
-
 .grid-container .right-side {
     display: grid;
     grid-template-columns: 30% 35% 35%;
@@ -68,22 +29,6 @@
   padding-top: 10px;
 }
 
-.lesson_details{
-  display: grid;
-  grid-template-columns: 100%;
-  gap: 10px;
-  padding-left: 10px;
-  padding-right:10px;
-}
-
-.modify_lesson_details{
-  display: grid;
-  grid-template-columns: 50% 50%;
-  gap: 10px;
-  padding-left: 10px;
-  padding-right:10px;
-}
-
 .modify_lesson_details .submit_button{
   grid-column: span 2;
 }
@@ -98,25 +43,4 @@
 
 .modify_lesson_details .livesearch{
   grid-column: span 2;
-}
-
-button {
-  grid-column: span 2;
-  margin-top: 10px;
-  padding: 10px 15px;
-  font-size: 16px;
-  background-color: #6b86c0;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  text-decoration: solid;
-}
-
-button:hover {
-  background-color: #4c6baf;
-}
-
-button:disabled {
-  color: red;
 }

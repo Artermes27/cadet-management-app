@@ -1,0 +1,44 @@
+.modify_lesson_details{
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 10px;
+    padding-left: 10px;
+    padding-right:10px;
+}
+
+button {
+    grid-column: span 2;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #6b86c0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4c6baf;
+}
+
+button:disabled {
+    color: red;
+}
+
+.input_handeling{
+    grid-column: span 2;
+}
+
+label {
+    font-weight: bold;
+    line-height: 2;
+}
+
+input, select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

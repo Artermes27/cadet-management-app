@@ -19,40 +19,7 @@
     text-align: center;
 }
 
-.event_not_aproved{
-    border-radius: 10px;
-    display: inline-block;
-    background-color: rgba(255, 105, 105, 0.582);
-    margin: 3px;
-    width: 98%;
-}
-
-.event_aproved{
-    border-radius: 10px;
-    display: inline-block;
-    background-color: rgb(157, 241, 157);
-    margin: 3px;
-    width: 98%;
-}
-
-.event_aproval_requested{
-    border-radius: 10px;
-    display: inline-block;
-    background-color:rgba(233, 215, 117, 0.952);
-    margin: 3px;
-    width: 98%;
-}
-
-.event{
-    border-radius: 10px;
-    display: inline-block;
-    background-color: #ddd;
-    margin: 3px;
-    width: 98%;
-}
-
 button {
-    grid-column: span 2;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px 15px;
@@ -62,35 +29,4 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #4c6baf;
-}
-
-button:disabled {
-    color: red;
-}
-.input_handeling{
-    grid-column: span 2;
-}
-
-label {
-    font-weight: bold;
-    line-height: 2;
-}
-
-input, select {
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.modify_event_form {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    gap: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
 }

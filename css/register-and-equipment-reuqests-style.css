@@ -1,0 +1,37 @@
+.register-button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #6b86c0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.register-button:hover {
+    background-color: #4c6baf;
+}
+
+.register-button:disabled {
+    color: red;
+}
+
+label {
+    font-weight: bold;
+    line-height: 2;
+}
+
+input, select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 90%;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
