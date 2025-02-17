@@ -100,7 +100,7 @@ session_start();
     $query = "SELECT parade_id, parade_name FROM parades WHERE date = '$parade_date';";
     $result = mysqli_query($con, $query);
     $parade = mysqli_fetch_assoc($result);
-    if($user_data["admin"] == 1){//admin will see events they are not in | cadets must be in a lesson to see it
+    if($user_data["admin"] == 1 or $user_data["G4"] == 1){//admin will see events they are not in | cadets must be in a lesson to see it
       $query = "SELECT events.* FROM events WHERE parade_id =" . $parade["parade_id"] . " ORDER BY events.event_start;";
     }else{
       $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade["parade_id"] . " AND user_event.user_id = " . $user_data["user_id"] . ") OR (events.owner = " . $user_data["user_id"] . " AND parade_id = " . $parade["parade_id"] . ") ORDER BY events.event_start;";
@@ -126,9 +126,9 @@ session_start();
           $result = mysqli_query($con, $query);
           $owner = mysqli_fetch_assoc($result);
             $event_html = $event_html . "<div class=\"" . $style_class . "\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a>" . $events[$event_count]["event_name"] . "</a><br>\n<a>" . $owner["rank"] . " " . $owner["first_name"] . " " . $owner["last_name"] . "</a><br>\n<a href=\"event.php?parade_id=" . $parade["parade_id"] . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a><br>\n<button onclick=\"populateAdminEditEventForm('" . $events[$event_count]["parade_id"] . "', '" . $events[$event_count]["event_id"] . "', '" . $events[$event_count]["event_type"] . "', '" . $events[$event_count]["event_name"] . "', '" .  $events[$event_count]["event_start"] . "', '" . $events[$event_count]["event_end"] . "', '" . $events[$event_count]["owner"] . "', '" .  $events[$event_count]["final_aproval"] . "')\">click for admin panel edit</button></div>\n";
-          }elseif($user_data["user_id"] == $events[$event_count]["owner"]){
+          }elseif($user_data["user_id"] == $events[$event_count]["owner"] or $user_data["G4"] == 1){
             $event_html = $event_html . "<div class=\"" . $style_class . "\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a href=\"event.php?parade_id=" . $parade["parade_id"] . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a></div>\n";
-          }else {//non owner so they can only view the event
+          }else {
             $event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a>" . $events[$event_count]["event_name"] . "</a></div>\n";
           }
         $event_count = $event_count + 1;
@@ -140,9 +140,8 @@ session_start();
   function html_for_admin_page_on_callandar(){//generate the general form for the admin panle on calendar.php
     $html = "<div class=\"event\">";
     $html .= "<h2>admin panel</h2>\n";
-    $html .= "<div id=\"curent_event_owner_full_name\"></div>\n";
-    $html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">\n";
-    $html .= "<div class=\"modify_event_form\">\n";
+    $html .= "<link rel=\"stylesheet\" href=\"css/event-owner-form-style.css\">\n";
+    $html .= "<form class=\"modify_lesson_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
     $html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">\n";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
@@ -168,9 +167,8 @@ session_start();
     $html .= "<div class=\"input_handeling\" id=\"event-input-handeling\"></div>\n";
     $html .= "<div class=\"input_handeling\" id=\"display_current_owner\"></div>\n";
     $html .= "<button class=\"input_handeling\" id=\"add-event-submit\" disabled>submit</button>\n";
-    $html .= "</div>\n";
     $html .= "</form>\n";
-    $html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">\n";
+    $html .= "<form class=\"modify_lesson_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
     $html .= "<input hidden value=\"1\" type=\"text\" name=\"delete_event\" id=\"delete_event\">\n";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_parade_id\" id=\"delete_parade_id\">\n";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_event_id\" id=\"delete_event_id\">\n";
@@ -178,7 +176,7 @@ session_start();
     $html .= "</form>\n";
     $html .= "</div>\n";
     return $html;
-  }  
+  }
 
   //checking for the current date variable from the previous page
   if(isset($_GET["current_date"]) and $_GET["current_date"] != "null") {
@@ -209,6 +207,7 @@ session_start();
 <head>
   <title>my Dashbord</title>
   <link rel="stylesheet" href="css/calendar-style.css">
+  <link rel="stylesheet" href="css/event-display-block-style.css">
   <script src="js/calendar.js"></script>
   <script src="js/event_owner_form_handeling.js"></script>
 </head>
@@ -234,7 +233,7 @@ session_start();
         <?php 
         if($user_data["admin"] == 1) {
           echo(html_for_admin_page_on_callandar());
-        } else {
+        }else {
           echo(html_for_parade_on_callendar($con, $parade_dates[$output_count]["date"], $user_data));
           $output_count = $output_count + 1;
         }

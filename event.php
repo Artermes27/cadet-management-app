@@ -34,7 +34,7 @@ session_start();
         $owner_info_dump = mysqli_fetch_assoc($result);
         $lesson_plan_html = "";
         $lesson_plan_html .= "<h4>modify lesson details</h4>\n";
-        $lesson_plan_html .= "<div class=\"lesson_details\">\n";
+        $lesson_plan_html .= "<link rel=\"stylesheet\" href=\"css/event-owner-form-style.css\">\n";
         $lesson_plan_html .= "<form class=\"modify_lesson_details\" id=\"modify_event_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
         $lesson_plan_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"user_id\" id=\"user_id\">\n";//this is the user id of the user that is curently loged in, this is used to check if the user has changed the event owner and redirect the acordingly when form is submited
@@ -63,19 +63,17 @@ session_start();
         $lesson_plan_html .= "<div class=\"display_current_owner\" id=\"display_current_owner\"><a>curent owner: " . $owner_info_dump["rank"] . " " . $owner_info_dump["first_name"] . " " . $owner_info_dump["last_name"] . "</a></div>\n";
         $lesson_plan_html .= "<button class=\"submit_button\" id=\"add-event-submit\">update lesson details</button>\n";
         $lesson_plan_html .= "</form>\n";
-        $lesson_plan_html .= "</form>\n";
-        $lesson_plan_html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">\n";
+        $lesson_plan_html .= "<form class=\"modify_lesson_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
         $lesson_plan_html .= "<input hidden value=\"1\" type=\"text\" name=\"delete_event\" id=\"delete_event\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["parade_id"]. "\" type=\"text\" name=\"delete_parade_id\" id=\"delete_parade_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"delete_event_id\" id=\"delete_event_id\">\n";
         $lesson_plan_html .= "<button class=\"input_handeling\" id=\"delete-event-submit\" style=\"width: 100%;\">delete event</button>\n";
         $lesson_plan_html .= "</form>\n";
-        $lesson_plan_html .= "</div>\n";
         return $lesson_plan_html;
     }
 
-    function html_for_list_of_parades_events($con, $parade_id, $user_id, $admin){
-        if ($admin == 1){
+    function html_for_list_of_parades_events($con, $parade_id, $user_id, $admin, $G4){
+        if ($admin == 1 or $G4 == 1){
             $query = "SELECT * FROM events WHERE parade_id = " . $parade_id . " ORDER BY event_start;";
         } else {
             $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade_id . " AND user_event.user_id = " . $user_id . ") OR (events.owner = " . $user_id . " AND parade_id = " . $parade_id . ") ORDER BY events.event_start;";
@@ -85,19 +83,19 @@ session_start();
         $event_count = 0;
         $event_html = "<div class=\"event\">\n";
         while($event_count < count($events)){
-            if($events[$event_count]["final_aproval"] == 0){//the event is not aproved
+            if($events[$event_count]["final_aproval"] == 0){
                 $style_class = "event_not_aproved";
-              }elseif($events[$event_count]["final_aproval"] == 1){//the event is aproved
+              }elseif($events[$event_count]["final_aproval"] == 1){
                 $style_class = "event_aproved";
-              }elseif($events[$event_count]["final_aproval"] == 2){//the event is pending aproval
+              }elseif($events[$event_count]["final_aproval"] == 2){
                 $style_class = "event_aproval_requested";
               }
-            if($user_id == $events[$event_count]["owner"] or $admin == 1){
+            if($user_id == $events[$event_count]["owner"] or $admin == 1 or $G4 == 1){
                 $event_html .= "<div class=\"" . $style_class . "\">\n";
                 $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
                 $event_html .= "<a href=\"event.php?parade_id=" . $parade_id . "&event_id=" . $events[$event_count]["event_id"] . "\">" . $events[$event_count]["event_name"] . "</a>\n";
                 $event_html .= "</div>\n";
-            }else {//non owner so they can only view the event
+            }else {
                 $event_html .= "<div class=\"event\">\n";
                 $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
                 $event_html .= "<a>" . $events[$event_count]["event_name"] . "</a>\n";
@@ -141,15 +139,15 @@ session_start();
     function html_for_amending_the_register($event_id){
         $all_html = "";
         $all_html .= "<div class=\"search-box-all\">\n";
-        $all_html .= "<input style=\"width: 180px;\" placeholder=\"add a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name\" value=\"\" onkeyup=\"showResultAddCadet(this.value, 'search_first_name', '" . $event_id . "')\"><br>\n";
+        $all_html .= "<input placeholder=\"add a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name\" value=\"\" onkeyup=\"showResultAddCadet(this.value, 'search_first_name', '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch\"></div>";
         $all_html .= "</div>\n";
         $all_html .= "<div class=\"search-box-all\">\n";
-        $all_html .= "<input style=\"width: 180px;\" placeholder=\"remove a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name_delete\" value=\"\" onkeyup=\"showResultDeleteCadet(this.value, 'search_first_name_delete', '" . $event_id . "')\"><br>\n";
+        $all_html .= "<input placeholder=\"remove a cadet(search first name)\" type=\"text\" size=\"30\" id=\"search_first_name_delete\" value=\"\" onkeyup=\"showResultDeleteCadet(this.value, 'search_first_name_delete', '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch_delete\"></div>";
         $all_html .= "</div>\n";
         $all_html .= "<div class=\"search-box-all\">\n";
-        $all_html .= "<input style=\"width: 180px;\" placeholder=\"search for another cadets event\" type=\"text\" size=\"30\" id=\"search_first_name_other\" value=\"\" onkeyup=\"showResultSearchOtherCadet(this.value, '" . $event_id . "')\"><br>\n";
+        $all_html .= "<input placeholder=\"search for another cadets event\" type=\"text\" size=\"30\" id=\"search_first_name_other\" value=\"\" onkeyup=\"showResultSearchOtherCadet(this.value, '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch_other_cadet\"></div>";
         $all_html .= "</div>\n";
         return $all_html;
@@ -189,15 +187,15 @@ session_start();
     function html_for_amending_the_equipment($event_id){
         $all_html = "";
         $all_html .= "<div class=\"search-box-all\">\n";
-        $all_html .= "<input style=\"width: 180px;\" placeholder=\"add equipment request (search name)\" type=\"text\" size=\"30\" id=\"search_equipment_name_add\" name=\"search_equipment_name_add\" value=\"\" onkeyup=\"showResultAddEquipment(this.value, '" . $event_id . "')\"><br>\n";
+        $all_html .= "<input placeholder=\"add equipment request (search name)\" type=\"text\" size=\"30\" id=\"search_equipment_name_add\" name=\"search_equipment_name_add\" value=\"\" onkeyup=\"showResultAddEquipment(this.value, '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch_equipment_add\"></div>";
         $all_html .= "</div>\n";
         $all_html .= "<div class=\"search-box-all\">\n";
-        $all_html .= "<input style=\"width: 180px;\" placeholder=\"remove equipment request (search name)\" type=\"text\" size=\"30\" id=\"search_equipment_name_delete\" value=\"\" onkeyup=\"showResultDeleteEquipment(this.value, '" . $event_id . "')\"><br>\n";
+        $all_html .= "<input placeholder=\"remove equipment request (search name)\" type=\"text\" size=\"30\" id=\"search_equipment_name_delete\" value=\"\" onkeyup=\"showResultDeleteEquipment(this.value, '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch_delete_equipment\"></div>";
         $all_html .= "</div>\n";
         $all_html .= "<div class=\"search-box-all\">\n";
-        $all_html .= "<input style=\"width: 180px;\" placeholder=\"search for another equipment request\" type=\"text\" size=\"30\" id=\"search_equipment_name_other\" value=\"\" onkeyup=\"showResultSearchOtherEquipment(this.value, '" . $event_id . "')\"><br>\n";
+        $all_html .= "<input placeholder=\"search for another equipment request\" type=\"text\" size=\"30\" id=\"search_equipment_name_other\" value=\"\" onkeyup=\"showResultSearchOtherEquipment(this.value, '" . $event_id . "')\"><br>\n";
         $all_html .= "<div id=\"livesearch_other_equipment\"></div>";
         $all_html .= "</div>\n";
         return $all_html;
@@ -241,13 +239,15 @@ session_start();
     <script src="js/event_owner_form_handeling.js"></script>
 	<title>my Dashbord</title>
 	<link rel="stylesheet" href="css/event-style.css">
+    <link rel="stylesheet" href="css/event-display-block-style.css">
+    <link rel="stylesheet" href="css/register-and-equipment-reuqests-style.css">
 </head>
 <body onload='<?php echo(javascript_for_onload($con, $user_data["event_id"]));?>'>
     <?php include("includes/nav.php");?>
     <div class="grid-container">
         <div class="left-side">
             <h1><?php echo(get_parade_name_and_date_as_html_h1($con, $user_data["parade_id"]));?></h1>
-            <?php echo(html_for_list_of_parades_events($con, $user_data["parade_id"], $user_data["user_id"], $user_data["admin"])); ?>
+            <?php echo(html_for_list_of_parades_events($con, $user_data["parade_id"], $user_data["user_id"], $user_data["admin"], $user_data["G4"])); ?>
         </div>
         <div class="right-side">
             <h1><?php echo(get_event_name($con, $user_data["event_id"]));?></h1><h1></h1><h1></h1>
