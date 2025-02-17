@@ -5,15 +5,15 @@ session_start();
 	include("includes/functions.php");
 	if($_SERVER['REQUEST_METHOD'] == "POST"){
 		//something was posted
-		$email = $_POST['email'];
-		$password = $_POST['password'];
+		include_once("requests/post_request_scanning.php");
+		$email = post_request('email');
+		$password = post_request('password');
 		if(!empty($email) && !empty($password)){
 			//read from database
 			$query = "select * from users where email = '$email' limit 1";
 			$result = mysqli_query($con, $query);
 			if($result){
 				if($result && mysqli_num_rows($result) > 0){
-					echo "query sucess,";
 					$user_data = mysqli_fetch_assoc($result);
 					if($user_data['password'] === hash("sha256", $password));{
 						echo "password match";
