@@ -92,6 +92,7 @@ function resultHasBeenClickedUser(user_id) {//returns the user_id of the user se
         document.getElementById("modify_rank").value = userDetails.rank;
         document.getElementById("modify_active").value = userDetails.active;
         document.getElementById("modify_admin").value = userDetails.admin;
+        document.getElementById("modify_G4").value = userDetails.G4;
         //by defalt activate the form since the inputs will pass validation
         document.getElementById("modify-user-submit").disabled = false;
         }

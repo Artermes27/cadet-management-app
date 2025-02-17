@@ -111,6 +111,11 @@ session_start();
                         <option value="0">non-admin</option>
                         <option value="1">admin</option>
                     </select>
+                    <label>G4</label>
+                    <select id="G4" name="G4">
+                        <option value="0">non-G4</option>
+                        <option value="1">G4</option>
+                    </select>
                     <div id="user-input-handeling"></div>
                     <button id="add-user-submit" disabled>submit</button>
                 </form>
@@ -150,6 +155,11 @@ session_start();
                     <select id="modify_admin" name="modify_admin">
                         <option value="0">non-admin</option>
                         <option value="1">admin</option>
+                    </select>
+                    <label>G4</label>
+                    <select id="modify_G4" name="modify_G4">
+                        <option value="0">non-G4</option>
+                        <option value="1">G4</option>
                     </select>
                     <div id="modify-user-input-handeling"></div>
                     <button id="modify-user-submit" disabled>submit</button>

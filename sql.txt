@@ -7,7 +7,9 @@ CREATE TABLE `users` (
   `DOB` date NOT NULL,
   `gender` tinytext NOT NULL,
   `rank` varchar(255) NOT NULL,
-  `active` bit NOT NULL
+  `active` bit(1) NOT NULL
+  `admin` bit(1) NOT NULL
+  `G4` bit(1) NOT NULL COMMENT '1 = g4, 0 = not-g4';
 );
 
 

@@ -11,11 +11,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$rank = post_request("rank");
 		$active = post_request("active");
 		$admin = post_request("admin");
+		$G4 = post_request("G4");
 		include_once("../includes/connection.php");
 		$query = "SELECT MAX(user_id) FROM users;";
 		$result = mysqli_query($con, $query);
 		$user_id = mysqli_fetch_assoc($result)["MAX(user_id)"] + 1;
-		$query = "INSERT INTO `users` (`user_id`, `email`, `password`, `first_name`, `last_name`, `DOB`, `gender`, `rank`, `active`, `admin`) VALUES ('" . $user_id . "', '" . $email . "', '" . hash("sha256", $password) . "', '" . $first_name . "', '" . $last_name . "', '" . $DOB . "', '" . $gender . "', '" . $rank . "', " . $active . ", " . $admin . ");";
+		$query = "INSERT INTO `users` (`user_id`, `email`, `password`, `first_name`, `last_name`, `DOB`, `gender`, `rank`, `active`, `admin`, `G4`) VALUES ('" . $user_id . "', '" . $email . "', '" . hash("sha256", $password) . "', '" . $first_name . "', '" . $last_name . "', '" . $DOB . "', '" . $gender . "', '" . $rank . "', " . $active . ", " . $admin . ", " . $G4 . ");";
 		$result = mysqli_query($con, $query);
 		header("Location: ../add.php");
 	}if(isset($_POST["add_new_equipment"]) and $_POST["add_new_equipment"] == "1"){
@@ -70,13 +71,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the databas
 		$rank = post_request("modify_rank");
 		$active = post_request("modify_active");
 		$admin = post_request("modify_admin");
+		$G4 = post_request("modify_G4");
 		include_once("../includes/connection.php");
 		if(isset($_POST["modify_password"])){
 			$password = post_request("modify_password");
-			$query = "UPDATE `users` SET `email` = '" . $email . "', `password` = '" . hash("sha256", $password) . "', `first_name` = '" . $first_name . "', `last_name` = '" . $last_name . "', `DOB` = '" . $DOB . "', `gender` = '" . $gender . "', `rank` = '" . $rank . "', `active` = " . $active . ", `admin` = " . $admin . " WHERE `users`.`user_id` = " . $user_id . ";";
+			$query = "UPDATE `users` SET `email` = '" . $email . "', `password` = '" . hash("sha256", $password) . "', `first_name` = '" . $first_name . "', `last_name` = '" . $last_name . "', `DOB` = '" . $DOB . "', `gender` = '" . $gender . "', `rank` = '" . $rank . "', `active` = " . $active . ", `admin` = " . $admin . ", `G4` = " . $G4 . " WHERE `users`.`user_id` = " . $user_id . ";";
 			$result = mysqli_query($con, $query);
 		}else{
-			$query = "UPDATE `users` SET `email` = '" . $email . "', `first_name` = '" . $first_name . "', `last_name` = '" . $last_name . "', `DOB` = '" . $DOB . "', `gender` = '" . $gender . "', `rank` = '" . $rank . "', `active` = " . $active . ", `admin` = " . $admin . " WHERE `users`.`user_id` = " . $user_id . ";";
+			$query = "UPDATE `users` SET `email` = '" . $email . "', `first_name` = '" . $first_name . "', `last_name` = '" . $last_name . "', `DOB` = '" . $DOB . "', `gender` = '" . $gender . "', `rank` = '" . $rank . "', `active` = " . $active . ", `admin` = " . $admin . ", `G4` = " . $G4 . " WHERE `users`.`user_id` = " . $user_id . ";";
 			$result = mysqli_query($con, $query);
 		}
 		header("Location: ../add.php");
