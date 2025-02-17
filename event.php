@@ -123,12 +123,14 @@ session_start();
             while($cadet = mysqli_fetch_assoc($result)) {
                 $output_html .= "<tr>\n";
                 $output_html .= "<td><label>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</label></td>\n";
-                $output_html .= "<td><input style=\"width: 10px; height: 20px;\" type=\"text\" value=\"" . $cadet["present"] . "\" placeholder=\"" . $cadet["present"] . "\" name=\"" . $cadet["user_id"] . "\"></td>\n";
+                $output_html .= "<td><input style=\"width: 10px; height: 20px;\" type=\"text\" value=\"" . $cadet["present"] . "\" placeholder=\"" . $cadet["present"] . "\" name=\"" . $cadet["user_id"] . "\" onkeyup=\"REGEXCheckRegister(this.value, " . $cadet["user_id"] . ")\"></td>\n";
                 $output_html .= "</tr>\n";
                 $who_is_present_original[$cadet["user_id"]] = $cadet["present"];
             }
             $output_html .= "</table></div>\n";
-            $output_html .= "<div style=\"padding-top:10px\" class=\"submit-the-register\"><input type=\"submit\" value=\"submit the register\" class=\"register-button\">\n";
+            $output_html .= "<div class=\"input_error_handeling\" id=\"register-input-handeling\"></div>\n";
+            $output_html .= "<div style=\"padding-top:10px\" class=\"submit-the-register\"><input type=\"submit\" value=\"submit the register\" id= \"register-submit\" class=\"register-button\">\n";
+            $output_html .= "<div id=\"register-input-handeling\"></div>\n";
             $output_html .= "</form></div>\n";
         } else {
             $output_html .= "no cadets will be present\n";
@@ -153,29 +155,30 @@ session_start();
         return $all_html;
     }
 
-    function html_for_equipment($con, $event_id, $parade_id){
+    function html_for_equipment($con, $event_id, $parade_id, $G4){
         $query = "SELECT equipment_requests.equipment_id, equipment_requests.aproved, equipment.name FROM equipment_requests, equipment WHERE event_id = " . $event_id . " AND equipment_requests.equipment_id = equipment.equipment_id;";
         $result = mysqli_query($con, $query);
         $all_html = "";
         if(mysqli_num_rows($result) > 0){
             $all_html .= "<div class=\"equipemnt-display-register-main\">\n";
             $all_html .= "<table>\n";
-            $all_html .= "<form method=\"post\" action=\"requests/event_details_requests.php\">\n";
+            $all_html .= "<form method=\"post\" action=\"requests/post_requests.php\">\n";
             $all_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_equipment_register\" id=\"modify_equipment_register\">\n";
             $all_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
             $all_html .= "<input hidden value=\"" . $parade_id . "\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
             while($equipment_request = mysqli_fetch_assoc($result)){
                 $all_html .= "<tr>\n";
                 $all_html .= "<td><label>" . $equipment_request["name"] . "</label></td>\n";
-                $all_html .= "<td><select onload=\"//setStateOfEquipmentRequest('" . $equipment_request["aproved"] . "', '" . $equipment_request["equipment_id"] . "')\" value=\"" . $equipment_request["aproved"] . "\" id=\"" . $equipment_request["equipment_id"] . "\" name=\"" . $equipment_request["equipment_id"] . "\" onclick=\"REGEXCheckEquipment(this.value, '" . $equipment_request["aproved"] . "')\">\n";
+                $all_html .= "<td><select value=\"" . $equipment_request["aproved"] . "\" id=\"" . $equipment_request["equipment_id"] . "\" name=\"" . $equipment_request["equipment_id"] . "\" onclick=\"REGEXCheckEquipment(this.value, '" . $equipment_request["equipment_id"] . "', '" . $equipment_request["aproved"] . "', '" . $G4 . "')\">\n";
                 $all_html .= "<option value=\"0\">requested</option>\n";
                 $all_html .= "<option value=\"1\">aproved</option>\n";
                 $all_html .= "<option value=\"2\">denied</option>\n";
                 $all_html .= "</select></td>\n";
                 $all_html .= "</tr>\n";
             }
-            $all_html .= "</table><div style=\"padding-top:10px\" class=\"submit-the-equipment\"><input type=\"submit\" value=\"update equipment request log\" class=\"register-button\">\n";
+            $all_html .= "</table><div style=\"padding-top:10px\" class=\"submit-the-equipment\"><input type=\"submit\" value=\"update equipment request log\" class=\"register-button\" id=\"equipment-submit\">\n";
             $all_html .= "</form></div>\n";
+            $all_html .= "<div class=\"input_error_handeling\" id=\"equipment-input-handeling\"></div>\n"; 
             $all_html .= "</div>\n";
         } else{
             $all_html .= "<a>no equipment requests</a>\n";
@@ -199,6 +202,36 @@ session_start();
         $all_html .= "</div>\n";
         return $all_html;
     }
+
+    function javascript_for_onload($con, $event_id){
+        $return_js = "";
+        $event_aproval = get_event_aproval_value($con, $event_id);
+        if($event_aproval != 1){
+            $return_js .= "setStateOfEventApproval(" . $event_aproval . ");";
+        }else{
+            $initialise_array = "register_array = {";
+            $initialise_feedback = "register_feedback = {";
+            $query = "SELECT user_id FROM user_event WHERE event_id = " . $event_id . ";";
+            $result = mysqli_query($con, $query);
+            while($cadet = mysqli_fetch_assoc($result)){
+                $initialise_array .= $cadet["user_id"] . ": 1,";
+                $initialise_feedback .= $cadet["user_id"] . ": \"\",";
+            }
+            $initialise_array .= "};equipment_array = {";
+            $initialise_feedback .= "};equipment_feedback = {";
+            $query = "SELECT equipment_id, aproved FROM equipment_requests WHERE event_id = " . $event_id . ";";
+            $result = mysqli_query($con, $query);
+            while($equipment_request = mysqli_fetch_assoc($result)){
+                $return_js .= "setStateOfEquipmentRequest(" . $equipment_request["aproved"] . ", " . $equipment_request["equipment_id"] . ");";
+                $initialise_array .= $equipment_request["equipment_id"] . ": 1,";
+                $initialise_feedback .= $equipment_request["equipment_id"] . ": \"\",";
+            }
+            $initialise_array .= "};";
+            $initialise_feedback .= "};";
+            $return_js .= $initialise_array . $initialise_feedback;
+        }
+        return $return_js;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -209,7 +242,7 @@ session_start();
 	<title>my Dashbord</title>
 	<link rel="stylesheet" href="css/event-style.css">
 </head>
-<body onload='setStateOfEventApproval(<?php echo(get_event_aproval_value($con, $user_data["event_id"]))?>);'>
+<body onload='<?php echo(javascript_for_onload($con, $user_data["event_id"]));?>'>
     <?php include("includes/nav.php");?>
     <div class="grid-container">
         <div class="left-side">
@@ -218,7 +251,7 @@ session_start();
         </div>
         <div class="right-side">
             <h1><?php echo(get_event_name($con, $user_data["event_id"]));?></h1><h1></h1><h1></h1>
-            <div class=register-box-all>
+            <div onload="register_array = []" class="register-box-all">
                 <h4>register</h4>
                 <?php
                 if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
@@ -241,7 +274,7 @@ session_start();
                 <h4>equipment requests displayed here</h4>
                 <?php 
                 if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
-                    echo(html_for_equipment($con, $user_data["event_id"], $user_data["parade_id"]));
+                    echo(html_for_equipment($con, $user_data["event_id"], $user_data["parade_id"], $user_data["G4"]));
                     echo(html_for_amending_the_equipment($user_data["event_id"]));
                 } else {
                     echo("<a>equipment requests are not available untill event is aproved</a>");

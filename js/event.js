@@ -166,14 +166,15 @@ function resultHasBeenClickedDeleteEquipment(equipment_id, event_id){
 
 function setStateOfEventApproval(state){
   //method to test if element final_aproval exists and act acordingly
-  console.log(document.getElementById("final_aproval"));
   if(document.getElementById("final_aproval") !== "null"){
     document.getElementById("final_aproval").value = state;
   }
 }
 
 function setStateOfEquipmentRequest(state, equipment_id){
-  document.getElementsByid(equipment_id).value = state;
+  if(document.getElementById(equipment_id) !== "null"){
+    document.getElementById(equipment_id).value = state;
+  }
 }
 
 function checkAreAllValuesOne(obj) {
@@ -275,6 +276,75 @@ function REGEXCheckEvent(str, input_to_check, admin){
   }
 }
 
-function REGEXCheckEquipment(str, original_state){
-  return null
+function REGEXCheckRegister(str, user_id){
+  if(str === ""){
+    register_array[user_id] = 0;
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+user_id,true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      let userDetails = JSON.parse(this.responseText);
+      register_feedback[user_id] = "<a>" + userDetails.rank + " " + userDetails.first_name + " " + userDetails.last_name + " cant have an empty registar box<a><br>";
+      }
+    }
+  }else if(str !== "1" && str !== "0"){
+    register_array[user_id] = 0;
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+user_id,true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      let userDetails = JSON.parse(this.responseText);
+      register_feedback[user_id] = "<a>" + userDetails.rank + " " + userDetails.first_name + " " + userDetails.last_name + " must have atendance of 1 or 0<a><br>";
+      }
+    }
+  }else{
+    register_array[user_id] = 1;
+    register_feedback[user_id] = "";
+  }
+  if(checkAreAllValuesOne(register_array) === true){
+    document.getElementById("register-submit").disabled = false;
+    document.getElementById("register-input-handeling").innerHTML = "";
+  }else{
+    document.getElementById("register-submit").disabled = true;
+    document.getElementById("register-input-handeling").innerHTML = returnFeedbackHTMl(register_feedback);
+  }
+}
+
+function REGEXCheckEquipment(str, equipment_id, originial_aproval, G4){
+  console.log(str);
+  console.log(originial_aproval);
+  if (G4 === "1"){
+    if(str === "0" && originial_aproval !== "0"){
+      equipment_array[equipment_id] = 0;
+      equipment_feedback[equipment_id] = "<a>can't reverse an aproval descision<a><br>";
+    } else if(str === "1" && originial_aproval === "2"){
+      equipment_array[equipment_id] = 0;
+      equipment_feedback[equipment_id] = "<a>can't aprove an already denied request<a><br>";
+    } else if(str === "2" && originial_aproval === "1"){
+      equipment_array[equipment_id] = 0;
+      equipment_feedback[equipment_id] = "<a>can't deny an already aproved request<a><br>";
+    }else{
+      equipment_array[equipment_id] = 1;
+      equipment_feedback[equipment_id] = "";
+    }
+  }else{
+    if(str !== originial_aproval){
+      equipment_array[equipment_id] = 0;
+      equipment_feedback[equipment_id] = "<a>can't change an aproval descision you are not G4<a><br>";
+    } else{
+      equipment_array[equipment_id] = 1;
+      equipment_feedback[equipment_id] = "";
+    }
+  }
+  //implement corect logic
+  //implement an equipement id infodump to tie equipment id error message to equipment name
+  if(checkAreAllValuesOne(equipment_array) === true){
+    document.getElementById("equipment-submit").disabled = false;
+    document.getElementById("equipment-input-handeling").innerHTML = "";
+  }else{
+    document.getElementById("equipment-submit").disabled = true;
+    document.getElementById("equipment-input-handeling").innerHTML = returnFeedbackHTMl(equipment_feedback);
+  }
 }
