@@ -1,8 +1,8 @@
 <?php 
 
 session_start();
-	include_once("connection.php");
-	include("functions.php");
+	include_once("includes/connection.php");
+	include("includes/functions.php");
 	if($_SERVER['REQUEST_METHOD'] == "POST"){
 		//something was posted
 		$email = $_POST['email'];

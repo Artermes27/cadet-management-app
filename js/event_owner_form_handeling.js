@@ -12,7 +12,7 @@ function showResutsSearchForOwner(str) {//returns search results for an owner's 
         document.getElementById("livesearch_owner").style.border="1px solid #A5ACB2";
       }
     }
-    xmlhttp.open("GET","add_requests.php?search_first_name_owner="+str,true);
+    xmlhttp.open("GET","requests/event_details_requests.php?search_first_name_owner="+str,true);
     xmlhttp.send();
 }
   
@@ -40,6 +40,6 @@ function displayCurrentOwnerOfEvent(owner_id) {//returns the rank first_name and
     }
     }
     //owner_id_rank_first_and_last_name
-    xmlhttp.open("GET","add_requests.php?user_id_info_dump="+owner_id,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+owner_id,true);
     xmlhttp.send();
 }

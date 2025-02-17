@@ -12,8 +12,7 @@ function showResutsSearchForUserFirstName(str) {//returns search results for a u
           document.getElementById("livesearch_first_name").style.border="1px solid #A5ACB2";
         }
       }
-      //console.log("add_requests.php?search_first_name_user="+str);
-      xmlhttp.open("GET","add_requests.php?search_first_name_user="+str,true);
+      xmlhttp.open("GET","requests/add_get_requests.php?search_first_name_user="+str,true);
       xmlhttp.send();
 }
 
@@ -31,8 +30,7 @@ function showResutsSearchForUserLastName(str) {//returns search results for a us
           document.getElementById("livesearch_last_name").style.border="1px solid #A5ACB2";
         }
       }
-      //console.log("add_requests.php?search_last_name_user="+str);
-      xmlhttp.open("GET","add_requests.php?search_last_name_user="+str,true);
+      xmlhttp.open("GET","requests/add_get_requests.php?search_last_name_user="+str,true);
       xmlhttp.send();
 }
 
@@ -50,8 +48,7 @@ function ShowResultsSearchForParade(str) {//returns search results for a parade'
         document.getElementById("livesearch_parade_id").style.border="1px solid #A5ACB2";
       }
     }
-    //console.log("add_requests.php?search_parade_name="+str);
-    xmlhttp.open("GET","add_requests.php?search_parade_name="+str,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?search_parade_name="+str,true);
     xmlhttp.send();
 }
 
@@ -66,7 +63,6 @@ function ResultHasBeenClickedParade(parade_id, parade_date, parade_name) {//retu
 }
 
 function resultHasBeenClickedUser(user_id) {//returns the user_id of the user selected in the modify user form
-    //console.log(user_id);
     document.getElementById("livesearch_first_name").innerHTML="";
     document.getElementById("livesearch_first_name").style.border="0px";
     document.getElementById("input_search_first_name").value = "";
@@ -80,8 +76,7 @@ function resultHasBeenClickedUser(user_id) {//returns the user_id of the user se
           document.getElementById("livesearch_last_name").style.border="1px solid #A5ACB2";
         }
       }
-    //console.log("add_requests.php?user_id_info_dump="+user_id);
-    xmlhttp.open("GET","add_requests.php?user_id_info_dump="+user_id,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+user_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
       if (this.readyState==4 && this.status==200) {
@@ -118,8 +113,7 @@ function showResutsSearchForEquipmentByName(str){//returns search results for an
           document.getElementById("livesearch_equipment_name").style.border="1px solid #A5ACB2";
         }
       }
-      //console.log("add_requests.php?search_equipment_name="+str);
-      xmlhttp.open("GET","add_requests.php?search_equipment_name="+str,true);
+      xmlhttp.open("GET","requests/add_get_requests.php?search_equipment_name="+str,true);
       xmlhttp.send();
 }
 
@@ -137,8 +131,7 @@ function showResutsSearchForEquipmentByLocation(str){//returns search results fo
           document.getElementById("livesearch_equipment_location").style.border="1px solid #A5ACB2";
         }
       }
-      //console.log("add_requests.php?search_equipment_name="+str);
-      xmlhttp.open("GET","add_requests.php?search_equipment_location="+str,true);
+      xmlhttp.open("GET","requests/add_get_requests.php?search_equipment_location="+str,true);
       xmlhttp.send();
 }
 
@@ -158,8 +151,7 @@ function resultHasBeenClickedEquipment(equipment_id){//returns the equipment_id 
           document.getElementById("livesearch_equipment_location").style.border="1px solid #A5ACB2";
         }
       }
-    //console.log("add_requests.php?equipment_id_info_dump="+equipment_id);
-    xmlhttp.open("GET","add_requests.php?equipment_id_info_dump="+equipment_id,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?equipment_id_info_dump="+equipment_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
       if (this.readyState==4 && this.status==200) {
@@ -176,7 +168,8 @@ function resultHasBeenClickedEquipment(equipment_id){//returns the equipment_id 
     return;
 }
 
-function checkAreAllValuesOne(obj) {//checks if all values in a dictionary are 1 indicating the form has been filled out corectly
+function checkAreAllValuesOne(obj) {
+  //checks if all values in a dictionary are 1 indicating the form has been filled out correctly
   for (let key in obj) {
       if (obj.hasOwnProperty(key) && obj[key] !== 1) {
           return false;
@@ -185,12 +178,13 @@ function checkAreAllValuesOne(obj) {//checks if all values in a dictionary are 1
   return true;
 }
 
-function returnFeedbackHTMl(obj){//returns the feedback messages in html format from an form_feedback dictionary
-  returnHTML = ""
+function returnFeedbackHTMl(obj) {
+  //returns the feedback messages in html format from a form_feedback dictionary
+  let returnHTML = "";
   for (let key in obj) {
-    if (obj.hasOwnProperty(key) && obj[key] !== "") {
-      returnHTML = returnHTML + obj[key];
-    }
+      if (obj.hasOwnProperty(key) && obj[key] !== "") {
+          returnHTML = returnHTML + obj[key];
+      }
   }
   return returnHTML;
 }
@@ -198,11 +192,9 @@ function returnFeedbackHTMl(obj){//returns the feedback messages in html format 
 function REGEXCheckParade(str, input_to_check){//checks the input of the add parade form for errors
   if (typeof parade_array === 'undefined'){
     parade_array = {date: 0, start: 0, end: 0, parade_name: 0};
-  }
-  if (typeof parade_feedback === 'undefined'){
+  }if (typeof parade_feedback === 'undefined'){
     parade_feedback = {date: "", start: "", end: "", parade_name: ""};
-  }
-  if (input_to_check === "date") {
+  }if (input_to_check === "date") {
     if (!str.match(/^\d{4}-\d{2}-\d{2}$/)) {//checking the input is in the correct date format
       parade_feedback["date"] = "<a>Invalid date format (YYYY-MM-DD)<a><br>";
       parade_array["date"] = 0;
@@ -592,3 +584,5 @@ function REGEXCheckModifyEquipment(str, input_to_check){//checks the input of th
     document.getElementById("modify-equipment-input-handeling").innerHTML = returnFeedbackHTMl(modify_equipment_feedback);
   }
 }
+
+//import { checkAreAllValuesOne, returnFeedbackHTMl} from 'include_REGEX_check.js';

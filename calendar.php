@@ -1,8 +1,8 @@
 <?php 
 session_start();
 
-	include_once("connection.php");
-	include("functions.php");
+	include_once("includes/connection.php");
+	include("includes/functions.php");
 
   $user_data = check_login($con);
 
@@ -141,7 +141,7 @@ session_start();
     $html = "<div class=\"event\">";
     $html .= "<h2>admin panel</h2>";
     $html .= "<div id=\"curent_event_owner_full_name\"></div>";
-    $html .= "<form action=\"functions.php\" method=\"POST\">";
+    $html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">";
     $html .= "<div class=\"modify_event_form\">";
     $html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"parade_id\" id=\"parade_id\">";
@@ -170,7 +170,7 @@ session_start();
     $html .= "<button class=\"input_handeling\" id=\"add-event-submit\" disabled>submit</button>";
     $html .= "</div>";
     $html .= "</form>";
-    $html .= "<form action=\"functions.php\" method=\"POST\">";
+    $html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">";
     $html .= "<input hidden value=\"1\" type=\"text\" name=\"delete_event\" id=\"delete_event\">";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_parade_id\" id=\"delete_parade_id\">";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_event_id\" id=\"delete_event_id\">";

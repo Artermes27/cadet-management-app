@@ -1,8 +1,8 @@
 <?php 
 session_start();
 
-	include_once("connection.php");
-	include("functions.php");
+	include_once("includes/connection.php");
+	include("includes/functions.php");
 
 	$user_data = check_login($con);
 
@@ -35,7 +35,7 @@ session_start();
         $lesson_plan_html = "";
         $lesson_plan_html .= "<h4>modify lesson details</h4>\n";
         $lesson_plan_html .= "<div class=\"lesson_details\">\n";
-        $lesson_plan_html .= "<form class=\"modify_lesson_details\" id=\"modify_event_details\" action=\"functions.php\" method=\"POST\">\n";
+        $lesson_plan_html .= "<form class=\"modify_lesson_details\" id=\"modify_event_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
         $lesson_plan_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"user_id\" id=\"user_id\">\n";//this is the user id of the user that is curently loged in, this is used to check if the user has changed the event owner and redirect the acordingly when form is submited
         $lesson_plan_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
@@ -63,12 +63,23 @@ session_start();
         $lesson_plan_html .= "<div class=\"display_current_owner\" id=\"display_current_owner\"><a>curent owner: " . $owner_info_dump["rank"] . " " . $owner_info_dump["first_name"] . " " . $owner_info_dump["last_name"] . "</a></div>\n";
         $lesson_plan_html .= "<button class=\"submit_button\" id=\"add-event-submit\">update lesson details</button>\n";
         $lesson_plan_html .= "</form>\n";
+        $lesson_plan_html .= "</form>\n";
+        $lesson_plan_html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">\n";
+        $lesson_plan_html .= "<input hidden value=\"1\" type=\"text\" name=\"delete_event\" id=\"delete_event\">\n";
+        $lesson_plan_html .= "<input hidden value=\"" . $event["parade_id"]. "\" type=\"text\" name=\"delete_parade_id\" id=\"delete_parade_id\">\n";
+        $lesson_plan_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"delete_event_id\" id=\"delete_event_id\">\n";
+        $lesson_plan_html .= "<button class=\"input_handeling\" id=\"delete-event-submit\" style=\"width: 100%;\">delete event</button>\n";
+        $lesson_plan_html .= "</form>\n";
         $lesson_plan_html .= "</div>\n";
         return $lesson_plan_html;
     }
 
-    function html_for_list_of_parades_events($con, $parade_id, $user_id){
-        $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade_id . " AND user_event.user_id = " . $user_id . ") OR (events.owner = " . $user_id . " AND parade_id = " . $parade_id . ") ORDER BY events.event_start;";
+    function html_for_list_of_parades_events($con, $parade_id, $user_id, $admin){
+        if ($admin == 1){
+            $query = "SELECT * FROM events WHERE parade_id = " . $parade_id . " ORDER BY event_start;";
+        } else {
+            $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade_id . " AND user_event.user_id = " . $user_id . ") OR (events.owner = " . $user_id . " AND parade_id = " . $parade_id . ") ORDER BY events.event_start;";
+        }
         $result = mysqli_query($con, $query);
         $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
         $event_count = 0;
@@ -98,7 +109,7 @@ session_start();
         $output_html = "";
         if(mysqli_num_rows($result) > 0) {
             $output_html .= "<div class=\"register-main\"><table>\n";
-            $output_html .= "<form method=\"post\" action=\"functions.php\">\n";
+            $output_html .= "<form method=\"post\" action=\"requests/post_requests.php\">\n";
             $output_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_register\" id=\"modify_register\">\n";
             $output_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
             $output_html .= "<input hidden value=\"" . $parade_id . "\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
@@ -200,7 +211,7 @@ session_start();
     <div class="grid-container">
         <div class="left-side">
             <h1><?php echo(get_parade_name_and_date_as_html_h1($con, $user_data["parade_id"]));?></h1>
-            <?php echo(html_for_list_of_parades_events($con, $user_data["parade_id"], $user_data["user_id"])); ?>
+            <?php echo(html_for_list_of_parades_events($con, $user_data["parade_id"], $user_data["user_id"], $user_data["admin"])); ?>
         </div>
         <div class="right-side">
             <h1><?php echo(get_event_name($con, $user_data["event_id"]));?></h1><h1></h1><h1></h1>

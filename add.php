@@ -1,8 +1,8 @@
 <?php 
 session_start();
 
-	include_once("connection.php");
-	include("functions.php");
+	include_once("includes/connection.php");
+	include("includes/functions.php");
 
 	$user_data = check_login($con);
     if($user_data["admin"] == 0) {
@@ -33,7 +33,7 @@ session_start();
         <div class="events-parades">
             <h2>events/parades</h2>
             <div class="add-parade">
-                <form id="add_new_parade" action="functions.php" method="POST">
+                <form id="add_new_parade" action="requests/post_requests.php" method="POST">
                     <h4 >add a Parade</h4>
                     <a>the latest scheduled parade is curently set to:<?php $latest = get_latest_parade($con); echo($latest);?></a>
                     <a>the next parade should be: <?php echo(date("Y-m-d", strtotime($latest . " +7 days")));?></a>
@@ -51,7 +51,7 @@ session_start();
                 </form>
             </div>
             <div class="add-event">
-                <form id="add_new_event" action="functions.php" method="POST">
+                <form id="add_new_event" action="requests/post_requests.php" method="POST">
                     <h4 >add an event</h4>
                     <input hidden value="" type="text" name="parade_id" id="parade_id">
                     <input hidden value="1" type="text" name="add_new_event" id="add_new_event">
@@ -80,7 +80,7 @@ session_start();
         <div class="users">
             <h2>users</h2>
             <div class="add-user">
-                <form id="add_user" action="functions.php" method="POST">
+                <form id="add_user" action="requests/post_requests.php" method="POST">
                     <h4 >add a user</h4>
                     <input hidden value="1" type="text" name="add_new_user" id="add_new_user">
                     <label>email</label>
@@ -112,7 +112,7 @@ session_start();
                 </form>
             </div>
             <div class="modify-user">
-                <form id="add_user" action="functions.php" method="POST">
+                <form id="add_user" action="requests/post_requests.php" method="POST">
                     <h4 >modify a user</h4>
                     <a style="grid-column: span 2;">leave the password field blank to leave it unchanged</a>
                     <input hidden value="1" type="text" name="modify_user" id="modify_user">
@@ -155,7 +155,7 @@ session_start();
         <div class="equipment">
             <h2>equipment</h2>
             <div class="add-equipment">
-                <form id="add_equipment" action="functions.php" method="POST">
+                <form id="add_equipment" action="requests/post_requests.php" method="POST">
                     <h4 >add equipment</h4>
                     <input hidden value="1" type="text" name="add_new_equipment" id="add_new_equipment">
                     <label>equipment name</label>
@@ -169,7 +169,7 @@ session_start();
                 </form>
             </div>
             <div class="modify-equipment">
-                <form id="modify_existing_equipment" action="functions.php" method="POST">
+                <form id="modify_existing_equipment" action="requests/post_requests.php" method="POST">
                     <h4 >update equipment</h4>
                     <input hidden value="1" type="text" name="modify_equipment" id="modify_equipment">
                     <input hidden value="" type="text" name="modify_equipment_id" id="modify_equipment_id">
@@ -197,4 +197,6 @@ session_start();
         </div>
     </div>
 </body>
-<?php mysqli_close($con)?>
+<?php 
+mysqli_close($con)
+?>

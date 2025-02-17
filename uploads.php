@@ -1,8 +1,8 @@
 <a href="profile.php">click here to go back to the profile page</a><br>
 <?php 
 session_start();
-	include_once("connection.php");
-	include("functions.php");
+	include_once("includes/connection.php");
+	include("includes/functions.php");
 	$user_data = check_login($con);
 
 $target_dir = "profile-photos/";
