@@ -4,7 +4,48 @@
     background-color:#ddd;
     display: grid;
     grid-template-columns: 15% 85%;
-  }
+}
+
+
+
+.grid-container .left-side .event_not_aproved{
+  text-align: center;
+  border-radius: 10px;
+  display: inline-block;
+  background-color: rgba(255, 105, 105, 0.582);
+  margin: 3px;
+  width: 98%;
+}
+
+.grid-container .left-side .event_aproved{
+  text-align: center;
+  border-radius: 10px;
+  display: inline-block;
+  background-color: rgb(157, 241, 157);
+  margin: 3px;
+  width: 98%;
+}
+
+.grid-container .left-side .event_aproval_requested{
+  text-align: center;
+  border-radius: 10px;
+  display: inline-block;
+  background-color:rgba(233, 215, 117, 0.952);
+  margin: 3px;
+  width: 98%;
+}
+
+.grid-container .left-side .event{
+  text-align: center;
+  border-radius: 10px;
+  display: inline-block;
+  background-color: #ddd;
+  margin: 3px;
+  width: 98%;
+}
+
+
+
 .grid-container .right-side {
     display: grid;
     grid-template-columns: 20% 35% 45%;

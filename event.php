@@ -85,8 +85,15 @@ session_start();
         $event_count = 0;
         $event_html = "<div class=\"event\">\n";
         while($event_count < count($events)){
-            if($user_id == $events[$event_count]["owner"]){
-                $event_html .= "<div class=\"event\">\n";
+            if($events[$event_count]["final_aproval"] == 0){//the event is not aproved
+                $style_class = "event_not_aproved";
+              }elseif($events[$event_count]["final_aproval"] == 1){//the event is aproved
+                $style_class = "event_aproved";
+              }elseif($events[$event_count]["final_aproval"] == 2){//the event is pending aproval
+                $style_class = "event_aproval_requested";
+              }
+            if($user_id == $events[$event_count]["owner"] or $admin == 1){
+                $event_html .= "<div class=\"" . $style_class . "\">\n";
                 $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
                 $event_html .= "<a href=\"event.php?parade_id=" . $parade_id . "&event_id=" . $events[$event_count]["event_id"] . "\">" . $events[$event_count]["event_name"] . "</a>\n";
                 $event_html .= "</div>\n";
@@ -150,13 +157,7 @@ session_start();
         $query = "SELECT equipment_requests.equipment_id, equipment_requests.aproved, equipment.name FROM equipment_requests, equipment WHERE event_id = " . $event_id . " AND equipment_requests.equipment_id = equipment.equipment_id;";
         $result = mysqli_query($con, $query);
         $all_html = "";
-        if(mysqli_num_rows($result) == 0){
-            $all_html .= "<h4>no equipment requests</h4>\n";
-            $all_html .= "<div class=\"equipemnt-display-register-main\"\n>";
-            $all_html .= "<a>no equipment requests have been made</a>\n";
-            $all_html .= "</div>\n";
-        } else{
-            $all_html .= "<h4>equipment requests displayed here</h4>\n";
+        if(mysqli_num_rows($result) > 0){
             $all_html .= "<div class=\"equipemnt-display-register-main\">\n";
             $all_html .= "<table>\n";
             $all_html .= "<form method=\"post\" action=\"requests/event_details_requests.php\">\n";
@@ -176,6 +177,8 @@ session_start();
             $all_html .= "</table><div style=\"padding-top:10px\" class=\"submit-the-equipment\"><input type=\"submit\" value=\"update equipment request log\" class=\"register-button\">\n";
             $all_html .= "</form></div>\n";
             $all_html .= "</div>\n";
+        } else{
+            $all_html .= "<a>no equipment requests</a>\n";
             }
         return $all_html;
     }
@@ -235,6 +238,7 @@ session_start();
                 }?>
             </div>
             <div class="equipment-requests">
+                <h4>equipment requests displayed here</h4>
                 <?php 
                 if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
                     echo(html_for_equipment($con, $user_data["event_id"], $user_data["parade_id"]));

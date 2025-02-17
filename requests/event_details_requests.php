@@ -37,7 +37,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		include_once("../includes/connection.php");
 		$query = "UPDATE events SET event_type = '" . $event_type . "', event_name = '" . $event_name . "', event_start = '" . $event_start . "', event_end = '" . $event_end . "', owner = " . $owner . ", final_aproval = " . $final_aproval . " WHERE event_id = " . $event_id;
 		$result = mysqli_query($con, $query);
-		if(post_request("user_id") == $owner){
+		session_start();
+		include_once("../includes/functions.php");
+		$user_data = check_login($con);
+		if(post_request("user_id") == $owner or $user_data["admin"] == 1){
 			header("location: ../event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
 		}else{
 			header("location: ../calendar.php");
