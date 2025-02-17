@@ -125,12 +125,12 @@ session_start();
           $query = "SELECT `first_name`, `last_name`, `rank` FROM users WHERE user_id = " . $events[$event_count]["owner"] . ";";
           $result = mysqli_query($con, $query);
           $owner = mysqli_fetch_assoc($result);
-          $event_html = $event_html . "<div class=\"" . $style_class . "\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br><a>" . $events[$event_count]["event_name"] . "</a><br><a>" . $owner["rank"] . " " . $owner["first_name"] . " " . $owner["last_name"] . "</a><br><a href=\"event.php?parade_id=" . $parade["parade_id"] . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a><br><button onclick=\"populateAdminEditEventForm('" . $events[$event_count]["parade_id"] . "', '" . $events[$event_count]["event_id"] . "', '" . $events[$event_count]["event_type"] . "', '" . $events[$event_count]["event_name"] . "', '" .  $events[$event_count]["event_start"] . "', '" . $events[$event_count]["event_end"] . "', '" . $events[$event_count]["owner"] . "', '" .  $events[$event_count]["final_aproval"] . "')\">click for admin panel edit</button></div>";
-        }elseif($user_data["user_id"] == $events[$event_count]["owner"]){
-          $event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br><a href=\"event.php?parade_id=" . $parade["parade_id"] . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a></div>";
-        }else {//non owner so they can only view the event
-          $event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br><a>" . $events[$event_count]["event_name"] . "</a></div>";
-        }
+            $event_html = $event_html . "<div class=\"" . $style_class . "\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a>" . $events[$event_count]["event_name"] . "</a><br>\n<a>" . $owner["rank"] . " " . $owner["first_name"] . " " . $owner["last_name"] . "</a><br>\n<a href=\"event.php?parade_id=" . $parade["parade_id"] . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a><br>\n<button onclick=\"populateAdminEditEventForm('" . $events[$event_count]["parade_id"] . "', '" . $events[$event_count]["event_id"] . "', '" . $events[$event_count]["event_type"] . "', '" . $events[$event_count]["event_name"] . "', '" .  $events[$event_count]["event_start"] . "', '" . $events[$event_count]["event_end"] . "', '" . $events[$event_count]["owner"] . "', '" .  $events[$event_count]["final_aproval"] . "')\">click for admin panel edit</button></div>\n";
+          }elseif($user_data["user_id"] == $events[$event_count]["owner"]){
+            $event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a href=\"event.php?parade_id=" . $parade["parade_id"] . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a></div>\n";
+          }else {//non owner so they can only view the event
+            $event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a>" . $events[$event_count]["event_name"] . "</a></div>\n";
+          }
         $event_count = $event_count + 1;
       }
     }
@@ -139,44 +139,44 @@ session_start();
 
   function html_for_admin_page_on_callandar(){//generate the general form for the admin panle on calendar.php
     $html = "<div class=\"event\">";
-    $html .= "<h2>admin panel</h2>";
-    $html .= "<div id=\"curent_event_owner_full_name\"></div>";
-    $html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">";
-    $html .= "<div class=\"modify_event_form\">";
-    $html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">";
-    $html .= "<input hidden value=\"\" type=\"text\" name=\"parade_id\" id=\"parade_id\">";
-    $html .= "<input hidden value=\"\" type=\"text\" name=\"event_id\" id=\"event_id\">";
-    $html .= "<input hidden value=\"\" type=\"text\" name=\"owner_id\" id=\"owner_id\">";
-    $html .= "<input hidden value=\"\" type=\"text\" name=\"original_aproval\" id=\"original_aproval\">";
-    $html .= "<label>event type</label>";
-    $html .= "<input type=\"text\" name=\"event_type\" id=\"event_type\" onkeyup=\"REGEXCheckEvent(this.value, 'event_type')\">";
-    $html .= "<label>event name</label>";
-    $html .= "<input type=\"text\" name=\"event_name\" id=\"event_name\" onkeyup=\"REGEXCheckEvent(this.value, 'event_name')\">";
-    $html .= "<label>event start</label>";
-    $html .= "<input type=\"time\" name=\"event_start\" id=\"event_start\" onkeyup=\"REGEXCheckEvent(this.value, 'event_start')\">";
-    $html .= "<label>event end</label>";
-    $html .= "<input type=\"time\" name=\"event_end\" id=\"event_end\" onkeyup=\"REGEXCheckEvent(this.value, 'event_end')\">";
-    $html .= "<label>approved</label>";
-    $html .= "<select id=\"final_aproval\" name=\"final_aproval\" onclick=\"REGEXCheckEvent(this.value, 'final_aproval')\">";
-    $html .= "<option value=\"0\">not-aproved</option>";
-    $html .= "<option value=\"1\">aproved</option>";
-    $html .= "<option value=\"2\">aproval requested</option>";
-    $html .= "</select>";
-    $html .= "<label>event owner</label>";
-    $html .= "<input type=\"text\" name=\"event_owner_search_box\" id=\"event_owner_search_box\" onkeyup=\"showResutsSearchForOwner(this.value)\">";
-    $html .= "<div class=\"input_handeling\" id=\"livesearch_owner\"></div>";
-    $html .= "<div class=\"input_handeling\" id=\"event-input-handeling\"></div>";
-    $html .= "<div class=\"input_handeling\" id=\"display_current_owner\"></div>";
-    $html .= "<button class=\"input_handeling\" id=\"add-event-submit\" disabled>submit</button>";
-    $html .= "</div>";
-    $html .= "</form>";
-    $html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">";
-    $html .= "<input hidden value=\"1\" type=\"text\" name=\"delete_event\" id=\"delete_event\">";
-    $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_parade_id\" id=\"delete_parade_id\">";
-    $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_event_id\" id=\"delete_event_id\">";
-    $html .= "<button class=\"input_handeling\" id=\"delete-event-submit\" style=\"width: 100%;\" disabled>delete event</button>";
-    $html .= "</form>";
-    $html .= "</div>";
+    $html .= "<h2>admin panel</h2>\n";
+    $html .= "<div id=\"curent_event_owner_full_name\"></div>\n";
+    $html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">\n";
+    $html .= "<div class=\"modify_event_form\">\n";
+    $html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">\n";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"owner_id\" id=\"owner_id\">\n";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"original_aproval\" id=\"original_aproval\">\n";
+    $html .= "<label>event type</label>\n";
+    $html .= "<input type=\"text\" name=\"event_type\" id=\"event_type\" onkeyup=\"REGEXCheckEvent(this.value, 'event_type')\">\n";
+    $html .= "<label>event name</label>\n";
+    $html .= "<input type=\"text\" name=\"event_name\" id=\"event_name\" onkeyup=\"REGEXCheckEvent(this.value, 'event_name')\">\n";
+    $html .= "<label>event start</label>\n";
+    $html .= "<input type=\"time\" name=\"event_start\" id=\"event_start\" onkeyup=\"REGEXCheckEvent(this.value, 'event_start')\">\n";
+    $html .= "<label>event end</label>\n";
+    $html .= "<input type=\"time\" name=\"event_end\" id=\"event_end\" onkeyup=\"REGEXCheckEvent(this.value, 'event_end')\">\n";
+    $html .= "<label>approved</label>\n";
+    $html .= "<select id=\"final_aproval\" name=\"final_aproval\" onclick=\"REGEXCheckEvent(this.value, 'final_aproval')\">\n";
+    $html .= "<option value=\"0\">not-aproved</option>\n";
+    $html .= "<option value=\"1\">aproved</option>\n";
+    $html .= "<option value=\"2\">aproval requested</option>\n";
+    $html .= "</select>\n";
+    $html .= "<label>event owner</label>\n";
+    $html .= "<input type=\"text\" name=\"event_owner_search_box\" id=\"event_owner_search_box\" onkeyup=\"showResutsSearchForOwner(this.value)\">\n";
+    $html .= "<div class=\"input_handeling\" id=\"livesearch_owner\"></div>\n";
+    $html .= "<div class=\"input_handeling\" id=\"event-input-handeling\"></div>\n";
+    $html .= "<div class=\"input_handeling\" id=\"display_current_owner\"></div>\n";
+    $html .= "<button class=\"input_handeling\" id=\"add-event-submit\" disabled>submit</button>\n";
+    $html .= "</div>\n";
+    $html .= "</form>\n";
+    $html .= "<form action=\"requests/event_details_requests.php\" method=\"POST\">\n";
+    $html .= "<input hidden value=\"1\" type=\"text\" name=\"delete_event\" id=\"delete_event\">\n";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_parade_id\" id=\"delete_parade_id\">\n";
+    $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_event_id\" id=\"delete_event_id\">\n";
+    $html .= "<button class=\"input_handeling\" id=\"delete-event-submit\" style=\"width: 100%;\" disabled>delete event</button>\n";
+    $html .= "</form>\n";
+    $html .= "</div>\n";
     return $html;
   }  
 

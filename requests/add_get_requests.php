@@ -1,7 +1,8 @@
 <?php
 
 if(isset($_GET["search_parade_name"])){//search method for creating an event used by add.js for searching for user by last name
-    $parade_name = $_GET["search_parade_name"];
+    include_once("get_request_scanning.php");
+    $parade_name = get_request("search_parade_name");
     include_once("../includes/connection.php");
     $query = "SELECT parade_id, date, parade_name FROM parades WHERE parade_name REGEXP '" . str_replace('"', "", $parade_name) . "';";
     $result = mysqli_query($con, $query);
@@ -21,7 +22,8 @@ if(isset($_GET["search_parade_name"])){//search method for creating an event use
 }
 
 if(isset($_GET["search_first_name_user"])){//search method for user's first name used by add.js for searching for user by first name
-    $name = $_GET["search_first_name_user"];
+    include_once("get_request_scanning.php");
+    $name = get_request("search_first_name_user");
     include_once("../includes/connection.php");
     $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "' ORDER BY first_name ASC;";
     $result = mysqli_query($con, $query);
@@ -46,7 +48,8 @@ if(isset($_GET["search_first_name_user"])){//search method for user's first name
 }
 
 if(isset($_GET["search_last_name_user"])){//search method for user's last name used by add.js for searching for user by last name
-    $name = $_GET["search_last_name_user"];
+    include_once("get_request_scanning.php");
+    $name = get_request("search_last_name_user");
     include_once("../includes/connection.php");
     $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE last_name REGEXP '" . str_replace('"', "", $name) . "' ORDER BY last_name ASC;";
     $result = mysqli_query($con, $query);
@@ -71,7 +74,8 @@ if(isset($_GET["search_last_name_user"])){//search method for user's last name u
 }
 
 if(isset($_GET["search_equipment_name"])){//search method for equipment name used by add.js for searching for equipment by name
-    $name = $_GET["search_equipment_name"];
+    include_once("get_request_scanning.php");
+    $name = get_request("search_equipment_name");
     include_once("../includes/connection.php");
     $query = "SELECT * FROM equipment WHERE name REGEXP '" . str_replace('"', "", $name) . "';";
     $result = mysqli_query($con, $query);
@@ -95,7 +99,8 @@ if(isset($_GET["search_equipment_name"])){//search method for equipment name use
 }
 
 if(isset($_GET["search_equipment_location"])){//search method used by add.js for searching for equipment by location
-    $name = $_GET["search_equipment_location"];
+    include_once("get_request_scanning.php");
+    $name = get_request("search_equipment_location");
     include_once("../includes/connection.php");
     $query = "SELECT * FROM equipment WHERE location REGEXP '" . str_replace('"', "", $name) . "';";
     $result = mysqli_query($con, $query);
@@ -119,8 +124,10 @@ if(isset($_GET["search_equipment_location"])){//search method used by add.js for
 }
 
 if(isset($_GET["equipment_id_info_dump"])){//retreve all information about a piece of equipment from its id used by add.js to populate the modify equipment form
+    include_once("get_request_scanning.php");
+    $equipment_id = get_request("equipment_id_info_dump");
     include_once("../includes/connection.php");
-    $query = "SELECT * FROM equipment WHERE equipment_id = " . $_GET["equipment_id_info_dump"] . ";";
+    $query = "SELECT * FROM equipment WHERE equipment_id = " . $equipment_id . ";";
     $result = mysqli_query($con, $query);
     if(mysqli_num_rows($result) > 0)	{
         $equipment = mysqli_fetch_assoc($result);
@@ -131,8 +138,10 @@ if(isset($_GET["equipment_id_info_dump"])){//retreve all information about a pie
 }
 
 if(isset($_GET["user_id_info_dump"])){//retreve all user data for a user_id used by add.js to populate the modify user form
+    include_once("get_request_scanning.php");
+    $user_id = get_request("user_id_info_dump");
     include_once("../includes/connection.php");
-    $query = "SELECT * FROM users WHERE user_id = " . $_GET["user_id_info_dump"] . ";";
+    $query = "SELECT * FROM users WHERE user_id = " . $user_id . ";";
     $result = mysqli_query($con, $query);
     if(mysqli_num_rows($result) > 0)	{
         $cadet = mysqli_fetch_assoc($result);

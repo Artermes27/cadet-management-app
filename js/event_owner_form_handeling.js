@@ -1,5 +1,5 @@
 function showResutsSearchForOwner(str) {//returns search results for an owner's first name in the add event form
-    //console.log(str);
+    console.log(str);
     if (str.length==0) {
       document.getElementById("livesearch_owner").innerHTML="";
       document.getElementById("livesearch_owner").style.border="0px";
@@ -30,6 +30,7 @@ function displayCurrentOwnerOfEvent(owner_id) {//returns the rank first_name and
     //console.log(owner_id);
     if (owner_id.length==0) {
     document.getElementById("display_current_owner").innerHTML = "";
+    document.getElementById("display_current_owner").innerHTML="<a>curent owner: none selected<a>";
     return;
     }
     var xmlhttp=new XMLHttpRequest();

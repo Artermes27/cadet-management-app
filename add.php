@@ -66,11 +66,15 @@ session_start();
                     <input type="time" name="event_end" id="event_end">
                     <label>event owner</label>
                     <input type="text" name="event_owner_search_box" id="event_owner_search_box" onkeyup="showResutsSearchForOwner(this.value)">
-                    <div class="input-error-handeling" id="display_current_owner"></div>
+                    <div class="input-error-handeling" id="display_current_owner">
+                        <a>current owner: none selected</a>
+                    </div>
                     <div class="livesearch" id="livesearch_owner"></div>
                     <label>parade</label>
                     <input value="" type="text" name="parade_id_search_box" id="parade_id_search_box" onkeyup="ShowResultsSearchForParade(this.value)">
-                    <div class="input-error-handeling" id="display_current_parade"></div>
+                    <div class="input-error-handeling" id="display_current_parade">
+                        <a>current parade: none selected</a>
+                    </div>
                     <div class="livesearch" id="livesearch_parade_id"></div>
                     <div class="input-error-handeling" id="event-input-handeling"></div>
                     <button id="add-event-submit" disabled>submit</button>

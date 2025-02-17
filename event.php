@@ -159,7 +159,7 @@ session_start();
             $all_html .= "<h4>equipment requests displayed here</h4>\n";
             $all_html .= "<div class=\"equipemnt-display-register-main\">\n";
             $all_html .= "<table>\n";
-            $all_html .= "<form method=\"post\" action=\"functions.php\">\n";
+            $all_html .= "<form method=\"post\" action=\"requests/event_details_requests.php\">\n";
             $all_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_equipment_register\" id=\"modify_equipment_register\">\n";
             $all_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
             $all_html .= "<input hidden value=\"" . $parade_id . "\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";

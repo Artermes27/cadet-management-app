@@ -1,6 +1,7 @@
 <?php
 if(isset($_GET["search_first_name_owner"])){
-    $name = $_GET["search_first_name_owner"];
+	include_once("get_request_scanning.php");
+	$name = get_request("search_first_name_owner");
     include_once("../includes/connection.php");
     $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "';";
     $result = mysqli_query($con, $query);

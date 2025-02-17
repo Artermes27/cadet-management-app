@@ -54,6 +54,7 @@
 button {
     grid-column: span 2;
     margin-top: 10px;
+    margin-bottom: 10px;
     padding: 10px 15px;
     font-size: 16px;
     background-color: #6b86c0;
@@ -91,5 +92,5 @@ input, select {
     grid-template-columns: 30% 70%;
     gap: 10px;
     padding-left: 10px;
-    padding-right:10px;
+    padding-right: 10px;
 }
