@@ -1,3 +1,74 @@
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+SET NAMES utf8mb4;
+
+DROP TABLE IF EXISTS `equipment`;
+CREATE TABLE `equipment` (
+  `equipment_id` int unsigned NOT NULL,
+  `name` tinytext NOT NULL,
+  `description` text NOT NULL,
+  `location` text NOT NULL,
+  PRIMARY KEY (`equipment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+DROP TABLE IF EXISTS `equipment_requests`;
+CREATE TABLE `equipment_requests` (
+  `event_id` int unsigned NOT NULL,
+  `equipment_id` int unsigned NOT NULL,
+  `aproved` int NOT NULL COMMENT '0: requested, 1: aproved, 2:denied',
+  PRIMARY KEY (`event_id`,`equipment_id`),
+  KEY `equipment_id` (`equipment_id`),
+  CONSTRAINT `equipment_requests_ibfk_1` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`equipment_id`),
+  CONSTRAINT `equipment_requests_ibfk_3` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+DROP TABLE IF EXISTS `events`;
+CREATE TABLE `events` (
+  `event_id` int unsigned NOT NULL,
+  `parade_id` int unsigned NOT NULL,
+  `event_type` tinytext NOT NULL,
+  `event_name` tinytext NOT NULL,
+  `event_start` time NOT NULL,
+  `event_end` time NOT NULL,
+  `final_aproval` tinyint NOT NULL COMMENT '0 = not aproved, 1 = aproved, 2 = pending aproval',
+  `owner` int unsigned NOT NULL,
+  PRIMARY KEY (`event_id`,`parade_id`),
+  KEY `parade_id` (`parade_id`),
+  KEY `owner` (`owner`),
+  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`parade_id`) REFERENCES `parades` (`parade_id`),
+  CONSTRAINT `events_ibfk_2` FOREIGN KEY (`owner`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+DROP TABLE IF EXISTS `parades`;
+CREATE TABLE `parades` (
+  `parade_id` int unsigned NOT NULL,
+  `date` date NOT NULL,
+  `start` time NOT NULL,
+  `end` time NOT NULL,
+  `parade_name` tinytext NOT NULL,
+  PRIMARY KEY (`parade_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+DROP TABLE IF EXISTS `user_event`;
+CREATE TABLE `user_event` (
+  `user_id` int unsigned NOT NULL,
+  `event_id` int unsigned NOT NULL,
+  `present` bit(1) NOT NULL COMMENT '0 = absent, 1 = present',
+  PRIMARY KEY (`user_id`,`event_id`),
+  KEY `event_id` (`event_id`),
+  CONSTRAINT `user_event_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`),
+  CONSTRAINT `user_event_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `user_id` int unsigned NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -7,84 +78,8 @@ CREATE TABLE `users` (
   `DOB` date NOT NULL,
   `gender` tinytext NOT NULL,
   `rank` varchar(255) NOT NULL,
-  `active` bit(1) NOT NULL
-  `admin` bit(1) NOT NULL
-  `G4` bit(1) NOT NULL COMMENT '1 = g4, 0 = not-g4';
-);
-
-
-CREATE TABLE `events` (
-  `event_id` int unsigned NOT NULL,
-  `parade_id` int unsigned NOT NULL,
-  `event_type` tinytext NOT NULL,
-  `event_name` tinytext NOT NULL,
-  `event_start` time NOT NULL,
-  `event_end` time NOT NULL,
-  `request_equipment_id` int NOT NULL,
-  `final_aproval` bit NOT NULL COMMENT '0 = not aproved, 1 = aproved'
-);
-
-
-CREATE TABLE `parades` (
-  `parade_id` int NOT NULL,
-  `date` date NOT NULL,
-  `start` time NOT NULL,
-  `end` time NOT NULL
-);
-
-
-CREATE TABLE `user_event` (
-  `user_id` int NOT NULL,
-  `event_id` int NOT NULL,
-  `present` bit NOT NULL COMMENT '0 = absent, 1 = present'
-);
-
-
-CREATE TABLE `equipment` (
-  `equipment_id` int NOT NULL,
-  `name` tinytext NOT NULL,
-  `description` text NOT NULL,
-  `location` text NOT NULL
-);
-
-
-CREATE TABLE `equipment_requests` (
-  `request_equipment_id` int NOT NULL,
-  `equipment_id` int NOT NULL,
-  `aproved` bit NOT NULL
-);
-
-
-ALTER TABLE `events`
-ADD PRIMARY KEY `event_id_parade_id` (`event_id`, `parade_id`);
-
-
-ALTER TABLE `parades`
-ADD PRIMARY KEY `parade_id` (`parade_id`);
-
-
-ALTER TABLE `user_event`
-ADD PRIMARY KEY `user_id_event_id` (`user_id`, `event_id`);
-
-
-ALTER TABLE `users`
-ADD PRIMARY KEY `user_id` (`user_id`);
-
-
-ALTER TABLE `events`
-ADD UNIQUE `request_equipment_id` (`request_equipment_id`);
-
-
-ALTER TABLE `equipment_requests`
-ADD FOREIGN KEY (`request_equipment_id`) REFERENCES `events` (`request_equipment_id`)
-
-
-ALTER TABLE `events`
-ADD FOREIGN KEY (`parade_id`) REFERENCES `parades` (`parade_id`)
-
-
-ALTER TABLE `user_event`
-ADD FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`)
-
-CREATE USER 'apache_user'@'localhost' IDENTIFIED BY 'Cadet2025';
-GRANT SELECT, UPDATE, INSERT, DELETE ON main_v2 TO 'apache_user'@'localhost';
+  `active` bit(1) NOT NULL COMMENT '1 = active, 0 = retired',
+  `admin` bit(1) NOT NULL COMMENT '1 = admin, 0 = non-admin',
+  `G4` bit(1) NOT NULL COMMENT '1 = g4, 0 = not-g4',
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
