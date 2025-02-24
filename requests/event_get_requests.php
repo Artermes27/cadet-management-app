@@ -190,6 +190,7 @@ if(isset($_GET["search_equipment_other"]) and isset($_GET["event_id"])){
 	AND events.event_end != '" . $event["event_start"] . "'
 	AND events.event_start != '" . $event["event_end"] . "'
 	AND events.parade_id = " . $event["parade_id"] . " 
+	AND events.event_id != '" . $event_id . "'
 	AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "' 
 	AND equipment.equipment_id IN (SELECT equipment_requests.equipment_id FROM equipment_requests, events 
 	WHERE equipment_requests.event_id = events.event_id 
