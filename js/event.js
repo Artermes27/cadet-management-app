@@ -318,7 +318,7 @@ function REGEXCheckEquipment(str, equipment_id, originial_aproval, G4){
   if (G4 === "1"){
     if(str === "0" && originial_aproval !== "0"){
       equipment_array[equipment_id] = 0;
-      equipment_feedback[equipment_id] = "<a>can't reverse an aproval descision<a><br>";
+      equipment_feedback[equipment_id] = "<a>can't reverse an aproval decision<a><br>";
     } else if(str === "1" && originial_aproval === "2"){
       equipment_array[equipment_id] = 0;
       equipment_feedback[equipment_id] = "<a>can't aprove an already denied request<a><br>";
@@ -332,7 +332,7 @@ function REGEXCheckEquipment(str, equipment_id, originial_aproval, G4){
   }else{
     if(str !== originial_aproval){
       equipment_array[equipment_id] = 0;
-      equipment_feedback[equipment_id] = "<a>can't change an aproval descision you are not G4<a><br>";
+      equipment_feedback[equipment_id] = "<a>can't change an aproval decision you are not G4<a><br>";
     } else{
       equipment_array[equipment_id] = 1;
       equipment_feedback[equipment_id] = "";

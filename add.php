@@ -38,11 +38,11 @@ session_start();
                     <a>the latest scheduled parade is curently set to:<?php $latest = get_latest_parade($con); echo($latest);?></a>
                     <a>the next parade should be: <?php echo(date("Y-m-d", strtotime($latest . " +7 days")));?></a>
                     <input hidden value="1" type="text" name="add_new_parade" id="add_new_parade">
-                    <label>Date</label>
+                    <label>date</label>
                     <input type="date" name="date" id="date" onkeyup="REGEXCheckParade(this.value, 'date')">
-                    <label>Start time</label>
+                    <label>start time</label>
                     <input type="time" name="start" id="start" onkeyup="REGEXCheckParade(this.value, 'start')">
-                    <label>Finish time</label>
+                    <label>finish time</label>
                     <input type="time" name="end" id="end" onkeyup="REGEXCheckParade(this.value, 'end')">
                     <label>parade name</label>
                     <input type="text" name="parade_name" id="parade_name" onkeyup="REGEXCheckParade(this.value, 'parade_name')">
@@ -199,13 +199,13 @@ session_start();
                     <input type="text" name="modify_equipment_description" id="modify_equipment_description" onkeyup="REGEXCheckModifyEquipment(this.value, 'modify_equipment_description')">
                     <label>equipment location</label>
                     <input type="text" name="modify_equipment_location" id="modify_equipment_location" onkeyup="REGEXCheckModifyEquipment(this.value, 'modify_equipment_location')">
-                    <label>active</label>
+                    <label style="text-decoration: underline;">action</label>
                     <select id="operation" name="operation">
                         <option value="modify">modify</option>
                         <option value="delete">delete</option>
                     </select><br>
                     <div id="modify-equipment-input-handeling"></div>
-                    <button type="submit" onclick="setModifyEquipment()" id="modify-equipment-submit" disabled>update equipment</button>
+                    <button type="submit" onclick="setModifyEquipment()" id="modify-equipment-submit" disabled>submit</button>
                 </form>
             </div>
         </div>
