@@ -537,7 +537,7 @@ function REGEXCheckAddEquipment(str, input_to_check){//checks the input of the a
 
 function REGEXCheckModifyEquipment(str, input_to_check){//checks the input of the modify equipment form for errors
   if (typeof modify_equipment_array === 'undefined'){
-    modify_equipment_array = {modify_name: 0, modify_description: 0, modify_location: 0};
+    modify_equipment_array = {modify_name: 1, modify_description: 1, modify_location: 1};
   }
   if (typeof modify_equipment_feedback === 'undefined'){
     modify_equipment_feedback = {modify_name: "", modify_description: "", modify_location: ""};
