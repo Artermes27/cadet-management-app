@@ -17,7 +17,13 @@ if(isset($_GET["remove_user_id"]) and isset($_GET["event_id"])){
 if(isset($_GET["add_equipment_id"]) and isset($_GET["event_id"])){
 	include_once("get_request_scanning.php");
 	include_once("../includes/connection.php");
-	$query = "INSERT INTO equipment_requests (equipment_id, event_id, aproved) VALUES (" . get_request("add_equipment_id") . "," . get_request("event_id") . ",0);";
+	$query = "SELECT equipment_id FROM equipment_requests WHERE equipment_id=" . get_request("add_equipment_id") . " AND event_id=" . get_request("event_id") . ";";
+	$result = mysqli_query($con, $query);
+	if(mysqli_num_rows($result) > 0){
+		$query = "UPDATE equipment_requests SET aproved=0 WHERE equipment_id=" . get_request("add_equipment_id") . " AND event_id=" . get_request("event_id") . ";";
+	} else {
+		$query = "INSERT INTO equipment_requests (equipment_id, event_id, aproved) VALUES (" . get_request("add_equipment_id") . "," . get_request("event_id") . ",0);";
+	}
 	mysqli_query($con, $query);
 }
 
@@ -95,19 +101,20 @@ if(isset($_GET["search_first_name_other_cadet"]) and isset($_GET["event_id"])){
 	AND events.event_start != '" . $event["event_end"] . "'
 	AND events.parade_id = " . $event["parade_id"] . " 
 	AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "' 
-	AND users.user_id IN (SELECT user_event.user_id FROM user_event, events 
+	AND users.user_id IN (
+	SELECT user_event.user_id FROM user_event, events 
 	WHERE user_event.event_id = events.event_id 
+	AND events.event_id != '" . $event_id . "'
 	AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
 	OR (events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_end"] . "')
 	OR (events.event_start > '" . $event["event_start"] . "' AND events.event_end < '" . $event["event_end"] . "')
 	OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end > '" . $event["event_end"] . "')
-	OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')
-	OR (events.event_id != '" . $event_id . "')));";
+	OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')));";
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0)	{
 		$output_html = "";
 		while($cadet = mysqli_fetch_assoc($result)){
-			$output_html .= "<a>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . " " . $cadet["event_name"] . " " . $cadet["event_start"] . " " . $cadet["event_end"] . "</a><br>";
+			$output_html .= "<a>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . " | " . $cadet["event_name"] . " " . $cadet["event_start"] . " " . $cadet["event_end"] . "</a><br>";
 		}
 		echo $output_html;
 	}	else{
@@ -127,9 +134,10 @@ if(isset($_GET["search_equipment_add"]) and isset($_GET["event_id"])){
 	FROM equipment
 	WHERE equipment.equipment_id NOT IN 
 	(SELECT equipment_requests.equipment_id 
-	FROM equipment_requests, equipment, events 
-	WHERE equipment_requests.equipment_id = equipment.equipment_id 
-	AND events.event_id = equipment_requests.event_id
+	FROM equipment_requests, events 
+	WHERE events.event_id = equipment_requests.event_id
+	AND events.parade_id = " . $event["parade_id"] . "
+	AND equipment_requests.aproved != 2
 	AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
 	OR (events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_end"] . "')
 	OR (events.event_start > '" . $event["event_start"] . "' AND events.event_end < '" . $event["event_end"] . "')
@@ -154,7 +162,7 @@ if(isset($_GET["search_equipment_delete"]) and isset($_GET["event_id"])){
 	$equipment_name = get_request("search_equipment_delete");
 	$event_id = get_request("event_id");
 	include_once("../includes/connection.php");
-	$query = "SELECT equipment.equipment_id, equipment.name FROM equipment WHERE equipment.equipment_id IN (SELECT equipment_requests.equipment_id FROM equipment_requests WHERE equipment_requests.event_id = " . $event_id . ") AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "';";
+	$query = "SELECT equipment.equipment_id, equipment.name FROM equipment WHERE equipment.equipment_id IN (SELECT equipment_requests.equipment_id FROM equipment_requests WHERE equipment_requests.event_id = " . $event_id . " AND equipment_requests.aproved != 2 ) AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "';";
 	$result = mysqli_query($con, $query);
 	if(mysqli_num_rows($result) > 0) {
 		$output_html = "";
