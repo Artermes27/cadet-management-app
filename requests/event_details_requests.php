@@ -40,7 +40,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		session_start();
 		include_once("../includes/functions.php");
 		$user_data = check_login($con);
-		if(post_request("user_id") == $owner or $user_data["admin"] == 1){
+		if((post_request("user_id") == $owner or $user_data["admin"] == 1) and $_POST["calendar_flag"] == 0){
 			header("location: ../event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
 		}else{
 			header("location: ../calendar.php");

@@ -143,6 +143,7 @@ session_start();
     $html .= "<link rel=\"stylesheet\" href=\"css/event-owner-form-style.css\">\n";
     $html .= "<form class=\"modify_lesson_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
     $html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">\n";
+    $html .= "<input hidden value=\"1\" type=\"text\" name=\"calendar_flag\" id=\"calendar_flag\">\n";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"owner_id\" id=\"owner_id\">\n";
