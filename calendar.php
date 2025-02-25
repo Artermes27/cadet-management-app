@@ -108,10 +108,12 @@ session_start();
     $result = mysqli_query($con, $query);
     $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $event_count = 0;
-    $event_html = "<div class=\"event\"><h2>" . $parade_date . "</h2><h2>" . $parade["parade_name"]. "</h2></div>";
+    $event_html = "<div class=\"event\"><h2>" . $parade_date . "</h2><h2>" . $parade["parade_name"] . "</h2>";
+    $event_html .= "</div>\n";
     if(count($events) == 0){//the user has no events on this parade night
       $event_html = $event_html . "<div class=\"event\"><a>you have no events on this parade night</a></div>";
     }else{//the user has events on this parade night
+      $equipment_reuqest_log = [];
       while($event_count < count($events)){
         //giving the owner the option to modify their event
         if($events[$event_count]["final_aproval"] == 0){//the event is not aproved
@@ -131,7 +133,37 @@ session_start();
           }else {
             $event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a>" . $events[$event_count]["event_name"] . "</a></div>\n";
           }
+          //selecting the aproved equipment requests of the curent event
+          $query = "SELECT equipment.name, equipment.location, events.event_name, events.event_start, events.event_end, users.rank, users.first_name, users.last_name FROM equipment, events, users, equipment_requests WHERE events.event_id = " . $events[$event_count]["event_id"] . " AND users.user_id = events.owner AND equipment_requests.event_id = events.event_id AND equipment.equipment_id = equipment_requests.equipment_id AND equipment_requests.aproved = 1";
+          $result = mysqli_query($con, $query);
+          //apending the requests to the master log
+          while($request = mysqli_fetch_assoc($result)){
+            $equipment_reuqest_log[] = $request;
+          }
         $event_count = $event_count + 1;
+      }
+      if($user_data["G4"] == "1" and count($equipment_reuqest_log) > 0){
+        $event_html .= "<div class=\"event\">\n";
+        $event_html .= "<h3 style=\"text-decoration: underline;\">log of aproved equipment requests</h3>";
+        $event_html .= "<table>";
+        $event_html .= "<tr>\n";
+        $event_html .= "<th>name</th>";
+        $event_html .= "<th>location</th>";
+        $event_html .= "<th>start time</th>";
+        $event_html .= "<th>finish time</th>";
+        $event_html .= "<th>lesson name</th>";
+        $event_html .= "</tr>";
+        foreach ($equipment_reuqest_log as $request) { 
+          $event_html .= "<tr>";
+          $event_html .= "<td>" . $request["name"] . "</td>";
+          $event_html .= "<td>" . $request["location"] . "</td>";
+          $event_html .= "<td>" . $request["event_start"] . "</td>";
+          $event_html .= "<td>" . $request["event_end"] . "</td>";
+          $event_html .= "<td>" . $request["event_name"] . "</td>";
+          $event_html .= "</tr>";
+        }
+        $event_html .= "</table>";
+        $event_html .= "</div>\n";
       }
     }
     return $event_html;
