@@ -1,5 +1,4 @@
-function showResutsSearchForOwner(str) {//returns search results for an owner's first name in the add event form
-    console.log(str);
+function showResutsSearchForOwner(str) {    console.log(str);
     if (str.length==0) {
       document.getElementById("livesearch_owner").innerHTML="";
       document.getElementById("livesearch_owner").style.border="0px";
@@ -16,8 +15,7 @@ function showResutsSearchForOwner(str) {//returns search results for an owner's 
     xmlhttp.send();
 }
   
-function resultHasBeenClickedOwner(user_id) {//returns the user_id of the owner selected in the add event form
-    console.log(user_id);
+function resultHasBeenClickedOwner(user_id) {    console.log(user_id);
     document.getElementById("livesearch_owner").innerHTML="";
     document.getElementById("livesearch_owner").style.border="0px";
     document.getElementById("owner_id").value = user_id;
@@ -26,9 +24,7 @@ function resultHasBeenClickedOwner(user_id) {//returns the user_id of the owner 
     return;
 }
 
-function displayCurrentOwnerOfEvent(owner_id) {//returns the rank first_name and last_name in html format of the owner selected in the add event form
-    //console.log(owner_id);
-    if (owner_id.length==0) {
+function displayCurrentOwnerOfEvent(owner_id) {        if (owner_id.length==0) {
     document.getElementById("display_current_owner").innerHTML = "";
     document.getElementById("display_current_owner").innerHTML="<a>curent owner: none selected<a>";
     return;
@@ -40,7 +36,6 @@ function displayCurrentOwnerOfEvent(owner_id) {//returns the rank first_name and
         document.getElementById("display_current_owner").innerHTML="<a>curent owner: " + owner_info.rank + " " + owner_info.first_name + " " + owner_info.last_name + "<a>";
     }
     }
-    //owner_id_rank_first_and_last_name
-    xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+owner_id,true);
+        xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+owner_id,true);
     xmlhttp.send();
 }

@@ -38,8 +38,7 @@ session_start();
         $lesson_plan_html .= "<form class=\"modify_lesson_details\" id=\"modify_event_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
         $lesson_plan_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">\n";
         $lesson_plan_html .= "<input hidden value=\"0\" type=\"text\" name=\"calendar_flag\" id=\"calendar_flag\">\n";
-        $lesson_plan_html .= "<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"user_id\" id=\"user_id\">\n";//this is the user id of the user that is curently loged in, this is used to check if the user has changed the event owner and redirect the acordingly when form is submited
-        $lesson_plan_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
+        $lesson_plan_html .= "<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"user_id\" id=\"user_id\">\n";        $lesson_plan_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"owner_id\" id=\"owner_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["parade_id"] . "\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["final_aproval"] . "\" type=\"text\" name=\"original_aproval\" id=\"original_aproval\">\n";
@@ -109,8 +108,7 @@ session_start();
     }
 
     function html_for_register($con, $event_id, $parade_id){
-        //retreving the curent status of the register
-        $query = "SELECT user_event.present, users.user_id, users.rank, users.first_name, users.last_name FROM user_event, users WHERE user_event.event_id = " . $event_id . " and users.user_id = user_event.user_id;";
+                $query = "SELECT user_event.present, users.user_id, users.rank, users.first_name, users.last_name FROM user_event, users WHERE user_event.event_id = " . $event_id . " and users.user_id = user_event.user_id;";
         $result = mysqli_query($con, $query);
         $output_html = "";
         if(mysqli_num_rows($result) > 0) {

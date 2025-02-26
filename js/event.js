@@ -38,8 +38,7 @@ function showResultDeleteCadet(str, search_for, event_id) {
 }
 
 function showResultSearchOtherCadet(str, event_id) {
-  //console.log(str);
-  if (str.length==0) {
+    if (str.length==0) {
     document.getElementById("livesearch_other_cadet").innerHTML="";
     document.getElementById("livesearch_other_cadet").style.border="0px";
     return;
@@ -72,8 +71,7 @@ function resultHasBeenClickedAdd(user_id, event_id) {
 }
 
 function resultHasBeenClickedDelete(user_id, event_id) {
-  //document.write(user_id);
-  var xmlhttp=new XMLHttpRequest();
+    var xmlhttp=new XMLHttpRequest();
   xmlhttp.open("POST", "requests/event_get_requests.php?remove_user_id=" + user_id + "&event_id=" + event_id + "")
   xmlhttp.send();
   document.getElementById("livesearch_delete").innerHTML="";
@@ -165,8 +163,7 @@ function resultHasBeenClickedDeleteEquipment(equipment_id, event_id){
 }
 
 function setStateOfEventApproval(state){
-  //method to test if element final_aproval exists and act acordingly
-  if(document.getElementById("final_aproval") !== "null"){
+    if(document.getElementById("final_aproval") !== "null"){
     document.getElementById("final_aproval").value = state;
   }
 }
@@ -209,8 +206,7 @@ function REGEXCheckEvent(str, input_to_check, admin){
     event_array["final_aproval"] = 0;
   }else {
     if (input_to_check === "event_type"){
-      if (str.match("^.{255,}$")){//checking the input is less than 255 in length
-        event_feedback["event_type"] = "<a>event type is to long<a><br>";
+      if (str.match("^.{255,}$")){        event_feedback["event_type"] = "<a>event type is to long<a><br>";
         event_array["event_type"] = 0;
       } else if(str === ""){
         event_feedback["event_type"] = "<a>event type cant empty<a><br>";
@@ -220,11 +216,9 @@ function REGEXCheckEvent(str, input_to_check, admin){
         event_array["event_type"] = 1;
       }
     } else if (input_to_check === "event_name"){
-      if (str.match("^.{255,}$")){//checking the input is less than 255 in length
-        event_feedback["event_name"] = "<a>event name is to long<a><br>";
+      if (str.match("^.{255,}$")){        event_feedback["event_name"] = "<a>event name is to long<a><br>";
         event_array["event_name"] = 0;
-      } else if(str === ""){//checking the input isnt empty
-        event_feedback["event_name"] = "<a>event name cant empty<a><br>";
+      } else if(str === ""){        event_feedback["event_name"] = "<a>event name cant empty<a><br>";
         event_array["event_name"] = 0;
       } else{
         event_feedback["event_name"] = "";
@@ -234,8 +228,7 @@ function REGEXCheckEvent(str, input_to_check, admin){
       if (str === ""){
         event_feedback["event_start"] = "<a>event start can't be empty<a><br>";
         event_array["event_start"] = 0;
-      } else if (!str.match(/^\d{2}:\d{2}$/)) { // checking the input fits the general form of a time input (HH:MM)
-        event_feedback["event_start"] = "<a>event start must be in the format HH:MM<a><br>";
+      } else if (!str.match(/^\d{2}:\d{2}$/)) {         event_feedback["event_start"] = "<a>event start must be in the format HH:MM<a><br>";
         event_array["event_start"] = 0;
       } else {
         event_feedback["event_start"] = "";
@@ -245,8 +238,7 @@ function REGEXCheckEvent(str, input_to_check, admin){
       if (str === ""){
         event_feedback["event_end"] = "<a>event end can't be empty<a><br>";
         event_array["event_end"] = 0;
-      } else if (!str.match(/^\d{2}:\d{2}$/)) { // checking the input fits the general form of a time input (HH:MM)
-        event_feedback["event_end"] = "<a>event end must be in the format HH:MM<a><br>";
+      } else if (!str.match(/^\d{2}:\d{2}$/)) {         event_feedback["event_end"] = "<a>event end must be in the format HH:MM<a><br>";
         event_array["event_end"] = 0;
       } else {
         event_feedback["event_end"] = "";
@@ -264,15 +256,11 @@ function REGEXCheckEvent(str, input_to_check, admin){
     }
   }
   if (checkAreAllValuesOne(event_array) === true){
-    //no error flags so activate the submit button
-    document.getElementById("add-event-submit").disabled = false;
-    //emptying the input handeling notification div
-    document.getElementById("event-input-handeling").innerHTML = "";
+        document.getElementById("add-event-submit").disabled = false;
+        document.getElementById("event-input-handeling").innerHTML = "";
   }else{
-    //error flags so deactivate the submit button
-    document.getElementById("add-event-submit").disabled = true;
-    //populating the feedback box
-    document.getElementById("event-input-handeling").innerHTML = returnFeedbackHTMl(event_feedback);
+        document.getElementById("add-event-submit").disabled = true;
+        document.getElementById("event-input-handeling").innerHTML = returnFeedbackHTMl(event_feedback);
   }
 }
 
@@ -338,9 +326,7 @@ function REGEXCheckEquipment(str, equipment_id, originial_aproval, G4){
       equipment_feedback[equipment_id] = "";
     }
   }
-  //implement corect logic
-  //implement an equipement id infodump to tie equipment id error message to equipment name
-  if(checkAreAllValuesOne(equipment_array) === true){
+      if(checkAreAllValuesOne(equipment_array) === true){
     document.getElementById("equipment-submit").disabled = false;
     document.getElementById("equipment-input-handeling").innerHTML = "";
   }else{

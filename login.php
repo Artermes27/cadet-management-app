@@ -4,13 +4,11 @@ session_start();
 	include_once("includes/connection.php");
 	include("includes/functions.php");
 	if($_SERVER['REQUEST_METHOD'] == "POST"){
-		//something was posted
-		include_once("requests/post_request_scanning.php");
+				include_once("requests/post_request_scanning.php");
 		$email = post_request('email');
 		$password = post_request('password');
 		if(!empty($email) && !empty($password)){
-			//read from database
-			$query = "select * from users where email = '$email' limit 1";
+						$query = "select * from users where email = '$email' limit 1";
 			$result = mysqli_query($con, $query);
 			if($result){
 				if($result && mysqli_num_rows($result) > 0){

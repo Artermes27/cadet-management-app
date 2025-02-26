@@ -1,6 +1,4 @@
-function showResutsSearchForUserFirstName(str) {//returns search results for a user's first name in the modify user form
-    //console.log(str);
-    if (str.length==0) {
+function showResutsSearchForUserFirstName(str) {        if (str.length==0) {
         document.getElementById("livesearch_first_name").innerHTML="";
         document.getElementById("livesearch_first_name").style.border="0px";
         return;
@@ -16,9 +14,7 @@ function showResutsSearchForUserFirstName(str) {//returns search results for a u
       xmlhttp.send();
 }
 
-function showResutsSearchForUserLastName(str) {//returns search results for a user's last name in the modify user form
-    //console.log(str);
-    if (str.length==0) {
+function showResutsSearchForUserLastName(str) {        if (str.length==0) {
         document.getElementById("livesearch_last_name").innerHTML="";
         document.getElementById("livesearch_last_name").style.border="0px";
         return;
@@ -34,9 +30,7 @@ function showResutsSearchForUserLastName(str) {//returns search results for a us
       xmlhttp.send();
 }
 
-function ShowResultsSearchForParade(str) {//returns search results for a parade's name in add event form
-  //console.log(str);
-  if (str.length==0) {
+function ShowResultsSearchForParade(str) {    if (str.length==0) {
       document.getElementById("livesearch_parade_id").innerHTML="";
       document.getElementById("livesearch_parade_id").style.border="0px";
       return;
@@ -52,9 +46,7 @@ function ShowResultsSearchForParade(str) {//returns search results for a parade'
     xmlhttp.send();
 }
 
-function ResultHasBeenClickedParade(parade_id, parade_date, parade_name) {//returns the parade_id of the parade selected in the add event form
-  //console.log(parade_id);
-  document.getElementById("livesearch_parade_id").innerHTML="";
+function ResultHasBeenClickedParade(parade_id, parade_date, parade_name) {    document.getElementById("livesearch_parade_id").innerHTML="";
   document.getElementById("livesearch_parade_id").style.border="0px";
   document.getElementById("parade_id_search_box").value = "";
   document.getElementById("parade_id").value = parade_id;
@@ -62,8 +54,7 @@ function ResultHasBeenClickedParade(parade_id, parade_date, parade_name) {//retu
   return;
 }
 
-function resultHasBeenClickedUser(user_id) {//returns the user_id of the user selected in the modify user form
-    document.getElementById("livesearch_first_name").innerHTML="";
+function resultHasBeenClickedUser(user_id) {    document.getElementById("livesearch_first_name").innerHTML="";
     document.getElementById("livesearch_first_name").style.border="0px";
     document.getElementById("input_search_first_name").value = "";
     document.getElementById("livesearch_last_name").innerHTML="";
@@ -93,16 +84,13 @@ function resultHasBeenClickedUser(user_id) {//returns the user_id of the user se
         document.getElementById("modify_active").value = userDetails.active;
         document.getElementById("modify_admin").value = userDetails.admin;
         document.getElementById("modify_G4").value = userDetails.G4;
-        //by defalt activate the form since the inputs will pass validation
-        document.getElementById("modify-user-submit").disabled = false;
+                document.getElementById("modify-user-submit").disabled = false;
         }
     }
     return;
 }
 
-function showResutsSearchForEquipmentByName(str){//returns search results for an equipment's name in the modify equipment form
-    //console.log(str);
-    if (str.length==0) {
+function showResutsSearchForEquipmentByName(str){        if (str.length==0) {
         document.getElementById("livesearch_equipment_name").innerHTML="";
         document.getElementById("livesearch_equipment_name").style.border="0px";
         return;
@@ -118,9 +106,7 @@ function showResutsSearchForEquipmentByName(str){//returns search results for an
       xmlhttp.send();
 }
 
-function showResutsSearchForEquipmentByLocation(str){//returns search results for an equipment's location in the modify equipment form
-    //console.log(str);
-    if (str.length==0) {
+function showResutsSearchForEquipmentByLocation(str){        if (str.length==0) {
         document.getElementById("livesearch_equipment_location").innerHTML="";
         document.getElementById("livesearch_equipment_location").style.border="0px";
         return;
@@ -136,9 +122,7 @@ function showResutsSearchForEquipmentByLocation(str){//returns search results fo
       xmlhttp.send();
 }
 
-function resultHasBeenClickedEquipment(equipment_id){//returns the equipment_id of the equipment selected in the modify equipment form
-    //console.log(equipment_id);
-    document.getElementById("livesearch_equipment_name").innerHTML="";
+function resultHasBeenClickedEquipment(equipment_id){        document.getElementById("livesearch_equipment_name").innerHTML="";
     document.getElementById("livesearch_equipment_name").style.border="0px";
     document.getElementById("input_search_equipment_name").value = "";
     document.getElementById("livesearch_equipment_location").innerHTML="";
@@ -162,16 +146,14 @@ function resultHasBeenClickedEquipment(equipment_id){//returns the equipment_id 
         document.getElementById("modify_equipment_name").value = equipmentDetails.name;
         document.getElementById("modify_equipment_location").value = equipmentDetails.location;
         document.getElementById("modify_equipment_description").value = equipmentDetails.description;
-        //by defalt activate the form since the inputs will pass validation
-        document.getElementById("modify-user-submit").disabled = false;
+                document.getElementById("modify-user-submit").disabled = false;
         }
     }
     return;
 }
 
 function checkAreAllValuesOne(obj) {
-  //checks if all values in a dictionary are 1 indicating the form has been filled out correctly
-  for (let key in obj) {
+    for (let key in obj) {
       if (obj.hasOwnProperty(key) && obj[key] !== 1) {
           return false;
       }
@@ -180,8 +162,7 @@ function checkAreAllValuesOne(obj) {
 }
 
 function returnFeedbackHTMl(obj) {
-  //returns the feedback messages in html format from a form_feedback dictionary
-  let returnHTML = "";
+    let returnHTML = "";
   for (let key in obj) {
       if (obj.hasOwnProperty(key) && obj[key] !== "") {
           returnHTML = returnHTML + obj[key];
@@ -190,41 +171,35 @@ function returnFeedbackHTMl(obj) {
   return returnHTML;
 }
 
-function REGEXCheckParade(str, input_to_check){//checks the input of the add parade form for errors
-  if (typeof parade_array === 'undefined'){
+function REGEXCheckParade(str, input_to_check){  if (typeof parade_array === 'undefined'){
     parade_array = {date: 0, start: 0, end: 0, parade_name: 0};
   }if (typeof parade_feedback === 'undefined'){
     parade_feedback = {date: "", start: "", end: "", parade_name: ""};
   }if (input_to_check === "date") {
-    if (!str.match(/^\d{4}-\d{2}-\d{2}$/)) {//checking the input is in the correct date format
-      parade_feedback["date"] = "<a>Invalid date format (YYYY-MM-DD)<a><br>";
+    if (!str.match(/^\d{4}-\d{2}-\d{2}$/)) {      parade_feedback["date"] = "<a>Invalid date format (YYYY-MM-DD)<a><br>";
       parade_array["date"] = 0;
     } else {
       parade_feedback["date"] = "";
       parade_array["date"] = 1;
     }
   } else if (input_to_check === "start") {
-    if (!str.match(/^\d{2}:\d{2}$/)) {//checking the input is in the correct time format
-      parade_feedback["start"] = "<a>Invalid time format (HH:MM)<a><br>";
+    if (!str.match(/^\d{2}:\d{2}$/)) {      parade_feedback["start"] = "<a>Invalid time format (HH:MM)<a><br>";
       parade_array["start"] = 0;
     } else {
       parade_feedback["start"] = "";
       parade_array["start"] = 1;
     }
   } else if (input_to_check === "end") {
-    if (!str.match(/^\d{2}:\d{2}$/)) {//checking the input is in the correct time format
-      parade_feedback["end"] = "<a>Invalid time format (HH:MM)<a><br>";
+    if (!str.match(/^\d{2}:\d{2}$/)) {      parade_feedback["end"] = "<a>Invalid time format (HH:MM)<a><br>";
       parade_array["end"] = 0;
     } else {
       parade_feedback["end"] = "";
       parade_array["end"] = 1;
     }
   } else if (input_to_check === "parade_name") {
-    if (str.match("^.{255,}$")){//checking the input is less than 255 in length
-      parade_feedback["parade_name"] = "<a>parade name is to long<a><br>";
+    if (str.match("^.{255,}$")){      parade_feedback["parade_name"] = "<a>parade name is to long<a><br>";
       parade_array["parade_name"] = 0;
-    } else if(str === ""){//checking the input isnt empty
-      parade_feedback["parade_name"] = "<a>parade name cant empty<a><br>";
+    } else if(str === ""){      parade_feedback["parade_name"] = "<a>parade name cant empty<a><br>";
       parade_array["parade_name"] = 0;
     } else {
       parade_feedback["parade_name"] = "";
@@ -232,28 +207,22 @@ function REGEXCheckParade(str, input_to_check){//checks the input of the add par
     }
   }
   if (checkAreAllValuesOne(parade_array) === true){
-    //no error flags so activate the submit button
-    document.getElementById("add-parade-submit").disabled = false;
-    //emptying the input handeling notification div
-    document.getElementById("parade-input-handeling").innerHTML = "";
+        document.getElementById("add-parade-submit").disabled = false;
+        document.getElementById("parade-input-handeling").innerHTML = "";
   }else{
-    //error flags so deactivate the submit button
-    document.getElementById("add-parade-submit").disabled = true;
-    //populating the feedback box
-    document.getElementById("parade-input-handeling").innerHTML = returnFeedbackHTMl(parade_feedback);
+        document.getElementById("add-parade-submit").disabled = true;
+        document.getElementById("parade-input-handeling").innerHTML = returnFeedbackHTMl(parade_feedback);
   }
 }
 
-function REGEXCheckEvent(str, input_to_check){//checks the input of the add event form for errors
-  if (typeof event_array === 'undefined'){
+function REGEXCheckEvent(str, input_to_check){  if (typeof event_array === 'undefined'){
     event_array = {event_type: 0, event_name: 0};
   }
   if (typeof event_feedback === 'undefined'){
     event_feedback = {event_type: "", event_name: ""};
   }
   if (input_to_check === "event_type") {
-    if (str.match("^.{255,}$")){//checking the input is less than 255 in length
-      event_feedback["event_type"] = "<a>event type is to long<a><br>";
+    if (str.match("^.{255,}$")){      event_feedback["event_type"] = "<a>event type is to long<a><br>";
       event_array["event_type"] = 0;
     } else if(str === ""){
       event_feedback["event_type"] = "<a>event type cant empty<a><br>";
@@ -263,11 +232,9 @@ function REGEXCheckEvent(str, input_to_check){//checks the input of the add even
       event_array["event_type"] = 1;
     }
   } else if (input_to_check === "event_name"){
-    if (str.match("^.{255,}$")){//checking the input is less than 255 in length
-      event_feedback["event_name"] = "<a>event name is to long<a><br>";
+    if (str.match("^.{255,}$")){      event_feedback["event_name"] = "<a>event name is to long<a><br>";
       event_array["event_name"] = 0;
-    } else if(str === ""){//checking the input isnt empty
-      event_feedback["event_name"] = "<a>event name cant empty<a><br>";
+    } else if(str === ""){      event_feedback["event_name"] = "<a>event name cant empty<a><br>";
       event_array["event_name"] = 0;
     } else{
       event_feedback["event_name"] = "";
@@ -275,34 +242,26 @@ function REGEXCheckEvent(str, input_to_check){//checks the input of the add even
     }
   }
   if (checkAreAllValuesOne(event_array) === true){
-    //no error flags so activate the submit button
-    document.getElementById("add-event-submit").disabled = false;
-    //emptying the input handeling notification div
-    document.getElementById("event-input-handeling").innerHTML = "";
+        document.getElementById("add-event-submit").disabled = false;
+        document.getElementById("event-input-handeling").innerHTML = "";
   }else{
-    //error flags so deactivate the submit button
-    document.getElementById("add-event-submit").disabled = true;
-    //populating the feedback box
-    document.getElementById("event-input-handeling").innerHTML = returnFeedbackHTMl(event_feedback);
+        document.getElementById("add-event-submit").disabled = true;
+        document.getElementById("event-input-handeling").innerHTML = returnFeedbackHTMl(event_feedback);
   }
 }
 
-function REGEXCheckAddUser(str, input_to_check){//checks the input of the add user form for errors
-  if (typeof add_user_array === 'undefined'){
+function REGEXCheckAddUser(str, input_to_check){  if (typeof add_user_array === 'undefined'){
     add_user_array = {email: 0, password: 0, first_name: 0, last_name: 0, DOB: 0, gender: 0, rank: 0};
   }
   if (typeof add_user_feedback === 'undefined'){
     add_user_feedback = {email: "", password: "", first_name: "", last_name: "", DOB: "", gender: "", rank: ""};
   }
   if (input_to_check === "email") {
-    if (str.length > 255){//checking the input is less than 255 in length
-      add_user_feedback["email"] = "<a>email is to long<a><br>";
+    if (str.length > 255){      add_user_feedback["email"] = "<a>email is to long<a><br>";
       add_user_array["email"] = 0;
-    } else if(str === ""){//checking the input isnt empty
-      add_user_feedback["email"] = "<a>email cant be empty<a><br>";
+    } else if(str === ""){      add_user_feedback["email"] = "<a>email cant be empty<a><br>";
       add_user_array["email"] = 0;
-    } else if (!str.match("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")) {//checking the email fits the general form of an email
-      add_user_feedback["email"] = "<a>Invalid email format<a><br>";
+    } else if (!str.match("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")) {      add_user_feedback["email"] = "<a>Invalid email format<a><br>";
       add_user_array["email"] = 0;
     } else {
       add_user_feedback["email"] = "";
@@ -373,34 +332,26 @@ function REGEXCheckAddUser(str, input_to_check){//checks the input of the add us
     }
   }
   if (checkAreAllValuesOne(add_user_array) === true){
-    //no error flags so activate the submit button
-    document.getElementById("add-user-submit").disabled = false;
-    //clearing the feedback box
-    document.getElementById("user-input-handeling").innerHTML = "";
+        document.getElementById("add-user-submit").disabled = false;
+        document.getElementById("user-input-handeling").innerHTML = "";
   } else {
-    //error flags so deactivate the submit button
-    document.getElementById("add-user-submit").disabled = true;
-    //populating the feedback box
-    document.getElementById("user-input-handeling").innerHTML = returnFeedbackHTMl(add_user_feedback);
+        document.getElementById("add-user-submit").disabled = true;
+        document.getElementById("user-input-handeling").innerHTML = returnFeedbackHTMl(add_user_feedback);
   }
 }
  
-function REGEXCheckModifyUser(str, input_to_check){//checks the input of the modify user form for errors
-  if (typeof modify_user_array === 'undefined'){
+function REGEXCheckModifyUser(str, input_to_check){  if (typeof modify_user_array === 'undefined'){
     modify_user_array = {modify_email: 1, modify_password: 1, modify_first_name: 1, modify_last_name: 1, modify_DOB: 1, modify_gender: 1, modify_rank: 1};
   }
   if (typeof modify_user_feedback === 'undefined'){
     modify_user_feedback = {modify_email: "", modify_password: "", modify_first_name: "", modify_last_name: "", modify_DOB: "", modify_gender: "", modify_rank: ""};
   }
   if (input_to_check === "modify_email") {
-    if (str.length > 255){//checking the input is less than 255 in length
-      modify_user_feedback["modify_email"] = "<a>email is to long<a><br>";
+    if (str.length > 255){      modify_user_feedback["modify_email"] = "<a>email is to long<a><br>";
       modify_user_array["modify_email"] = 0;
-    } else if(str === ""){//checking the input isnt empty
-      modify_user_feedback["modify_email"] = "<a>email cant be empty<a><br>";
+    } else if(str === ""){      modify_user_feedback["modify_email"] = "<a>email cant be empty<a><br>";
       modify_user_array["modify_email"] = 0;
-    } else if (!str.match("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")) {//checking the email fits the general form of an email
-      modify_user_feedback["modify_email"] = "<a>Invalid email format<a><br>";
+    } else if (!str.match("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")) {      modify_user_feedback["modify_email"] = "<a>Invalid email format<a><br>";
       modify_user_array["modify_email"] = 0;
     } else {
       modify_user_feedback["modify_email"] = "";
@@ -472,31 +423,24 @@ function REGEXCheckModifyUser(str, input_to_check){//checks the input of the mod
   }
   console.log(modify_user_array);
   if (checkAreAllValuesOne(modify_user_array) === true){
-    //no error flags so activate the submit button
-    document.getElementById("modify-user-submit").disabled = false;
-    //clearing the feedback box
-    document.getElementById("modify-user-input-handeling").innerHTML = "";
+        document.getElementById("modify-user-submit").disabled = false;
+        document.getElementById("modify-user-input-handeling").innerHTML = "";
   } else {
-    //error flags so deactivate the submit button
-    document.getElementById("modify-user-submit").disabled = true;
-    //populating the feedback box
-    document.getElementById("modify-user-input-handeling").innerHTML = returnFeedbackHTMl(modify_user_feedback);
+        document.getElementById("modify-user-submit").disabled = true;
+        document.getElementById("modify-user-input-handeling").innerHTML = returnFeedbackHTMl(modify_user_feedback);
   }
 }
 
-function REGEXCheckAddEquipment(str, input_to_check){//checks the input of the add equipment form for errors
-  if (typeof add_equipment_array === 'undefined'){
+function REGEXCheckAddEquipment(str, input_to_check){  if (typeof add_equipment_array === 'undefined'){
     add_equipment_array = {name: 0, description: 0, location: 0};
   }
   if (typeof add_equipment_feedback === 'undefined'){
     add_equipment_feedback = {name: "", description: "", location: ""};
   }
   if (input_to_check === "name") {
-    if (str.length > 255){//checking the input is less than 255 in length
-      add_equipment_feedback["name"] = "<a>Name is too long<a><br>";
+    if (str.length > 255){      add_equipment_feedback["name"] = "<a>Name is too long<a><br>";
       add_equipment_array["name"] = 0;
-    } else if(str === ""){//checking the input isn't empty
-      add_equipment_feedback["name"] = "<a>Name can't be empty<a><br>";
+    } else if(str === ""){      add_equipment_feedback["name"] = "<a>Name can't be empty<a><br>";
       add_equipment_array["name"] = 0;
     } else {
       add_equipment_feedback["name"] = "";
@@ -523,31 +467,24 @@ function REGEXCheckAddEquipment(str, input_to_check){//checks the input of the a
     }
   }
   if (checkAreAllValuesOne(add_equipment_array) === true){
-    //no error flags so activate the submit button
-    document.getElementById("add-equipment-submit").disabled = false;
-    //clearing the feedback box
-    document.getElementById("equipment-input-handeling").innerHTML = "";
+        document.getElementById("add-equipment-submit").disabled = false;
+        document.getElementById("equipment-input-handeling").innerHTML = "";
   } else {
-    //error flags so deactivate the submit button
-    document.getElementById("add-equipment-submit").disabled = true;
-    //populating the feedback box
-    document.getElementById("equipment-input-handeling").innerHTML = returnFeedbackHTMl(add_equipment_feedback);
+        document.getElementById("add-equipment-submit").disabled = true;
+        document.getElementById("equipment-input-handeling").innerHTML = returnFeedbackHTMl(add_equipment_feedback);
   }
 }
 
-function REGEXCheckModifyEquipment(str, input_to_check){//checks the input of the modify equipment form for errors
-  if (typeof modify_equipment_array === 'undefined'){
+function REGEXCheckModifyEquipment(str, input_to_check){  if (typeof modify_equipment_array === 'undefined'){
     modify_equipment_array = {modify_name: 1, modify_description: 1, modify_location: 1};
   }
   if (typeof modify_equipment_feedback === 'undefined'){
     modify_equipment_feedback = {modify_name: "", modify_description: "", modify_location: ""};
   }
   if (input_to_check === "modify_equipment_name") {
-    if (str.length > 255){//checking the input is less than 255 in length
-      modify_equipment_feedback["modify_equipment_name"] = "<a>Name is too long<a><br>";
+    if (str.length > 255){      modify_equipment_feedback["modify_equipment_name"] = "<a>Name is too long<a><br>";
       modify_equipment_array["modify_equipment_name"] = 0;
-    } else if(str === ""){//checking the input isn't empty
-      modify_equipment_feedback["modify_equipment_name"] = "<a>Name can't be empty<a><br>";
+    } else if(str === ""){      modify_equipment_feedback["modify_equipment_name"] = "<a>Name can't be empty<a><br>";
       modify_equipment_array["modify_name"] = 0;
     } else {
       modify_equipment_feedback["modify_equipment_namey_name"] = "";
@@ -574,15 +511,11 @@ function REGEXCheckModifyEquipment(str, input_to_check){//checks the input of th
     }
   }
   if (checkAreAllValuesOne(modify_equipment_array) === true){
-    //no error flags so activate the submit button
-    document.getElementById("modify-equipment-submit").disabled = false;
-    //clearing the feedback box
-    document.getElementById("modify-equipment-input-handeling").innerHTML = "";
+        document.getElementById("modify-equipment-submit").disabled = false;
+        document.getElementById("modify-equipment-input-handeling").innerHTML = "";
   } else {
-    //error flags so deactivate the submit button
-    document.getElementById("modify-equipment-submit").disabled = true;
-    //populating the feedback box
-    document.getElementById("modify-equipment-input-handeling").innerHTML = returnFeedbackHTMl(modify_equipment_feedback);
+        document.getElementById("modify-equipment-submit").disabled = true;
+        document.getElementById("modify-equipment-input-handeling").innerHTML = returnFeedbackHTMl(modify_equipment_feedback);
   }
 }
 

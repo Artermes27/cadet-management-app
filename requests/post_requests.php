@@ -1,6 +1,5 @@
 <?php
-if($_SERVER["REQUEST_METHOD"] == "POST"){//post methods for updating the database from add.php
-	if(isset($_POST["add_new_user"]) and $_POST["add_new_user"] == "1"){
+if($_SERVER["REQUEST_METHOD"] == "POST"){	if(isset($_POST["add_new_user"]) and $_POST["add_new_user"] == "1"){
 		include_once("post_request_scanning.php");
 		$email = post_request("email");
 		$password = post_request("password");

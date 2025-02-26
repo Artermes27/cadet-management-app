@@ -6,11 +6,9 @@ if(isset($_GET["search_first_name_owner"])){
     $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "';";
     $result = mysqli_query($con, $query);
     if(mysqli_num_rows($result) > 0)	{
-        //their are names symalar
-        $output = "";
+                $output = "";
         while($cadet = mysqli_fetch_assoc($result)){
-            //echo $output;
-            if($output == ""){
+                        if($output == ""){
                 $output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
             }	else	{
                 $output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
@@ -18,8 +16,7 @@ if(isset($_GET["search_first_name_owner"])){
         }
         echo $output;
     }	else{
-        //their are no symalar names
-        echo "<a>no names match your prompt</a>";
+                echo "<a>no names match your prompt</a>";
     }
 }
 
@@ -50,14 +47,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		$parade_id = post_request("delete_parade_id");
 		$event_id = post_request("delete_event_id");
 		include_once("../includes/connection.php");
-		//removing constraints from user_event
-		$query = "DELETE FROM user_event WHERE event_id = " . $event_id;
+				$query = "DELETE FROM user_event WHERE event_id = " . $event_id;
 		mysqli_query($con, $query);
-		//removing constraints from equipment_requests
-		$query = "DELETE FROM equipment_requests WHERE event_id = " . $event_id;
+				$query = "DELETE FROM equipment_requests WHERE event_id = " . $event_id;
 		mysqli_query($con, $query);
-		//deleteing the event
-		$query = "DELETE FROM events WHERE event_id = " . $event_id;
+				$query = "DELETE FROM events WHERE event_id = " . $event_id;
 		mysqli_query($con, $query);
 		header("location: ../calendar.php");
     }
