@@ -9,7 +9,7 @@ session_start();
         header("Location: calendar.php");
     }
 
-    function get_latest_parade($con)	{//get latest parade for next parade date sugestion on add.php
+    function get_latest_parade($con)	{
         $query = "SELECT date FROM parades ORDER BY date DESC LIMIT 1;";
         $result = mysqli_query($con, $query);
         
