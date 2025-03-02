@@ -36,7 +36,7 @@ session_start();
         $lesson_plan_html .= "<h4>modify event details</h4>\n";
         $lesson_plan_html .= "<link rel=\"stylesheet\" href=\"css/event-owner-form-style.css\">\n";
         $lesson_plan_html .= "<form class=\"modify_lesson_details\" id=\"modify_event_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
-        $lesson_plan_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_event_details\" id=\"modify_event_details\">\n";
+        $lesson_plan_html .= "<input hidden value=\"modify_event_details\" type=\"text\" name=\"flag\" id=\"flag\">\n";
         $lesson_plan_html .= "<input hidden value=\"0\" type=\"text\" name=\"calendar_flag\" id=\"calendar_flag\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"user_id\" id=\"user_id\">\n";        $lesson_plan_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"owner_id\" id=\"owner_id\">\n";

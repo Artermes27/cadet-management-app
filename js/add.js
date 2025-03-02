@@ -10,7 +10,7 @@ function showResutsSearchForUserFirstName(str) {        if (str.length==0) {
           document.getElementById("livesearch_first_name").style.border="1px solid #A5ACB2";
         }
       }
-      xmlhttp.open("GET","requests/add_get_requests.php?search_first_name_user="+str,true);
+      xmlhttp.open("GET","requests/add_get_requests.php?flag=search_first_name_user&prompt="+str,true);
       xmlhttp.send();
 }
 
@@ -26,7 +26,7 @@ function showResutsSearchForUserLastName(str) {        if (str.length==0) {
           document.getElementById("livesearch_last_name").style.border="1px solid #A5ACB2";
         }
       }
-      xmlhttp.open("GET","requests/add_get_requests.php?search_last_name_user="+str,true);
+      xmlhttp.open("GET","requests/add_get_requests.php?flag=search_last_name_user&prompt="+str,true);
       xmlhttp.send();
 }
 
@@ -42,7 +42,7 @@ function ShowResultsSearchForParade(str) {    if (str.length==0) {
         document.getElementById("livesearch_parade_id").style.border="1px solid #A5ACB2";
       }
     }
-    xmlhttp.open("GET","requests/add_get_requests.php?search_parade_name="+str,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?flag=search_parade_name&prompt="+str,true);
     xmlhttp.send();
 }
 
@@ -67,7 +67,7 @@ function resultHasBeenClickedUser(user_id) {    document.getElementById("livesea
           document.getElementById("livesearch_last_name").style.border="1px solid #A5ACB2";
         }
       }
-    xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+user_id,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+user_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
       if (this.readyState==4 && this.status==200) {
@@ -102,7 +102,7 @@ function showResutsSearchForEquipmentByName(str){        if (str.length==0) {
           document.getElementById("livesearch_equipment_name").style.border="1px solid #A5ACB2";
         }
       }
-      xmlhttp.open("GET","requests/add_get_requests.php?search_equipment_name="+str,true);
+      xmlhttp.open("GET","requests/add_get_requests.php?flag=search_equipment_name&prompt="+str,true);
       xmlhttp.send();
 }
 
@@ -118,7 +118,7 @@ function showResutsSearchForEquipmentByLocation(str){        if (str.length==0) 
           document.getElementById("livesearch_equipment_location").style.border="1px solid #A5ACB2";
         }
       }
-      xmlhttp.open("GET","requests/add_get_requests.php?search_equipment_location="+str,true);
+      xmlhttp.open("GET","requests/add_get_requests.php?flag=search_equipment_location&prompt="+str,true);
       xmlhttp.send();
 }
 
@@ -136,7 +136,7 @@ function resultHasBeenClickedEquipment(equipment_id){        document.getElement
           document.getElementById("livesearch_equipment_location").style.border="1px solid #A5ACB2";
         }
       }
-    xmlhttp.open("GET","requests/add_get_requests.php?equipment_id_info_dump="+equipment_id,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?flag=equipment_id_info_dump&prompt="+equipment_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
       if (this.readyState==4 && this.status==200) {

@@ -12,7 +12,7 @@ function showResultAddCadet(str, search_for, event_id) {
       }
     }
     if (search_for == "search_first_name") {
-      xmlhttp.open("GET","requests/event_get_requests.php?search_first_name="+str+"&event_id=" + event_id,true);
+      xmlhttp.open("GET","requests/event_get_requests.php?flag=search_first_name&prompt="+str+"&event_id=" + event_id,true);
       xmlhttp.send();
     }
 }
@@ -31,8 +31,7 @@ function showResultDeleteCadet(str, search_for, event_id) {
     }
   }
   if (search_for == "search_first_name_delete") {
-    xmlhttp.open("GET","requests/event_get_requests.php?search_first_name_delete="+str+"&event_id=" + event_id,true);
-    console.log("requests/event_get_requests.php?search_first_name_delete="+str+"&event_id=" + event_id);
+    xmlhttp.open("GET","requests/event_get_requests.php?flag=search_first_name_delete&prompt="+str+"&event_id=" + event_id,true);
     xmlhttp.send();
   }
 }
@@ -51,15 +50,14 @@ function showResultSearchOtherCadet(str, event_id) {
       document.getElementById("livesearch_other_cadet").style.border="1px solid #A5ACB2";
     }
   }
-  console.log("requests/event_get_requests.php?search_first_name_other_cadet="+str+"&event_id=" + event_id);
-  xmlhttp.open("GET","requests/event_get_requests.php?search_first_name_other_cadet="+str+"&event_id=" + event_id,true);
+  xmlhttp.open("GET","requests/event_get_requests.php?flag=search_first_name_other_cadet&prompt="+str+"&event_id=" + event_id,true);
   xmlhttp.send();
 
 }
   
 function resultHasBeenClickedAdd(user_id, event_id) {
   var xmlhttp=new XMLHttpRequest();
-  xmlhttp.open("POST", "requests/event_get_requests.php?add_user_id=" + user_id + "&event_id=" + event_id + "")
+  xmlhttp.open("POST", "requests/event_get_requests.php?flag=add_user_id&add_user_id=" + user_id + "&event_id=" + event_id + "")
   xmlhttp.send();
   document.getElementById("livesearch").innerHTML="";
   document.getElementById("livesearch").style.border="0px";
@@ -72,7 +70,7 @@ function resultHasBeenClickedAdd(user_id, event_id) {
 
 function resultHasBeenClickedDelete(user_id, event_id) {
     var xmlhttp=new XMLHttpRequest();
-  xmlhttp.open("POST", "requests/event_get_requests.php?remove_user_id=" + user_id + "&event_id=" + event_id + "")
+  xmlhttp.open("POST", "requests/event_get_requests.php?flag=remove_user_id&remove_user_id=" + user_id + "&event_id=" + event_id + "")
   xmlhttp.send();
   document.getElementById("livesearch_delete").innerHTML="";
   document.getElementById("livesearch_delete").style.border="0px";
@@ -97,7 +95,7 @@ function showResultAddEquipment(str, event_id) {
       document.getElementById("livesearch_equipment_add").style.border="1px solid #A5ACB2";
     }
   }
-  xmlhttp.open("GET","requests/event_get_requests.php?search_equipment_add="+str+"&event_id=" + event_id,true);
+  xmlhttp.open("GET","requests/event_get_requests.php?flag=search_equipment_add&prompt="+str+"&event_id=" + event_id,true);
   xmlhttp.send();
 }
 
@@ -114,7 +112,7 @@ function showResultDeleteEquipment(str, event_id){
       document.getElementById("livesearch_delete_equipment").style.border = "1px solid #A5ACB2";
     }
   }
-  xmlhttp.open("GET", "requests/event_get_requests.php?search_equipment_delete=" + str + "&event_id=" + event_id, true);
+  xmlhttp.open("GET", "requests/event_get_requests.php?flag=search_equipment_delete&prompt=" + str + "&event_id=" + event_id, true);
   xmlhttp.send();
 }
 
@@ -131,13 +129,13 @@ function showResultSearchOtherEquipment(str, event_id){
       document.getElementById("livesearch_other_equipment").style.border = "1px solid #A5ACB2";
     }
   }
-  xmlhttp.open("GET", "requests/event_get_requests.php?search_equipment_other=" + str + "&event_id=" + event_id, true);
+  xmlhttp.open("GET", "requests/event_get_requests.php?flag=search_equipment_other&prompt=" + str + "&event_id=" + event_id, true);
   xmlhttp.send();
 }
 
 function resultHasBeenClickedAddEquipment(equipment_id, event_id){
   let xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("POST", "requests/event_get_requests.php?add_equipment_id=" + equipment_id + "&event_id=" + event_id);
+  xmlhttp.open("POST", "requests/event_get_requests.php?flag=add_equipment_id&add_equipment_id=" + equipment_id + "&event_id=" + event_id);
   xmlhttp.send();
   document.getElementById("livesearch_equipment_add").innerHTML = "";
   document.getElementById("livesearch_equipment_add").style.border = "0px";
@@ -151,7 +149,7 @@ function resultHasBeenClickedAddEquipment(equipment_id, event_id){
 
 function resultHasBeenClickedDeleteEquipment(equipment_id, event_id){
   var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("POST", "requests/event_get_requests.php?remove_equipment_id=" + equipment_id + "&event_id=" + event_id);
+  xmlhttp.open("POST", "requests/event_get_requests.php?flag=remove_equipment_id&remove_equipment_id=" + equipment_id + "&event_id=" + event_id);
   xmlhttp.send();
   document.getElementById("livesearch_delete_equipment").innerHTML = "";
   document.getElementById("livesearch_delete_equipment").style.border = "0px";
@@ -268,7 +266,7 @@ function REGEXCheckRegister(str, user_id){
   if(str === ""){
     register_array[user_id] = 0;
     let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+user_id,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+user_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
@@ -279,7 +277,7 @@ function REGEXCheckRegister(str, user_id){
   }else if(str !== "1" && str !== "0"){
     register_array[user_id] = 0;
     let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+user_id,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+user_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {

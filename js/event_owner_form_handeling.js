@@ -11,7 +11,7 @@ function showResutsSearchForOwner(str) {    console.log(str);
         document.getElementById("livesearch_owner").style.border="1px solid #A5ACB2";
       }
     }
-    xmlhttp.open("GET","requests/event_details_requests.php?search_first_name_owner="+str,true);
+    xmlhttp.open("GET","requests/event_details_requests.php?flag=search_first_name_owner&prompt="+str,true);
     xmlhttp.send();
 }
   
@@ -36,6 +36,6 @@ function displayCurrentOwnerOfEvent(owner_id) {        if (owner_id.length==0) {
         document.getElementById("display_current_owner").innerHTML="<a>curent owner: " + owner_info.rank + " " + owner_info.first_name + " " + owner_info.last_name + "<a>";
     }
     }
-        xmlhttp.open("GET","requests/add_get_requests.php?user_id_info_dump="+owner_id,true);
+        xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+owner_id,true);
     xmlhttp.send();
 }
