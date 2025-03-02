@@ -216,10 +216,10 @@ function REGEXCheckParade(str, input_to_check){  if (typeof parade_array === 'un
 }
 
 function REGEXCheckEvent(str, input_to_check){  if (typeof event_array === 'undefined'){
-    event_array = {event_type: 0, event_name: 0};
+    event_array = {event_type: 0, event_name: 0, event_start: 0, event_end: 0};
   }
   if (typeof event_feedback === 'undefined'){
-    event_feedback = {event_type: "", event_name: ""};
+    event_feedback = {event_type: "", event_name: "", event_start: "", event_end: ""};
   }
   if (input_to_check === "event_type") {
     if (str.match("^.{255,}$")){      event_feedback["event_type"] = "<a>event type is to long<a><br>";
@@ -239,6 +239,20 @@ function REGEXCheckEvent(str, input_to_check){  if (typeof event_array === 'unde
     } else{
       event_feedback["event_name"] = "";
       event_array["event_name"] = 1
+    }
+  }else if (input_to_check === "event_start") {
+    if (!str.match(/^\d{2}:\d{2}$/)) {      event_feedback["event_start"] = "<a>Invalid time format (HH:MM)<a><br>";
+      event_array["start"] = 0;
+    } else {
+      event_feedback["event_start"] = "";
+      event_array["event_start"] = 1;
+    }
+  } else if (input_to_check === "event_end") {
+    if (!str.match(/^\d{2}:\d{2}$/)) {      event_feedback["event_end"] = "<a>Invalid time format (HH:MM)<a><br>";
+      event_array["event_end"] = 0;
+    } else {
+      event_feedback["event_end"] = "";
+      event_array["event_end"] = 1;
     }
   }
   if (checkAreAllValuesOne(event_array) === true){
@@ -518,5 +532,3 @@ function REGEXCheckModifyEquipment(str, input_to_check){  if (typeof modify_equi
         document.getElementById("modify-equipment-input-handeling").innerHTML = returnFeedbackHTMl(modify_equipment_feedback);
   }
 }
-
-//import { checkAreAllValuesOne, returnFeedbackHTMl} from 'include_REGEX_check.js';

@@ -1,5 +1,35 @@
 <?php
-if($_SERVER["REQUEST_METHOD"] == "POST"){	if(isset($_POST["add_new_user"]) and $_POST["add_new_user"] == "1"){
+
+switch ($_POST["flag"]){
+	case "add_new_parade";
+		include_once("post_request_scanning.php");
+		$date = post_request("date");
+		$start = post_request("start");
+		$end = post_request("end");
+		$parade_name = post_request("parade_name");
+		include_once("../includes/connection.php");
+		$query = "SELECT MAX(parade_id) FROM parades;";
+		$result = mysqli_query($con, $query);
+		$parade_id = mysqli_fetch_assoc($result)["MAX(parade_id)"] + 1;
+		$query = "INSERT INTO `parades` (`parade_id`, `date`, `start`, `end`, `parade_name`) VALUES ('" . $parade_id . "', '" . $date . "', '" . $start . "', '" . $end . "', '" . $parade_name . "');";
+		$result = mysqli_query($con, $query);
+		header("Location: ../add.php");
+	case "add_new_event";
+		include_once("post_request_scanning.php");
+		$parade_id = post_request("parade_id");
+		$event_type = post_request("event_type");
+		$event_name = post_request("event_name");
+		$event_start = post_request("event_start");
+		$event_end = post_request("event_end");
+		$owner = post_request("owner_id");
+		include_once("../includes/connection.php");
+		$query = "SELECT MAX(event_id) FROM events;";
+		$result = mysqli_query($con, $query);
+		$event_id = mysqli_fetch_assoc($result)["MAX(event_id)"] + 1;
+		$query = "INSERT INTO `events` (`event_id`, `parade_id`, `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval`) VALUES ('" . $event_id . "', '" . $parade_id . "', '" . $event_type . "', '" . $event_name . "', '" . $event_start . "', '" . $event_end . "', '" . $owner . "', '0');";
+		$result = mysqli_query($con, $query);
+		header("Location: ../add.php");
+	case "add_new_user";
 		include_once("post_request_scanning.php");
 		$email = post_request("email");
 		$password = post_request("password");
@@ -18,48 +48,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){	if(isset($_POST["add_new_user"]) and $
 		$query = "INSERT INTO `users` (`user_id`, `email`, `password`, `first_name`, `last_name`, `DOB`, `gender`, `rank`, `active`, `admin`, `G4`) VALUES ('" . $user_id . "', '" . $email . "', '" . hash("sha256", $password) . "', '" . $first_name . "', '" . $last_name . "', '" . $DOB . "', '" . $gender . "', '" . $rank . "', " . $active . ", " . $admin . ", " . $G4 . ");";
 		$result = mysqli_query($con, $query);
 		header("Location: ../add.php");
-	}if(isset($_POST["add_new_equipment"]) and $_POST["add_new_equipment"] == "1"){
-		include_once("post_request_scanning.php");
-		$equipment_id = post_request("equipment_id");
-		$name = post_request("name");
-		$description = post_request("description");
-		$location = post_request("location");
-		include_once("../includes/connection.php");
-		$query = "SELECT MAX(equipment_id) FROM equipment;";
-		$result = mysqli_query($con, $query);
-		$equipment_id = mysqli_fetch_assoc($result)["MAX(equipment_id)"] + 1;
-		$query = "INSERT INTO `equipment` (`equipment_id`, `name`, `description`, `location`) VALUES ('" . $equipment_id . "', '" . $name . "', '" . $description . "', '" . $location . "');";
-		$result = mysqli_query($con, $query);
-		header("Location: ../add.php");
-	}if(isset($_POST["add_new_parade"]) and $_POST["add_new_parade"] == "1"){
-		include_once("post_request_scanning.php");
-		$date = post_request("date");
-		$start = post_request("start");
-		$end = post_request("end");
-		$parade_name = post_request("parade_name");
-		include_once("../includes/connection.php");
-		$query = "SELECT MAX(parade_id) FROM parades;";
-		$result = mysqli_query($con, $query);
-		$parade_id = mysqli_fetch_assoc($result)["MAX(parade_id)"] + 1;
-		$query = "INSERT INTO `parades` (`parade_id`, `date`, `start`, `end`, `parade_name`) VALUES ('" . $parade_id . "', '" . $date . "', '" . $start . "', '" . $end . "', '" . $parade_name . "');";
-		$result = mysqli_query($con, $query);
-		header("Location: ../add.php");
-	}if(isset($_POST["add_new_event"]) and $_POST["add_new_event"] == "1"){
-		include_once("post_request_scanning.php");
-		$parade_id = post_request("parade_id");
-		$event_type = post_request("event_type");
-		$event_name = post_request("event_name");
-		$event_start = post_request("event_start");
-		$event_end = post_request("event_end");
-		$owner = post_request("owner_id");
-		include_once("../includes/connection.php");
-		$query = "SELECT MAX(event_id) FROM events;";
-		$result = mysqli_query($con, $query);
-		$event_id = mysqli_fetch_assoc($result)["MAX(event_id)"] + 1;
-		$query = "INSERT INTO `events` (`event_id`, `parade_id`, `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval`) VALUES ('" . $event_id . "', '" . $parade_id . "', '" . $event_type . "', '" . $event_name . "', '" . $event_start . "', '" . $event_end . "', '" . $owner . "', '0');";
-		$result = mysqli_query($con, $query);
-		header("Location: ../add.php");
-	}if(isset($_POST["modify_user"]) and $_POST["modify_user"] == "1"){
+	case "modify_user";
 		include_once("post_request_scanning.php");
 		$user_id = post_request("modify_user_id");
 		$email = post_request("modify_email");
@@ -81,7 +70,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){	if(isset($_POST["add_new_user"]) and $
 			$result = mysqli_query($con, $query);
 		}
 		header("Location: ../add.php");
-	}if(isset($_POST["modify_equipment"]) and $_POST["modify_equipment"] == "1"){
+	case "add_new_equipment";
+		include_once("post_request_scanning.php");
+		$equipment_id = post_request("equipment_id");
+		$name = post_request("name");
+		$description = post_request("description");
+		$location = post_request("location");
+		include_once("../includes/connection.php");
+		$query = "SELECT MAX(equipment_id) FROM equipment;";
+		$result = mysqli_query($con, $query);
+		$equipment_id = mysqli_fetch_assoc($result)["MAX(equipment_id)"] + 1;
+		$query = "INSERT INTO `equipment` (`equipment_id`, `name`, `description`, `location`) VALUES ('" . $equipment_id . "', '" . $name . "', '" . $description . "', '" . $location . "');";
+		$result = mysqli_query($con, $query);
+		header("Location: ../add.php");
+
+	case "modify_equipment";
 		if($_POST["operation"] == "delete"){
 			include_once("post_request_scanning.php");
 			$equipment_id = post_request("modify_equipment_id");
@@ -100,7 +103,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){	if(isset($_POST["add_new_user"]) and $
 			$result = mysqli_query($con, $query);
 			header("Location: ../add.php");
 		}
-    }if(isset($_POST["modify_register"]) and $_POST["modify_register"] == "1"){
+	case "modify_register";
 		include_once("post_request_scanning.php");
 		$event_id = post_request("event_id");
 		unset($_POST["event_id"]);
@@ -114,7 +117,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){	if(isset($_POST["add_new_user"]) and $
 			$result = mysqli_query($con, $query);
 		}
 		header("location: ../event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
-	}if(isset($_POST["modify_equipment_register"]) and $_POST["modify_equipment_register"] == 1){
+	case "modify_equipment_register";
 		include_once("post_request_scanning.php");
 		$event_id = post_request("event_id");
 		unset($_POST["event_id"]);
@@ -127,6 +130,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){	if(isset($_POST["add_new_user"]) and $
 			$result = mysqli_query($con, $query);
 		}
 		header("location: ../event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
-	}
 }
 ?>

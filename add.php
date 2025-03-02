@@ -37,42 +37,42 @@ session_start();
                     <h4 >add a Parade</h4>
                     <a>the latest scheduled parade is curently set to:<?php $latest = get_latest_parade($con); echo($latest);?></a>
                     <a>the next parade should be: <?php echo(date("Y-m-d", strtotime($latest . " +7 days")));?></a>
-                    <input hidden value="1" type="text" name="add_new_parade" id="add_new_parade">
+                    <input hidden value="add_new_parade" type="text" name="flag" id="flag">
                     <label>date</label>
-                    <input type="date" name="date" id="date" onkeyup="REGEXCheckParade(this.value, 'date')">
+                    <input type="date" name="date" id="date" onkeyup="REGEXCheckParade(this.value, 'date')" onclick="REGEXCheckParade(this.value, 'date')">
                     <label>start time</label>
-                    <input type="time" name="start" id="start" onkeyup="REGEXCheckParade(this.value, 'start')">
+                    <input type="time" name="start" id="start" onkeyup="REGEXCheckParade(this.value, 'start')" onclick="REGEXCheckParade(this.value, 'start')">
                     <label>finish time</label>
-                    <input type="time" name="end" id="end" onkeyup="REGEXCheckParade(this.value, 'end')">
+                    <input type="time" name="end" id="end" onkeyup="REGEXCheckParade(this.value, 'end')" onclick="REGEXCheckParade(this.value, 'end')">
                     <label>parade name</label>
                     <input type="text" name="parade_name" id="parade_name" onkeyup="REGEXCheckParade(this.value, 'parade_name')">
-                    <div id="parade-input-handeling"></div>
+                    <div class="input-error-handeling" id="parade-input-handeling"></div>
                     <button id="add-parade-submit" disabled>submit</button>
                 </form>
             </div>
             <div class="add-event">
                 <form id="add_new_event" action="requests/post_requests.php" method="POST">
                     <h4 >add an event</h4>
+                    <input hidden value="add_new_event" type="text" name="flag" id="flag">
                     <input hidden value="" type="text" name="parade_id" id="parade_id">
-                    <input hidden value="1" type="text" name="add_new_event" id="add_new_event">
                     <input hidden value="" type="text" name="owner_id" id="owner_id">
                     <label>event type</label>
                     <input type="text" name="event_type" id="event_type" onkeyup="REGEXCheckEvent(this.value, 'event_type')">
                     <label>event name</label>
                     <input type="text" name="event_name" id="event_name" onkeyup="REGEXCheckEvent(this.value, 'event_name')">
                     <label>event start</label>
-                    <input type="time" name="event_start" id="event_start">
+                    <input type="time" name="event_start" id="event_start" onkeyup="REGEXCheckEvent(this.value, 'event_start')" onclick="REGEXCheckEvent(this.value, 'event_start')">
                     <label>event end</label>
-                    <input type="time" name="event_end" id="event_end">
+                    <input type="time" name="event_end" id="event_end" onkeyup="REGEXCheckEvent(this.value, 'event_end')" onclick="REGEXCheckEvent(this.value, 'event_end')">
                     <label>event owner</label>
                     <input type="text" name="event_owner_search_box" id="event_owner_search_box" onkeyup="showResutsSearchForOwner(this.value)">
-                    <div class="input-error-handeling" id="display_current_owner">
+                    <div id="display_current_owner">
                         <a>current owner: none selected</a>
                     </div>
                     <div class="livesearch" id="livesearch_owner"></div>
                     <label>parade</label>
                     <input value="" type="text" name="parade_id_search_box" id="parade_id_search_box" onkeyup="ShowResultsSearchForParade(this.value)">
-                    <div class="input-error-handeling" id="display_current_parade">
+                    <div id="display_current_parade">
                         <a>current parade: none selected</a>
                     </div>
                     <div class="livesearch" id="livesearch_parade_id"></div>
@@ -86,7 +86,7 @@ session_start();
             <div class="add-user">
                 <form id="add_user" action="requests/post_requests.php" method="POST">
                     <h4 >add a user</h4>
-                    <input hidden value="1" type="text" name="add_new_user" id="add_new_user">
+                    <input hidden value="add_new_user" type="text" name="flag" id="flag">
                     <label>email</label>
                     <input type="text" name="email" id="email" onkeyup="REGEXCheckAddUser(this.value, 'email')">
                     <label>password</label>
@@ -116,7 +116,7 @@ session_start();
                         <option value="0">non-G4</option>
                         <option value="1">G4</option>
                     </select>
-                    <div id="user-input-handeling"></div>
+                    <div class="input-error-handeling" id="user-input-handeling"></div>
                     <button id="add-user-submit" disabled>submit</button>
                 </form>
             </div>
@@ -124,7 +124,7 @@ session_start();
                 <form id="add_user" action="requests/post_requests.php" method="POST">
                     <h4 >modify a user</h4>
                     <a style="grid-column: span 2;">leave the password field blank to leave it unchanged</a>
-                    <input hidden value="1" type="text" name="modify_user" id="modify_user">
+                    <input hidden value="modify_user" type="text" name="flag" id="flag">
                     <input hidden value="" type="text" name="modify_user_id" id="modify_user_id">
                     <label>search by first name</label>
                     <input type="text" name="input_search_first_name" id="input_search_first_name" onkeyup="showResutsSearchForUserFirstName(this.value)">
@@ -161,7 +161,7 @@ session_start();
                         <option value="0">non-G4</option>
                         <option value="1">G4</option>
                     </select>
-                    <div id="modify-user-input-handeling"></div>
+                    <div class="input-error-handeling" id="modify-user-input-handeling"></div>
                     <button id="modify-user-submit" disabled>submit</button>
                 </form>
             </div>
@@ -171,21 +171,21 @@ session_start();
             <div class="add-equipment">
                 <form id="add_equipment" action="requests/post_requests.php" method="POST">
                     <h4 >add equipment</h4>
-                    <input hidden value="1" type="text" name="add_new_equipment" id="add_new_equipment">
+                    <input hidden value="add_new_equipment" type="text" name="flag" id="flag">
                     <label>equipment name</label>
                     <input type="text" name="name" id="name" onkeyup="REGEXCheckAddEquipment(this.value, 'name')">
                     <label>equipment description</label>
                     <input type="text" name="description" id="description" onkeyup="REGEXCheckAddEquipment(this.value, 'description')">
                     <label>equipment location</label>
                     <input type="text" name="location" id="location" onkeyup="REGEXCheckAddEquipment(this.value, 'location')">
-                    <div id="equipment-input-handeling"></div>
+                    <div class="input-error-handeling" id="equipment-input-handeling"></div>
                     <button id="add-equipment-submit" disabled>submit</button>
                 </form>
             </div>
             <div class="modify-equipment">
                 <form id="modify_existing_equipment" action="requests/post_requests.php" method="POST">
                     <h4 >update equipment</h4>
-                    <input hidden value="1" type="text" name="modify_equipment" id="modify_equipment">
+                    <input hidden value="modify_equipment" type="text" name="flag" id="flag">
                     <input hidden value="" type="text" name="modify_equipment_id" id="modify_equipment_id">
                     <label>search for equipment by name</label>
                     <input type="text" name="input_search_equipment_name" id="input_search_equipment_name" onkeyup="showResutsSearchForEquipmentByName(this.value)">
@@ -204,7 +204,7 @@ session_start();
                         <option value="modify">modify</option>
                         <option value="delete">delete</option>
                     </select><br>
-                    <div id="modify-equipment-input-handeling"></div>
+                    <div class="input-error-handeling" id="modify-equipment-input-handeling"></div>
                     <button type="submit" onclick="setModifyEquipment()" id="modify-equipment-submit" disabled>submit</button>
                 </form>
             </div>
