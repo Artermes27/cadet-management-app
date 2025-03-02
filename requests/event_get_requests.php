@@ -82,14 +82,12 @@ if (isset($_GET["flag"])){
 			FROM users, user_event, events 
 			WHERE users.user_id = user_event.user_id 
 			AND user_event.event_id = events.event_id
-			AND events.event_end != '" . $event["event_start"] . "'
-			AND events.event_start != '" . $event["event_end"] . "'
 			AND events.parade_id = " . $event["parade_id"] . " 
 			AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "' 
-			AND users.user_id IN (
-			SELECT user_event.user_id FROM user_event, events 
+			AND events.event_id IN (
+			SELECT events.event_id 
+			FROM user_event, events 
 			WHERE user_event.event_id = events.event_id 
-			AND events.event_id != '" . $event_id . "'
 			AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
 			OR (events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_end"] . "')
 			OR (events.event_start > '" . $event["event_start"] . "' AND events.event_end < '" . $event["event_end"] . "')
@@ -171,7 +169,9 @@ if (isset($_GET["flag"])){
 			AND events.parade_id = " . $event["parade_id"] . " 
 			AND events.event_id != '" . $event_id . "'
 			AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "' 
-			AND equipment.equipment_id IN (SELECT equipment_requests.equipment_id FROM equipment_requests, events 
+			AND equipment.equipment_id IN (
+			SELECT equipment_requests.equipment_id 
+			FROM equipment_requests, events 
 			WHERE equipment_requests.event_id = events.event_id 
 			AND equipment_requests.aproved = 1
 			AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')

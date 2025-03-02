@@ -1,0 +1,121 @@
+<mxfile host="65bd71144e">
+    <diagram name="Page-1" id="lcZT3Oo4GM346JymqH-7">
+        <mxGraphModel dx="1012" dy="764" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;client has passed login&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;and session data is attached&lt;/font&gt;&lt;/div&gt;" style="edgeStyle=none;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" source="o0MxhNlPTUyA7vASYzz4-2" target="o0MxhNlPTUyA7vASYzz4-3" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="o0MxhNlPTUyA7vASYzz4-2" value="login.php" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#009900;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="50" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" source="o0MxhNlPTUyA7vASYzz4-3" target="12" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;edit is&lt;/font&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;clicked&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="13" vertex="1" connectable="0">
+                    <mxGeometry x="-0.12" y="-2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="16" value="event hyperlink is clicked" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="o0MxhNlPTUyA7vASYzz4-3" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="450" y="270" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="o0MxhNlPTUyA7vASYzz4-3" value="callendar.php" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#00CC00;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="170" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="logout is clicked" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" source="o0MxhNlPTUyA7vASYzz4-8" target="o0MxhNlPTUyA7vASYzz4-44" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="o0MxhNlPTUyA7vASYzz4-8" value="navigation banner" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#00CC00;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="170" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="o0MxhNlPTUyA7vASYzz4-40" value="all users" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#009900;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="o0MxhNlPTUyA7vASYzz4-41" value="admin(highest)" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#FF0000;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="50" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="o0MxhNlPTUyA7vASYzz4-42" value="G4" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#3399FF;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="130" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;session data&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;is remoeved&lt;/font&gt;&lt;/div&gt;" style="edgeStyle=none;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" source="o0MxhNlPTUyA7vASYzz4-44" target="o0MxhNlPTUyA7vASYzz4-2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="o0MxhNlPTUyA7vASYzz4-44" value="logout.php" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#009900;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="50" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" source="o0MxhNlPTUyA7vASYzz4-3" target="o0MxhNlPTUyA7vASYzz4-8" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="430" y="160" as="sourcePoint"/>
+                        <mxPoint x="480" y="110" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="9" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;all pages have&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;the naviagation&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;banner&lt;/font&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="8" vertex="1" connectable="0">
+                    <mxGeometry x="-0.1111" y="4" relative="1" as="geometry">
+                        <mxPoint x="10" y="4" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="10" value="event owner" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="210" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="admin edit panel to modify non-aproved events or delete events" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#FF0000;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="165" width="120" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="modify event details" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="no" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="18" target="17" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="18" target="23" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="450" y="440"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="25" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;yes&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="24" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7444" y="-1" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="27" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" source="18" target="26" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="450" y="440"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="18" value="is event aproved" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="395" y="270" width="110" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="privelages" style="shape=flexArrow;endArrow=classic;html=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="30" y="340" as="sourcePoint"/>
+                        <mxPoint x="30" y="60" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="23" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;add/remove items on the register and equipement request log&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="410" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="aprove/deny equipment requests" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#3399FF;" parent="1" vertex="1">
+                    <mxGeometry x="560" y="410" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="add.php add/modify /delete users and equipemtn" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#FF0000;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="link is clicked" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" source="o0MxhNlPTUyA7vASYzz4-8" target="29" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="700" y="270" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
