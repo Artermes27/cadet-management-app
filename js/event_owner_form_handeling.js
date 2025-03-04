@@ -21,13 +21,19 @@ function resultHasBeenClickedOwner(user_id) {    console.log(user_id);
     document.getElementById("owner_id").value = user_id;
     displayCurrentOwnerOfEvent(user_id);
     document.getElementById("event_owner_search_box").value = "";
+    try {
+      REGEXCheckEvent(user_id, "owner_id");
+    } catch{
+      //do nothing
+    }
     return;
 }
 
-function displayCurrentOwnerOfEvent(owner_id) {        if (owner_id.length==0) {
-    document.getElementById("display_current_owner").innerHTML = "";
-    document.getElementById("display_current_owner").innerHTML="<a>curent owner: none selected<a>";
-    return;
+function displayCurrentOwnerOfEvent(owner_id) {        
+    if (owner_id.length==0) {
+      document.getElementById("display_current_owner").innerHTML = "";
+      document.getElementById("display_current_owner").innerHTML="<a>curent owner: none selected<a>";
+      return;
     }
     var xmlhttp=new XMLHttpRequest();
     xmlhttp.onreadystatechange=function() {
