@@ -32,18 +32,18 @@ if (isset($_GET["flag"])){
 			$result = mysqli_query($con, $query);
 			$event = mysqli_fetch_assoc($result);
 			$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id
-			FROM users 
-			WHERE users.user_id NOT IN 
-			(SELECT user_event.user_id FROM user_event, events 
-			WHERE user_event.event_id = events.event_id 
+			FROM users
+			WHERE users.first_name REGEXP '" . str_replace('"', "", $search_first_name) . "' 
+			AND users.user_id NOT IN
+			(SELECT user_event.user_id 
+			FROM events, user_event
+			WHERE user_event.event_id = events.event_id
 			AND events.parade_id = " . $event["parade_id"] . "
-			AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
-			OR (events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_end"] . "')
-			OR (events.event_start > '" . $event["event_start"] . "' AND events.event_end < '" . $event["event_end"] . "')
-			OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end > '" . $event["event_end"] . "')
-			OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')
-			OR (events.event_id = " . $event["event_id"] . "))) 
-			AND users.first_name REGEXP '" . str_replace('"', "", $search_first_name) . "';";
+			AND ((events.event_start <= '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
+			OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end >= '" . $event["event_end"] . "')
+			OR (events.event_start <= '" . $event["event_start"] . "' AND events.event_end >= '" . $event["event_end"] . "')
+			OR (events.event_start >= '" . $event["event_start"] . "' AND events.event_end <= '" . $event["event_end"] . "')
+			OR (events.event_id = " . $event["event_id"] . ")));";
 			$result = mysqli_query($con, $query);
 			if(mysqli_num_rows($result) > 0)	{
 				$output_html = "";
@@ -79,20 +79,16 @@ if (isset($_GET["flag"])){
 			$result = mysqli_query($con, $query);
 			$event = mysqli_fetch_assoc($result);
 			$query = "SELECT users.first_name, users.last_name, users.rank, events.event_start, events.event_end, events.event_name, events.owner 
-			FROM users, user_event, events 
-			WHERE users.user_id = user_event.user_id 
-			AND user_event.event_id = events.event_id
-			AND events.parade_id = " . $event["parade_id"] . " 
+			FROM events, user_event, users
+			WHERE user_event.event_id = events.event_id
 			AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "' 
-			AND events.event_id IN (
-			SELECT events.event_id 
-			FROM user_event, events 
-			WHERE user_event.event_id = events.event_id 
-			AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
-			OR (events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_end"] . "')
-			OR (events.event_start > '" . $event["event_start"] . "' AND events.event_end < '" . $event["event_end"] . "')
-			OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end > '" . $event["event_end"] . "')
-			OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')));";
+			AND user_event.user_id = users.user_id
+			AND events.event_id != " . $event_id . "
+			AND events.parade_id = " . $event["parade_id"] . "
+			AND ((events.event_start <= '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
+			OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end >= '" . $event["event_end"] . "')
+			OR (events.event_start <= '" . $event["event_start"] . "' AND events.event_end >= '" . $event["event_end"] . "')
+			OR (events.event_start >= '" . $event["event_start"] . "' AND events.event_end <= '" . $event["event_end"] . "'))";
 			$result = mysqli_query($con, $query);
 			if(mysqli_num_rows($result) > 0)	{
 				$output_html = "";
@@ -119,11 +115,10 @@ if (isset($_GET["flag"])){
 			WHERE events.event_id = equipment_requests.event_id
 			AND events.parade_id = " . $event["parade_id"] . "
 			AND equipment_requests.aproved != 2
-			AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
-			OR (events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_end"] . "')
-			OR (events.event_start > '" . $event["event_start"] . "' AND events.event_end < '" . $event["event_end"] . "')
-			OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end > '" . $event["event_end"] . "')
-			OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')
+			AND ((events.event_start <= '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
+			OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end >= '" . $event["event_end"] . "')
+			OR (events.event_start <= '" . $event["event_start"] . "' AND events.event_end >= '" . $event["event_end"] . "')
+			OR (events.event_start >= '" . $event["event_start"] . "' AND events.event_end <= '" . $event["event_end"] . "')
 			OR (events.event_id = " . $event["event_id"] . "))) 
 			AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "';";
 			$result = mysqli_query($con, $query);
@@ -164,22 +159,13 @@ if (isset($_GET["flag"])){
 			FROM equipment, equipment_requests, events 
 			WHERE equipment.equipment_id = equipment_requests.equipment_id 
 			AND equipment_requests.event_id = events.event_id
-			AND events.event_end != '" . $event["event_start"] . "'
-			AND events.event_start != '" . $event["event_end"] . "'
 			AND events.parade_id = " . $event["parade_id"] . " 
 			AND events.event_id != '" . $event_id . "'
 			AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "' 
-			AND equipment.equipment_id IN (
-			SELECT equipment_requests.equipment_id 
-			FROM equipment_requests, events 
-			WHERE equipment_requests.event_id = events.event_id 
-			AND equipment_requests.aproved = 1
-			AND ((events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
-			OR (events.event_start < '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_end"] . "')
-			OR (events.event_start > '" . $event["event_start"] . "' AND events.event_end < '" . $event["event_end"] . "')
-			OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end > '" . $event["event_end"] . "')
-			OR (events.event_start = '" . $event["event_start"] . "' AND events.event_end = '" . $event["event_end"] . "')
-			OR (events.event_id != '" . $event_id . "')));";
+			AND ((events.event_start <= '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
+			OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end >= '" . $event["event_end"] . "')
+			OR (events.event_start <= '" . $event["event_start"] . "' AND events.event_end >= '" . $event["event_end"] . "')
+			OR (events.event_start >= '" . $event["event_start"] . "' AND events.event_end <= '" . $event["event_end"] . "'))";
 			$result = mysqli_query($con, $query);
 			if(mysqli_num_rows($result) > 0) {
 				$output_html = "";

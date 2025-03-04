@@ -52,6 +52,7 @@ switch ($_POST["flag"]){
 		include_once("post_request_scanning.php");
 		$user_id = post_request("modify_user_id");
 		$email = post_request("modify_email");
+		$password = post_request("modify_password");
 		$first_name = post_request("modify_first_name");
 		$last_name = post_request("modify_last_name");
 		$DOB = post_request("modify_DOB");
@@ -61,13 +62,12 @@ switch ($_POST["flag"]){
 		$admin = post_request("modify_admin");
 		$G4 = post_request("modify_G4");
 		include_once("../includes/connection.php");
-		if(isset($_POST["modify_password"])){
-			$password = post_request("modify_password");
-			$query = "UPDATE `users` SET `email` = '" . $email . "', `password` = '" . hash("sha256", $password) . "', `first_name` = '" . $first_name . "', `last_name` = '" . $last_name . "', `DOB` = '" . $DOB . "', `gender` = '" . $gender . "', `rank` = '" . $rank . "', `active` = " . $active . ", `admin` = " . $admin . ", `G4` = " . $G4 . " WHERE `users`.`user_id` = " . $user_id . ";";
-			$result = mysqli_query($con, $query);
-		}else{
+		if($password == ""){
 			$query = "UPDATE `users` SET `email` = '" . $email . "', `first_name` = '" . $first_name . "', `last_name` = '" . $last_name . "', `DOB` = '" . $DOB . "', `gender` = '" . $gender . "', `rank` = '" . $rank . "', `active` = " . $active . ", `admin` = " . $admin . ", `G4` = " . $G4 . " WHERE `users`.`user_id` = " . $user_id . ";";
-			$result = mysqli_query($con, $query);
+			mysqli_query($con, $query);
+		}else{
+			$query = "UPDATE `users` SET `email` = '" . $email . "', `password` = '" . hash("sha256", $password) . "', `first_name` = '" . $first_name . "', `last_name` = '" . $last_name . "', `DOB` = '" . $DOB . "', `gender` = '" . $gender . "', `rank` = '" . $rank . "', `active` = " . $active . ", `admin` = " . $admin . ", `G4` = " . $G4 . " WHERE `users`.`user_id` = " . $user_id . ";";
+			mysqli_query($con, $query);
 		}
 		header("Location: ../add.php");
 	case "add_new_equipment";
