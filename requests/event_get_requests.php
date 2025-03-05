@@ -161,6 +161,7 @@ if (isset($_GET["flag"])){
 			AND equipment_requests.event_id = events.event_id
 			AND events.parade_id = " . $event["parade_id"] . " 
 			AND events.event_id != '" . $event_id . "'
+			AND equipment_requests.aproved != 2
 			AND equipment.name REGEXP '" . str_replace('"', "", $equipment_name) . "' 
 			AND ((events.event_start <= '" . $event["event_start"] . "' AND events.event_end > '" . $event["event_start"] . "')
 			OR (events.event_start < '" . $event["event_end"] . "' AND events.event_end >= '" . $event["event_end"] . "')

@@ -114,7 +114,7 @@ session_start();
         if(mysqli_num_rows($result) > 0) {
             $output_html .= "<div class=\"register-main\"><table>\n";
             $output_html .= "<form method=\"post\" action=\"requests/post_requests.php\">\n";
-            $output_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_register\" id=\"modify_register\">\n";
+            $output_html .= "<input hidden value=\"modify_register\" type=\"text\" name=\"flag\" id=\"flag\">\n";
             $output_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
             $output_html .= "<input hidden value=\"" . $parade_id . "\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
             while($cadet = mysqli_fetch_assoc($result)) {
@@ -160,7 +160,7 @@ session_start();
             $all_html .= "<div class=\"equipemnt-display-register-main\">\n";
             $all_html .= "<table>\n";
             $all_html .= "<form method=\"post\" action=\"requests/post_requests.php\">\n";
-            $all_html .= "<input hidden value=\"1\" type=\"text\" name=\"modify_equipment_register\" id=\"modify_equipment_register\">\n";
+            $all_html .= "<input hidden value=\"modify_equipment_register\" type=\"text\" name=\"flag\" id=\"flag\">\n";
             $all_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
             $all_html .= "<input hidden value=\"" . $parade_id . "\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
             while($equipment_request = mysqli_fetch_assoc($result)){

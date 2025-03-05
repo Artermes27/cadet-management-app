@@ -109,7 +109,7 @@ switch ($_POST["flag"]){
 		unset($_POST["event_id"]);
 		$parade_id = post_request("parade_id");
 		unset($_POST["parade_id"]);
-		unset($_POST["modify_register"]);
+		unset($_POST["flag"]);
 		include_once("../includes/connection.php");
 		foreach ($_POST as $key => $value) {
 			$query = "UPDATE user_event SET present = " . $value . " WHERE user_id = " . $key . " AND event_id = " . $event_id . "";
@@ -123,7 +123,7 @@ switch ($_POST["flag"]){
 		unset($_POST["event_id"]);
 		$parade_id = post_request("parade_id");
 		unset($_POST["parade_id"]);
-		unset($_POST["modify_equipment_register"]);
+		unset($_POST["flag"]);
 		include_once("../includes/connection.php");
 		foreach ($_POST as $key => $value) {
 			$query = "UPDATE equipment_requests SET aproved = " . $value . " WHERE equipment_id = " . $key . " AND event_id = " . $event_id . "";
