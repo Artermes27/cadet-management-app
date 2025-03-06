@@ -182,7 +182,7 @@ session_start();
     $html .= "<button class=\"input_handeling\" id=\"add-event-submit\" disabled>submit</button>\n";
     $html .= "</form>\n";
     $html .= "<form class=\"modify_lesson_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
-    $html .= "<input hidden value=\"1\" type=\"text\" name=\"delete_event\" id=\"delete_event\">\n";
+    $html .= "<input hidden value=\"delete_event\" type=\"text\" name=\"flag\" id=\"flag\">\n";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_parade_id\" id=\"delete_parade_id\">\n";
     $html .= "<input hidden value=\"\" type=\"text\" name=\"delete_event_id\" id=\"delete_event_id\">\n";
     $html .= "<button class=\"input_handeling\" id=\"delete-event-submit\" style=\"width: 100%;\" disabled>delete event</button>\n";
@@ -190,18 +190,18 @@ session_start();
     $html .= "</div>\n";
     return $html;
   }
-
-    if(isset($_GET["current_date"]) and $_GET["current_date"] != "null") {
+  include("requests/get_request_scanning.php");
+  if(isset($_GET["current_date"]) and get_request("current_date") != "null") {
     $current_date = $_GET["current_date"];
   } else {
     $current_date = "2025-01-24";
   }
-    $temp = get_parade_date_range($con, $current_date, $user_data["admin"]);
+  $temp = get_parade_date_range($con, $current_date, $user_data["admin"]);
   $parade_dates = $temp[0];
   $end_date = $temp[1];
-    $min_add = date_skip_method($con, $current_date, "+1");
+  $min_add = date_skip_method($con, $current_date, "+1");
   $min_subtract = date_skip_method($con, $current_date, "-1");
-    if($user_data["admin"] == 0) {
+  if($user_data["admin"] == 0) {
     $max_add = date_skip_method($con, $current_date, "+5");
     $max_subtract = date_skip_method($con, $current_date, "-5");
   } else {
@@ -222,7 +222,7 @@ session_start();
 </head>
 <body>
   <?php include("includes/nav.php");?>
-  <div calss="container">
+  <div>
     <div class="banner">
       <input hidden value=<?php echo($current_date);?> type="date" name="current-date" id="current-date">
       <div class="prev">

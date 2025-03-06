@@ -64,7 +64,7 @@ session_start();
         $lesson_plan_html .= "<button class=\"submit_button\" id=\"add-event-submit\">update event details</button>\n";
         $lesson_plan_html .= "</form>\n";
         $lesson_plan_html .= "<form class=\"modify_lesson_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
-        $lesson_plan_html .= "<input hidden value=\"1\" type=\"text\" name=\"delete_event\" id=\"delete_event\">\n";
+        $lesson_plan_html .= "<input hidden value=\"delete_event\" type=\"text\" name=\"flag\" id=\"flag\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["parade_id"]. "\" type=\"text\" name=\"delete_parade_id\" id=\"delete_parade_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"delete_event_id\" id=\"delete_event_id\">\n";
         $lesson_plan_html .= "<button class=\"input_handeling\" id=\"delete-event-submit\" style=\"width: 100%;\">delete event</button>\n";
@@ -122,12 +122,10 @@ session_start();
                 $output_html .= "<td><label>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</label></td>\n";
                 $output_html .= "<td><input style=\"width: 10px; height: 20px;\" type=\"text\" value=\"" . $cadet["present"] . "\" placeholder=\"" . $cadet["present"] . "\" name=\"" . $cadet["user_id"] . "\" onkeyup=\"REGEXCheckRegister(this.value, " . $cadet["user_id"] . ")\"></td>\n";
                 $output_html .= "</tr>\n";
-                $who_is_present_original[$cadet["user_id"]] = $cadet["present"];
             }
             $output_html .= "</table></div>\n";
             $output_html .= "<div class=\"input_error_handeling\" id=\"register-input-handeling\"></div>\n";
             $output_html .= "<div style=\"padding-top:10px\" class=\"submit-the-register\"><input type=\"submit\" value=\"submit the register\" id= \"register-submit\" class=\"register-button\">\n";
-            $output_html .= "<div id=\"register-input-handeling\"></div>\n";
             $output_html .= "</form></div>\n";
         } else {
             $output_html .= "no cadets will be present\n";
@@ -245,12 +243,12 @@ session_start();
     <?php include("includes/nav.php");?>
     <div class="grid-container">
         <div class="left-side">
-            <h1><?php echo(get_parade_name_and_date_as_html_h1($con, $user_data["parade_id"]));?></h1>
+            <?php echo(get_parade_name_and_date_as_html_h1($con, $user_data["parade_id"]));?>
             <?php echo(html_for_list_of_parades_events($con, $user_data["parade_id"], $user_data["user_id"], $user_data["admin"], $user_data["G4"])); ?>
         </div>
         <div class="right-side">
             <h1><?php echo(get_event_name($con, $user_data["event_id"]));?></h1><h1></h1><h1></h1>
-            <div onload="register_array = []" class="register-box-all">
+            <div class="register-box-all">
                 <h4>register</h4>
                 <?php
                 if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
