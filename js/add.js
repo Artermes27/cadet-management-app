@@ -55,6 +55,40 @@ function ResultHasBeenClickedParade(parade_id, parade_date, parade_name) {    do
   return;
 }
 
+function showResutsSearchForDuty(str){
+  if (str.length === 0){
+    document.getElementById("livesearch_duty").innerHTML="";
+    document.getElementById("livesearch_duty").style.border="0px";
+    return;
+  }
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("livesearch_duty").innerHTML=this.responseText;
+      document.getElementById("livesearch_duty").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","requests/add_get_requests.php?flag=search_duty&prompt="+str,true);
+  xmlhttp.send();
+  }
+
+function resultHasBeenClickedDuty(user_id){
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+user_id,true);
+  xmlhttp.send();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      var userDetails = JSON.parse(this.responseText);
+      document.getElementById("livesearch_duty").innerHTML="";
+      document.getElementById("livesearch_duty").style.border="0px";
+      document.getElementById("event_duty_search_box").value = "";
+      document.getElementById("duty_id").value = user_id;
+      document.getElementById("display_current_duty").innerHTML = "<a>current duty cadet: " + userDetails.rank + " " + userDetails.first_name + " " + userDetails.last_name + "<a>";
+      REGEXCheckEvent(user_id, "duty_id");
+    }
+  }
+}
+
 function resultHasBeenClickedUser(user_id) {    document.getElementById("livesearch_first_name").innerHTML="";
     document.getElementById("livesearch_first_name").style.border="0px";
     document.getElementById("input_search_first_name").value = "";
@@ -62,12 +96,6 @@ function resultHasBeenClickedUser(user_id) {    document.getElementById("livesea
     document.getElementById("livesearch_last_name").style.border="0px";
     document.getElementById("input_search_last_name").value = "";
     var xmlhttp=new XMLHttpRequest();
-      xmlhttp.onreadystatechange=function() {
-        if (this.readyState==4 && this.status==200) {
-          document.getElementById("livesearch_last_name").innerHTML=this.responseText;
-          document.getElementById("livesearch_last_name").style.border="1px solid #A5ACB2";
-        }
-      }
     xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+user_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
@@ -132,12 +160,6 @@ function resultHasBeenClickedEquipment(equipment_id){        document.getElement
     document.getElementById("input_search_equipment_location").value = "";
     document.getElementById("modify-equipment-submit").disabled = false;
     var xmlhttp=new XMLHttpRequest();
-      xmlhttp.onreadystatechange=function() {
-        if (this.readyState==4 && this.status==200) {
-          document.getElementById("livesearch_equipment_location").innerHTML=this.responseText;
-          document.getElementById("livesearch_equipment_location").style.border="1px solid #A5ACB2";
-        }
-      }
     xmlhttp.open("GET","requests/add_get_requests.php?flag=equipment_id_info_dump&prompt="+equipment_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
@@ -220,7 +242,7 @@ function REGEXCheckParade(str, input_to_check){  if (typeof parade_array === 'un
 
 function REGEXCheckEvent(str, input_to_check){
   if (typeof event_array === 'undefined'){
-    event_array = {event_type: 0, event_name: 0, event_start: 0, event_end: 0, parade_id: 0, owner_id: 0};
+    event_array = {event_type: 0, event_name: 0, event_start: 0, event_end: 0, parade_id: 0, owner_id: 0, duty_id: 0};
   }
   if (typeof event_feedback === 'undefined'){
     event_feedback = {event_type: "", event_name: "", event_start: "", event_end: ""};
@@ -262,6 +284,8 @@ function REGEXCheckEvent(str, input_to_check){
     event_array["parade_id"] = 1;
   } else if (input_to_check === "owner_id") {
     event_array["owner_id"] = 1;
+  } else if (input_to_check === "duty_id") {
+    event_array["duty_id"] = 1;
   }
   if (checkAreAllValuesOne(event_array) === true){
         document.getElementById("add-event-submit").disabled = false;

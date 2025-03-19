@@ -93,7 +93,7 @@ session_start();
     $parade = mysqli_fetch_assoc($result);
     if($user_data["admin"] == 1 or $user_data["G4"] == 1){      $query = "SELECT events.* FROM events WHERE parade_id =" . $parade["parade_id"] . " ORDER BY events.event_start;";
     }else{
-      $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade["parade_id"] . " AND user_event.user_id = " . $user_data["user_id"] . ") OR (events.owner = " . $user_data["user_id"] . " AND parade_id = " . $parade["parade_id"] . ") ORDER BY events.event_start;";
+      $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade["parade_id"] . " AND user_event.user_id = " . $user_data["user_id"] . ") OR ((events.duty = " . $user_data["user_id"] . " OR events.owner = " . $user_data["user_id"] . ") AND parade_id = " . $parade["parade_id"] . ") ORDER BY events.event_start;";
     }
     $result = mysqli_query($con, $query);
     $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -103,16 +103,22 @@ session_start();
     if(count($events) == 0){      $event_html = $event_html . "<div class=\"event\"><a>you have no events on this parade night</a></div>";
     }else{      $equipment_reuqest_log = [];
       while($event_count < count($events)){
-                if($events[$event_count]["final_aproval"] == 0){          $style_class = "event_not_aproved";
-        }elseif($events[$event_count]["final_aproval"] == 1){          $style_class = "event_aproved";
-        }elseif($events[$event_count]["final_aproval"] == 2){          $style_class = "event_aproval_requested";
+        if($events[$event_count]["final_aproval"] == 0){
+          $style_class = "event_not_aproved";
+        }elseif($events[$event_count]["final_aproval"] == 1){
+          $style_class = "event_aproved";
+        }elseif($events[$event_count]["final_aproval"] == 2){
+          $style_class = "event_aproval_requested";
         }
-        if($user_data["admin"] == 1){          $query = "SELECT `first_name`, `last_name`, `rank` FROM users WHERE user_id = " . $events[$event_count]["owner"] . ";";
+        if($user_data["admin"] == 1){
+          $query = "SELECT `first_name`, `last_name`, `rank` FROM users WHERE user_id = " . $events[$event_count]["owner"] . ";";
           $result = mysqli_query($con, $query);
           $owner = mysqli_fetch_assoc($result);
             $event_html = $event_html . "<div class=\"" . $style_class . "\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a>" . $events[$event_count]["event_name"] . "</a><br>\n<a>" . $owner["rank"] . " " . $owner["first_name"] . " " . $owner["last_name"] . "</a><br>\n<a href=\"event.php?parade_id=" . $parade["parade_id"] . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a><br>\n<button onclick=\"populateAdminEditEventForm('" . $events[$event_count]["parade_id"] . "', '" . $events[$event_count]["event_id"] . "', '" . $events[$event_count]["event_type"] . "', '" . $events[$event_count]["event_name"] . "', '" .  $events[$event_count]["event_start"] . "', '" . $events[$event_count]["event_end"] . "', '" . $events[$event_count]["owner"] . "', '" .  $events[$event_count]["final_aproval"] . "')\">click for admin panel edit</button></div>\n";
           }elseif($user_data["user_id"] == $events[$event_count]["owner"] or $user_data["G4"] == 1){
             $event_html = $event_html . "<div class=\"" . $style_class . "\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a href=\"event.php?parade_id=" . $parade["parade_id"] . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a></div>\n";
+          }elseif($user_data["user_id"] == $events[$event_count]["duty"]){
+            $event_html = $event_html . "<div class=\"" . $style_class . "\"><a>duty event</a><br><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a href=\"event.php?parade_id=" . $parade["parade_id"] . "&event_id=" . $events[$event_count]["event_id"] . "\">" .  $events[$event_count]["event_name"] . "</a></div>\n";
           }else {
             $event_html = $event_html . "<div class=\"event\"><a>" . $events[$event_count]["event_start"] .  " till " . $events[$event_count]["event_end"] . "</a><br>\n<a>" . $events[$event_count]["event_name"] . "</a></div>\n";
           }

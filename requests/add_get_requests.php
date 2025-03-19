@@ -1,4 +1,7 @@
 <?php
+
+use Dom\Mysql;
+
 if (isset($_GET["flag"])){
     include_once("get_request_scanning.php");
     switch (get_request("flag")){
@@ -17,6 +20,21 @@ if (isset($_GET["flag"])){
                 echo "<a>no names match your prompt</a>";
             }
             break;
+        case "search_duty";
+            $first_name = get_request("prompt");
+            include_once("../includes/connection.php");
+            $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $first_name) . "' ORDER BY first_name ASC;";
+            $result = mysqli_query($con, $query);
+            if (mysqli_num_rows($result) > 0){
+                $output = "";
+                while($cadet = mysqli_fetch_assoc($result)){
+                    $output .= "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedDuty(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
+                }
+            } else{
+                $output = "<a>no names match your prompt</a>";
+            }
+            echo $output;
+            break;
         case "search_first_name_user";
             $name = get_request("prompt");
             include_once("../includes/connection.php");
@@ -34,7 +52,7 @@ if (isset($_GET["flag"])){
                 echo $output;
                 return $result;
             }	else{
-                return "<a>no names match your prompt</a>";
+                echo "<a>no names match your prompt</a>";
             }
             break;
         case "search_last_name_user";

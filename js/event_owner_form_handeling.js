@@ -42,6 +42,6 @@ function displayCurrentOwnerOfEvent(owner_id) {
         document.getElementById("display_current_owner").innerHTML="<a>curent owner: " + owner_info.rank + " " + owner_info.first_name + " " + owner_info.last_name + "<a>";
     }
     }
-        xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+owner_id,true);
+    xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+owner_id,true);
     xmlhttp.send();
 }

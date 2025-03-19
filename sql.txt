@@ -37,9 +37,11 @@ CREATE TABLE `events` (
   `event_end` time NOT NULL,
   `final_aproval` tinyint NOT NULL COMMENT '0 = not aproved, 1 = aproved, 2 = pending aproval',
   `owner` int unsigned NOT NULL,
+  `duty` int unsigned NOT NULL;
   PRIMARY KEY (`event_id`,`parade_id`),
   KEY `parade_id` (`parade_id`),
   KEY `owner` (`owner`),
+  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`duty`) REFERENCES `users` (`user_id`)
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`parade_id`) REFERENCES `parades` (`parade_id`),
   CONSTRAINT `events_ibfk_2` FOREIGN KEY (`owner`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

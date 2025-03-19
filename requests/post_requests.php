@@ -22,11 +22,12 @@ switch ($_POST["flag"]){
 		$event_start = post_request("event_start");
 		$event_end = post_request("event_end");
 		$owner = post_request("owner_id");
+		$duty = post_request("duty_id");
 		include_once("../includes/connection.php");
 		$query = "SELECT MAX(event_id) FROM events;";
 		$result = mysqli_query($con, $query);
 		$event_id = mysqli_fetch_assoc($result)["MAX(event_id)"] + 1;
-		$query = "INSERT INTO `events` (`event_id`, `parade_id`, `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval`) VALUES ('" . $event_id . "', '" . $parade_id . "', '" . $event_type . "', '" . $event_name . "', '" . $event_start . "', '" . $event_end . "', '" . $owner . "', '0');";
+		$query = "INSERT INTO `events` (`event_id`, `parade_id`, `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval`, `duty`) VALUES ('" . $event_id . "', '" . $parade_id . "', '" . $event_type . "', '" . $event_name . "', '" . $event_start . "', '" . $event_end . "', '" . $owner . "', '0', " . $duty . ");";
 		$result = mysqli_query($con, $query);
 		header("Location: ../add.php");
 	case "add_new_user";

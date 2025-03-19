@@ -1,10 +1,16 @@
 <?php 
-session_start();
+    session_start();
 
 	include_once("includes/connection.php");
 	include("includes/functions.php");
 
 	$user_data = check_login($con);
+    $query = "SELECT `owner`, `duty` FROM events WHERE event_id = " . $user_data["event_id"] . ";";
+    $result = mysqli_query($con, $query);
+    $event = mysqli_fetch_assoc($result);
+    if(!($user_data["admin"] == 1 or $user_data["G4"] == 1 or $user_data["user_id"] == $event["owner"] or $user_data["user_id"] == $event["duty"])){
+        header("location: calendar.php");
+    }
 
     function get_event_name($con, $event_id){
         $query = "SELECT event_name FROM events WHERE event_id = " . $event_id . ";";
@@ -26,12 +32,15 @@ session_start();
     }
 
     function generate_html_for_lesson_plan($con, $event_id, $admin){
-        $query = "SELECT `parade_id`, `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval` FROM events WHERE event_id = $event_id;";
+        $query = "SELECT `parade_id`, `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval`, `duty` FROM events WHERE event_id = $event_id;";
         $result = mysqli_query($con, $query);
         $event = mysqli_fetch_assoc($result);
         $query = "SELECT `rank`, `first_name`, `last_name` FROM users WHERE user_id = " . $event["owner"] . ";";
         $result = mysqli_query($con, $query);
         $owner_info_dump = mysqli_fetch_assoc($result);
+        $query = "SELECT `rank`, `first_name`, `last_name` FROM users WHERE user_id = " . $event["duty"] . ";";
+        $result = mysqli_query($con, $query);
+        $duty_info_dump = mysqli_fetch_assoc($result);
         $lesson_plan_html = "";
         $lesson_plan_html .= "<h4>modify event details</h4>\n";
         $lesson_plan_html .= "<link rel=\"stylesheet\" href=\"css/event-owner-form-style.css\">\n";
@@ -41,6 +50,7 @@ session_start();
         $lesson_plan_html .= "<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"user_id\" id=\"user_id\">\n";        $lesson_plan_html .= "<input hidden value=\"" . $event_id . "\" type=\"text\" name=\"event_id\" id=\"event_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["owner"] . "\" type=\"text\" name=\"owner_id\" id=\"owner_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["parade_id"] . "\" type=\"text\" name=\"parade_id\" id=\"parade_id\">\n";
+        $lesson_plan_html .= "<input hidden value=\"" . $event["duty"] . "\" type=\"text\" name=\"duty_id\" id=\"duty_id\">\n";
         $lesson_plan_html .= "<input hidden value=\"" . $event["final_aproval"] . "\" type=\"text\" name=\"original_aproval\" id=\"original_aproval\">\n";
         $lesson_plan_html .= "<label>event type</label>\n";
         $lesson_plan_html .= "<input value=\"" . $event["event_type"] . "\" type=\"text\" name=\"event_type\" id=\"event_type\" onkeyup=\"REGEXCheckEvent(this.value, 'event_type', '" . $admin . "')\">\n";
@@ -61,6 +71,7 @@ session_start();
         $lesson_plan_html .= "<div class=\"livesearch\" id=\"livesearch_owner\"></div>\n";
         $lesson_plan_html .= "<div class=\"input_error_handeling\" id=\"event-input-handeling\"></div>\n";
         $lesson_plan_html .= "<div class=\"display_current_owner\" id=\"display_current_owner\"><a>curent owner: " . $owner_info_dump["rank"] . " " . $owner_info_dump["first_name"] . " " . $owner_info_dump["last_name"] . "</a></div>\n";
+        $lesson_plan_html .= "<div class=\"display_current_owner\" id=\"display_current_duty\"><a>duty cadet: " . $duty_info_dump["rank"] . " " . $duty_info_dump["first_name"] . " " . $duty_info_dump["last_name"] . "</a></div>\n";
         $lesson_plan_html .= "<button class=\"submit_button\" id=\"add-event-submit\">update event details</button>\n";
         $lesson_plan_html .= "</form>\n";
         $lesson_plan_html .= "<form class=\"modify_lesson_details\" action=\"requests/event_details_requests.php\" method=\"POST\">\n";
@@ -76,7 +87,7 @@ session_start();
         if ($admin == 1 or $G4 == 1){
             $query = "SELECT * FROM events WHERE parade_id = " . $parade_id . " ORDER BY event_start;";
         } else {
-            $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade_id . " AND user_event.user_id = " . $user_id . ") OR (events.owner = " . $user_id . " AND parade_id = " . $parade_id . ") ORDER BY events.event_start;";
+            $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade_id . " AND user_event.user_id = " . $user_id . ") OR ((events.duty = " . $user_id . " OR events.owner = " . $user_id . ") AND parade_id = " . $parade_id . ") ORDER BY events.event_start;";
         }
         $result = mysqli_query($con, $query);
         $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -92,6 +103,12 @@ session_start();
               }
             if($user_id == $events[$event_count]["owner"] or $admin == 1 or $G4 == 1){
                 $event_html .= "<div class=\"" . $style_class . "\">\n";
+                $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
+                $event_html .= "<a href=\"event.php?parade_id=" . $parade_id . "&event_id=" . $events[$event_count]["event_id"] . "\">" . $events[$event_count]["event_name"] . "</a>\n";
+                $event_html .= "</div>\n";
+            }elseif($user_id == $events[$event_count]["duty"]){
+                $event_html .= "<div class=\"" . $style_class . "\">\n";
+                $event_html .= "<a>duty event</a><br>";
                 $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
                 $event_html .= "<a href=\"event.php?parade_id=" . $parade_id . "&event_id=" . $events[$event_count]["event_id"] . "\">" . $events[$event_count]["event_name"] . "</a>\n";
                 $event_html .= "</div>\n";
