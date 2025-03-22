@@ -11,6 +11,7 @@ This is a help page with navigation and guidance for various user roles.
 - [Duty Cadets](#duty-cadets)
 - [G4 (Logistics Cadets)](#g4-logistics-cadets)
 - [Admin](#admin)
+- [Galaray of the system](#galary-of-the-pages-on-the-system)
 
 ---
 
@@ -120,7 +121,7 @@ As the admin, you have access to functions and pages other users do not. Below a
 
 - To set the approval status of an event to "approved," go to the "Modify Event Details" form at the center of the page, set the approval to "approved," and submit the form. This will update the event's status, allowing the register to be modified and equipment requests to be made.
 
-### galary of the pages on the system
+## galary of the pages on the system
 
 calendar page for the admin and G4 users
 ![image](https://github.com/user-attachments/assets/16bc7a22-5f80-45d6-aa29-6d6b6f1b76df)
