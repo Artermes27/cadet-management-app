@@ -120,9 +120,7 @@ As the admin, you have access to functions and pages other users do not. Below a
 
 - To set the approval status of an event to "approved," go to the "Modify Event Details" form at the center of the page, set the approval to "approved," and submit the form. This will update the event's status, allowing the register to be modified and equipment requests to be made.
 
----
-
-With this layout, GitHub will render the content clearly without complex styling. However, as mentioned earlier, to achieve the original visual design and interactions, you would need to host the full HTML on GitHub Pages.
+### galary of the pages on the system
 
 calendar page for the admin and G4 users
 ![image](https://github.com/user-attachments/assets/16bc7a22-5f80-45d6-aa29-6d6b6f1b76df)
