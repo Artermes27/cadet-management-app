@@ -25,6 +25,7 @@
 <nav>
         <div class="left">
             <a class="highlightable" data-active="my calendar" href="calendar.php">my calendar</a>
+            <a class="highlightable" data-active="help and guidance" href="help.php">help and guidance</a>
             <?php 
             if($user_data["admin"] == "1")  {
                 echo("<a class=\"highlightable\" href=\"add.php\">add parade/event/acount/equipment</a>");

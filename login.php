@@ -59,7 +59,7 @@ session_start();
 					<input class="checkbox" type="checkbox" checked="checked"/>
 					<label class="remember-me-tag">remember me</label>
 				</div>
-				<a href="forgot-password.php" class="forgot-password">forgot password</a>
+				<a href="help.php" class="forgot-password">help page</a>
 			</div>
 			<input type="submit" value="Log in" class="login-button">
 			<?php echo "<a style=\"text-align: center;\">$error_msg</a>";?>
