@@ -6,11 +6,11 @@ This is a help page with navigation and guidance for various user roles.
 
 - [All Users Issues](#all-users-issues)
 - [All Users Guidance](#all-users-guidance)
-- [Basic Users](#basic-users)
-- [Event Owner](#event-owner)
-- [Duty Cadets](#duty-cadets)
-- [G4 (Logistics Cadets)](#g4-logistics-cadets)
-- [Admin](#admin)
+- [Basic Users](#basic-users-guidance)
+- [Event Owner](#event-owner-guidance)
+- [Duty Cadets](#duty-cadets-guidance)
+- [G4 (Logistics Cadets)](#g4-logistics-cadets-guidance)
+- [Admin](#admin-guidance)
 - [Galaray of the system](#galary-of-the-pages-on-the-system)
 
 ---
