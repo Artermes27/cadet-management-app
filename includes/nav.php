@@ -22,7 +22,7 @@
 ?>
 
 <link rel="stylesheet" href="css/nav-style.css">
-<nav>
+    <nav>
         <div class="left">
             <a class="highlightable" data-active="my calendar" href="calendar.php">my calendar</a>
             <a class="highlightable" data-active="help and guidance" href="help.php">help and guidance</a>

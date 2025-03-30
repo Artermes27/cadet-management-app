@@ -56,7 +56,8 @@ function REGEXCheckEvent(str, input_to_check){
     if (input_to_check === "event_id"){
       event_array["event_id"] = 1;
     } else if (input_to_check === "event_type") {
-      if (str.match("^.{255,}$")){        event_feedback["event_type"] = "<a>event type is to long<a><br>";
+      if (str.match("^.{255,}$")){
+        event_feedback["event_type"] = "<a>event type is to long<a><br>";
         event_array["event_type"] = 0;
       } else if(str === ""){
         event_feedback["event_type"] = "<a>event type cant empty<a><br>";
@@ -66,9 +67,11 @@ function REGEXCheckEvent(str, input_to_check){
         event_array["event_type"] = 1;
       }
     } else if (input_to_check === "event_name"){
-      if (str.match("^.{255,}$")){        event_feedback["event_name"] = "<a>event name is to long<a><br>";
+      if (str.match("^.{255,}$")){
+        event_feedback["event_name"] = "<a>event name is to long<a><br>";
         event_array["event_name"] = 0;
-      } else if(str === ""){        event_feedback["event_name"] = "<a>event name cant empty<a><br>";
+      } else if(str === ""){
+        event_feedback["event_name"] = "<a>event name cant empty<a><br>";
         event_array["event_name"] = 0;
       } else{
         event_feedback["event_name"] = "";
@@ -78,7 +81,8 @@ function REGEXCheckEvent(str, input_to_check){
       if (str === ""){
         event_feedback["event_start"] = "<a>event start can't be empty<a><br>";
         event_array["event_start"] = 0;
-      } else if (!str.match(/^\d{2}:\d{2}$/)) {         event_feedback["event_start"] = "<a>event start must be in the format HH:MM<a><br>";
+      } else if (!str.match(/^\d{2}:\d{2}$/)) {
+        event_feedback["event_start"] = "<a>event start must be in the format HH:MM<a><br>";
         event_array["event_start"] = 0;
       } else {
         event_feedback["event_start"] = "";
@@ -88,7 +92,8 @@ function REGEXCheckEvent(str, input_to_check){
       if (str === ""){
         event_feedback["event_end"] = "<a>event end can't be empty<a><br>";
         event_array["event_end"] = 0;
-      } else if (!str.match(/^\d{2}:\d{2}$/)) {         event_feedback["event_end"] = "<a>event end must be in the format HH:MM<a><br>";
+      } else if (!str.match(/^\d{2}:\d{2}$/)) {
+        event_feedback["event_end"] = "<a>event end must be in the format HH:MM<a><br>";
         event_array["event_end"] = 0;
       } else {
         event_feedback["event_end"] = "";
@@ -97,10 +102,10 @@ function REGEXCheckEvent(str, input_to_check){
     }
   }
   if (checkAreAllValuesOne(event_array) === true){
-        document.getElementById("add-event-submit").disabled = false;
-        document.getElementById("event-input-handeling").innerHTML = "";
+    document.getElementById("add-event-submit").disabled = false;
+    document.getElementById("event-input-handeling").innerHTML = "";
   }else{
-        document.getElementById("add-event-submit").disabled = true;
-        document.getElementById("event-input-handeling").innerHTML = returnFeedbackHTMl(event_feedback);
+    document.getElementById("add-event-submit").disabled = true;
+    document.getElementById("event-input-handeling").innerHTML = returnFeedbackHTMl(event_feedback);
   }
 }

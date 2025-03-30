@@ -9,12 +9,11 @@ session_start();
         header("Location: calendar.php");
     }
 
-    function get_latest_parade($con)	{
+    function get_latest_parade($con){
         $query = "SELECT date FROM parades ORDER BY date DESC LIMIT 1;";
         $result = mysqli_query($con, $query);
         
-        if(mysqli_num_rows($result) > 0)
-        {
+        if(mysqli_num_rows($result) > 0){
             return mysqli_fetch_assoc($result)["date"];
         }
     }

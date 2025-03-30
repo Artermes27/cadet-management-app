@@ -1,7 +1,5 @@
 <?php
 
-use Dom\Mysql;
-
 if (isset($_GET["flag"])){
     include_once("get_request_scanning.php");
     switch (get_request("flag")){
@@ -16,7 +14,7 @@ if (isset($_GET["flag"])){
                     $output .= "<a style=\"background-color:#ddd;\" onclick=\"ResultHasBeenClickedParade('" . $parade["parade_id"] . "', '" . $parade["date"] . "', '" . $parade["parade_name"] . "')\">" . $parade["parade_name"] . "</a><br>";
                 }
                 echo $output;
-            }	else{
+            }else{
                 echo "<a>no names match your prompt</a>";
             }
             break;
@@ -30,7 +28,7 @@ if (isset($_GET["flag"])){
                 while($cadet = mysqli_fetch_assoc($result)){
                     $output .= "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedDuty(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
                 }
-            } else{
+            }else{
                 $output = "<a>no names match your prompt</a>";
             }
             echo $output;
@@ -40,18 +38,17 @@ if (isset($_GET["flag"])){
             include_once("../includes/connection.php");
             $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "' ORDER BY first_name ASC;";
             $result = mysqli_query($con, $query);
-            if(mysqli_num_rows($result) > 0)	{
+            if(mysqli_num_rows($result) > 0){
                 $output = "";
                 while($cadet = mysqli_fetch_assoc($result)){
                     if($output == ""){
                         $output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedUser(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
-                    }	else	{
+                    }else{
                         $output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedUser(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
                     }
                 }
                 echo $output;
-                return $result;
-            }	else{
+            }else{
                 echo "<a>no names match your prompt</a>";
             }
             break;
@@ -60,19 +57,18 @@ if (isset($_GET["flag"])){
             include_once("../includes/connection.php");
             $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE last_name REGEXP '" . str_replace('"', "", $name) . "' ORDER BY last_name ASC;";
             $result = mysqli_query($con, $query);
-            if(mysqli_num_rows($result) > 0)	{
+            if(mysqli_num_rows($result) > 0){
                 $output = "";
                 while($cadet = mysqli_fetch_assoc($result)){
                     if($output == ""){
                         $output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedUser(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
-                    }	else	{
+                    }else{
                         $output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedUser(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
                     }
                 }
                 echo $output;
-                return $result;
-            }	else{
-                return "<a>no names match your prompt</a>";
+            }else{
+                echo "<a>no names match your prompt</a>";
             }
             break;
         case "search_equipment_name";
@@ -80,17 +76,17 @@ if (isset($_GET["flag"])){
             include_once("../includes/connection.php");
             $query = "SELECT * FROM equipment WHERE name REGEXP '" . str_replace('"', "", $name) . "';";
             $result = mysqli_query($con, $query);
-            if(mysqli_num_rows($result) > 0)	{
+            if(mysqli_num_rows($result) > 0){
                 $output = "";
                 while($equipment = mysqli_fetch_assoc($result)){
                     if($output == ""){
                         $output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedEquipment(" . $equipment["equipment_id"] . ")' name=" . $equipment["equipment_id"] . ">name:" . $equipment["name"] . " location:" . $equipment["location"] . "</a><br>";
-                    }	else	{
+                    }	else{
                         $output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedEquipment(" . $equipment["equipment_id"] . ")' name=" . $equipment["equipment_id"] . ">name:" . $equipment["name"] . " location:" . $equipment["location"] . "</a><br>";
                     }
                 }
                 echo $output;
-            }	else{
+            }else{
                 echo("<a>no names match your prompt</a>");
             }
             break;
@@ -99,12 +95,12 @@ if (isset($_GET["flag"])){
             include_once("../includes/connection.php");
             $query = "SELECT * FROM equipment WHERE location REGEXP '" . str_replace('"', "", $name) . "';";
             $result = mysqli_query($con, $query);
-            if(mysqli_num_rows($result) > 0)	{
+            if(mysqli_num_rows($result) > 0){
                 $output = "";
                 while($equipment = mysqli_fetch_assoc($result)){
                     if($output == ""){
                         $output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedEquipment(" . $equipment["equipment_id"] . ")' name=" . $equipment["equipment_id"] . ">name:" . $equipment["name"] . " location:" . $equipment["location"] . "</a><br>";
-                    }	else	{
+                    }	else{
                         $output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedEquipment(" . $equipment["equipment_id"] . ")' name=" . $equipment["equipment_id"] . ">name:" . $equipment["name"] . " location:" . $equipment["location"] . "</a><br>";
                     }
                 }
@@ -122,7 +118,7 @@ if (isset($_GET["flag"])){
                 $equipment = mysqli_fetch_assoc($result);
                 echo json_encode($equipment);
             } else {
-                return json_encode(["message" => "no names match your prompt"]);
+                echo json_encode(["message" => "no names match your prompt"]);
             }
             break;
         case "user_id_info_dump";
@@ -135,7 +131,7 @@ if (isset($_GET["flag"])){
                 $cadet["password"] = "";
                 echo json_encode($cadet);
             } else {
-                return json_encode(["message" => "no names match your prompt"]);
+                echo json_encode(["message" => "no names match your prompt"]);
             }
             break;
     }

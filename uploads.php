@@ -21,28 +21,28 @@ if(isset($_POST["submit"])) {
 }
 
 if ($_FILES["fileToUpload"]["size"] > 500000) {
-    $error_msg .= "<a>your image is to large try croping it</a><br>";
-    $uploadOk = 0;
+  $error_msg .= "<a>your image is to large try croping it</a><br>";
+  $uploadOk = 0;
 }
 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
-    $error_msg = "<a>your image was not one of the following alowed types: jpg, jpeg or png</a><br>";
-    $uploadOk = 0;
+  $error_msg = "<a>your image was not one of the following alowed types: jpg, jpeg or png</a><br>";
+  $uploadOk = 0;
 }
 
 $target_file = $target_dir . $user_data["user_id"] . ".jpg";
 if (file_exists($target_file) == true) {
-    unlink($target_file);
+  unlink($target_file);
 }
 
 $target_file = $target_dir . $user_data["user_id"] . ".jpeg";
 if (file_exists($target_file) == true) {
-    unlink($target_file);
+  unlink($target_file);
 }
 
 $target_file = $target_dir . $user_data["user_id"] . ".png";
 if (file_exists($target_file) == true) {
-    unlink($target_file);
-  }
+  unlink($target_file);
+}
 
 $target_file = $target_dir . $user_data["user_id"] . "." . $imageFileType;
 

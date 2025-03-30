@@ -84,7 +84,6 @@ switch ($_POST["flag"]){
 		$query = "INSERT INTO `equipment` (`equipment_id`, `name`, `description`, `location`) VALUES ('" . $equipment_id . "', '" . $name . "', '" . $description . "', '" . $location . "');";
 		$result = mysqli_query($con, $query);
 		header("Location: ../add.php");
-
 	case "modify_equipment";
 		if($_POST["operation"] == "delete"){
 			include_once("post_request_scanning.php");

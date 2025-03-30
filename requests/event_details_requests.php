@@ -6,7 +6,7 @@ if(isset($_GET["flag"]) and get_request("flag") == "search_first_name_owner"){
     $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "';";
     $result = mysqli_query($con, $query);
     if(mysqli_num_rows($result) > 0)	{
-                $output = "";
+        $output = "";
         while($cadet = mysqli_fetch_assoc($result)){
             if($output == ""){
                 $output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
@@ -15,8 +15,8 @@ if(isset($_GET["flag"]) and get_request("flag") == "search_first_name_owner"){
             }
         }
         echo $output;
-    }	else{
-                echo "<a>no names match your prompt</a>";
+    }else{
+    	echo "<a>no names match your prompt</a>";
     }
 }
 

@@ -125,7 +125,7 @@
     }
 
     function html_for_register($con, $event_id, $parade_id){
-                $query = "SELECT user_event.present, users.user_id, users.rank, users.first_name, users.last_name FROM user_event, users WHERE user_event.event_id = " . $event_id . " and users.user_id = user_event.user_id;";
+        $query = "SELECT user_event.present, users.user_id, users.rank, users.first_name, users.last_name FROM user_event, users WHERE user_event.event_id = " . $event_id . " and users.user_id = user_event.user_id;";
         $result = mysqli_query($con, $query);
         $output_html = "";
         if(mysqli_num_rows($result) > 0) {
@@ -194,7 +194,7 @@
             $all_html .= "</div>\n";
         } else{
             $all_html .= "<a>no equipment requests</a>\n";
-            }
+        }
         return $all_html;
     }
 
