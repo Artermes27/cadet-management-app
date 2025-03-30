@@ -16,7 +16,7 @@ if (isset($_GET["flag"])){
 			$result = mysqli_query($con, $query);
 			if(mysqli_num_rows($result) > 0){
 				$query = "UPDATE equipment_requests SET aproved=0 WHERE equipment_id=" . get_request("add_equipment_id") . " AND event_id=" . get_request("event_id") . ";";
-			} else {
+			}else{
 				$query = "INSERT INTO equipment_requests (equipment_id, event_id, aproved) VALUES (" . get_request("add_equipment_id") . "," . get_request("event_id") . ",0);";
 			}
 			mysqli_query($con, $query);
@@ -45,13 +45,13 @@ if (isset($_GET["flag"])){
 			OR (events.event_start >= '" . $event["event_start"] . "' AND events.event_end <= '" . $event["event_end"] . "')
 			OR (events.event_id = " . $event["event_id"] . ")));";
 			$result = mysqli_query($con, $query);
-			if(mysqli_num_rows($result) > 0)	{
+			if(mysqli_num_rows($result) > 0){
 				$output_html = "";
 				while($cadet = mysqli_fetch_assoc($result)){
 					$output_html .= "<a onclick='resultHasBeenClickedAdd(" . $cadet["user_id"] . ", " . $event_id . ")'>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
 				}
 				echo $output_html;
-			}	else{
+			}else{
 				echo "<a>no names match your prompt</a>";
 			}
 			break;
@@ -61,13 +61,13 @@ if (isset($_GET["flag"])){
 			include_once("../includes/connection.php");
 			$query = "SELECT users.first_name, users.last_name, users.rank, users.user_id FROM users WHERE users.user_id IN (SELECT user_event.user_id FROM user_event WHERE user_event.event_id = " . $event_id . ") AND users.first_name REGEXP '" . str_replace('"', "", $first_name) . "';";
 			$result = mysqli_query($con, $query);
-			if(mysqli_num_rows($result) > 0)	{
+			if(mysqli_num_rows($result) > 0){
 				$output_html = "";
 				while($cadet = mysqli_fetch_assoc($result)){
 					$output_html .= "<a onclick='resultHasBeenClickedDelete(" . $cadet["user_id"] . ", " . $event_id . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
 				}
 				echo $output_html;
-			}	else{
+			}else{
 				echo "<a>no names match your prompt</a>";
 			}
 			break;
@@ -96,7 +96,7 @@ if (isset($_GET["flag"])){
 					$output_html .= "<a>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . " | " . $cadet["event_name"] . " " . $cadet["event_start"] . " " . $cadet["event_end"] . "</a><br>";
 				}
 				echo $output_html;
-			}	else{
+			}else{
 				echo "<a>no names match your prompt</a>";
 			}
 			break;

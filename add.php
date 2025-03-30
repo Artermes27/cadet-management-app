@@ -9,12 +9,11 @@ session_start();
         header("Location: calendar.php");
     }
 
-    function get_latest_parade($con)	{
+    function get_latest_parade($con){
         $query = "SELECT date FROM parades ORDER BY date DESC LIMIT 1;";
         $result = mysqli_query($con, $query);
         
-        if(mysqli_num_rows($result) > 0)
-        {
+        if(mysqli_num_rows($result) > 0){
             return mysqli_fetch_assoc($result)["date"];
         }
     }
@@ -56,6 +55,7 @@ session_start();
                     <input hidden value="add_new_event" type="text" name="flag" id="flag">
                     <input hidden value="" type="text" name="parade_id" id="parade_id">
                     <input hidden value="" type="text" name="owner_id" id="owner_id">
+                    <input hidden value="" type="text" name="duty_id" id="duty_id">
                     <label>event type</label>
                     <input type="text" name="event_type" id="event_type" onkeyup="REGEXCheckEvent(this.value, 'event_type')">
                     <label>event name</label>
@@ -70,6 +70,12 @@ session_start();
                         <a>current owner: none selected</a>
                     </div>
                     <div class="livesearch" id="livesearch_owner"></div>
+                    <label>duty cadet</label>
+                    <input type="text" name="event_duty_search_box" id="event_duty_search_box" onkeyup="showResutsSearchForDuty(this.value)">
+                    <div id="display_current_duty">
+                        <a>current duty cadet: none selected</a>
+                    </div>
+                    <div class="livesearch" id="livesearch_duty"></div>
                     <label>parade</label>
                     <input value="" type="text" name="parade_id_search_box" id="parade_id_search_box" onkeyup="ShowResultsSearchForParade(this.value)">
                     <div id="display_current_parade">

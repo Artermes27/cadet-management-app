@@ -1,20 +1,20 @@
 function showResultAddCadet(str, search_for, event_id) {
-    if (str.length==0) {
-      document.getElementById("livesearch").innerHTML="";
-      document.getElementById("livesearch").style.border="0px";
-      return;
+  if (str.length==0) {
+    document.getElementById("livesearch").innerHTML="";
+    document.getElementById("livesearch").style.border="0px";
+    return;
+  }
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("livesearch").innerHTML=this.responseText;
+      document.getElementById("livesearch").style.border="1px solid #A5ACB2";
     }
-    var xmlhttp=new XMLHttpRequest();
-    xmlhttp.onreadystatechange=function() {
-      if (this.readyState==4 && this.status==200) {
-        document.getElementById("livesearch").innerHTML=this.responseText;
-        document.getElementById("livesearch").style.border="1px solid #A5ACB2";
-      }
-    }
-    if (search_for == "search_first_name") {
-      xmlhttp.open("GET","requests/event_get_requests.php?flag=search_first_name&prompt="+str+"&event_id=" + event_id,true);
-      xmlhttp.send();
-    }
+  }
+  if (search_for == "search_first_name") {
+    xmlhttp.open("GET","requests/event_get_requests.php?flag=search_first_name&prompt="+str+"&event_id=" + event_id,true);
+    xmlhttp.send();
+  }
 }
   
 function showResultDeleteCadet(str, search_for, event_id) {
@@ -37,7 +37,7 @@ function showResultDeleteCadet(str, search_for, event_id) {
 }
 
 function showResultSearchOtherCadet(str, event_id) {
-    if (str.length==0) {
+  if (str.length==0) {
     document.getElementById("livesearch_other_cadet").innerHTML="";
     document.getElementById("livesearch_other_cadet").style.border="0px";
     return;
@@ -52,7 +52,6 @@ function showResultSearchOtherCadet(str, event_id) {
   }
   xmlhttp.open("GET","requests/event_get_requests.php?flag=search_first_name_other_cadet&prompt="+str+"&event_id=" + event_id,true);
   xmlhttp.send();
-
 }
   
 function resultHasBeenClickedAdd(user_id, event_id) {
@@ -69,7 +68,7 @@ function resultHasBeenClickedAdd(user_id, event_id) {
 }
 
 function resultHasBeenClickedDelete(user_id, event_id) {
-    var xmlhttp=new XMLHttpRequest();
+  var xmlhttp=new XMLHttpRequest();
   xmlhttp.open("POST", "requests/event_get_requests.php?flag=remove_user_id&remove_user_id=" + user_id + "&event_id=" + event_id + "")
   xmlhttp.send();
   document.getElementById("livesearch_delete").innerHTML="";
@@ -144,7 +143,6 @@ function resultHasBeenClickedAddEquipment(equipment_id, event_id){
     window.location.reload();
   }, 200);
   return;
-
 }
 
 function resultHasBeenClickedDeleteEquipment(equipment_id, event_id){
@@ -204,7 +202,8 @@ function REGEXCheckEvent(str, input_to_check, admin){
     event_array["final_aproval"] = 0;
   }else {
     if (input_to_check === "event_type"){
-      if (str.match("^.{255,}$")){        event_feedback["event_type"] = "<a>event type is to long<a><br>";
+      if (str.match("^.{255,}$")){
+        event_feedback["event_type"] = "<a>event type is to long<a><br>";
         event_array["event_type"] = 0;
       } else if(str === ""){
         event_feedback["event_type"] = "<a>event type cant empty<a><br>";
@@ -214,9 +213,11 @@ function REGEXCheckEvent(str, input_to_check, admin){
         event_array["event_type"] = 1;
       }
     } else if (input_to_check === "event_name"){
-      if (str.match("^.{255,}$")){        event_feedback["event_name"] = "<a>event name is to long<a><br>";
+      if (str.match("^.{255,}$")){
+        event_feedback["event_name"] = "<a>event name is to long<a><br>";
         event_array["event_name"] = 0;
-      } else if(str === ""){        event_feedback["event_name"] = "<a>event name cant empty<a><br>";
+      } else if(str === ""){
+        event_feedback["event_name"] = "<a>event name cant empty<a><br>";
         event_array["event_name"] = 0;
       } else{
         event_feedback["event_name"] = "";
@@ -226,7 +227,8 @@ function REGEXCheckEvent(str, input_to_check, admin){
       if (str === ""){
         event_feedback["event_start"] = "<a>event start can't be empty<a><br>";
         event_array["event_start"] = 0;
-      } else if (!str.match(/^\d{2}:\d{2}$/)) {         event_feedback["event_start"] = "<a>event start must be in the format HH:MM<a><br>";
+      } else if (!str.match(/^\d{2}:\d{2}$/)) {
+        event_feedback["event_start"] = "<a>event start must be in the format HH:MM<a><br>";
         event_array["event_start"] = 0;
       } else {
         event_feedback["event_start"] = "";
@@ -236,7 +238,8 @@ function REGEXCheckEvent(str, input_to_check, admin){
       if (str === ""){
         event_feedback["event_end"] = "<a>event end can't be empty<a><br>";
         event_array["event_end"] = 0;
-      } else if (!str.match(/^\d{2}:\d{2}$/)) {         event_feedback["event_end"] = "<a>event end must be in the format HH:MM<a><br>";
+      } else if (!str.match(/^\d{2}:\d{2}$/)) {
+        event_feedback["event_end"] = "<a>event end must be in the format HH:MM<a><br>";
         event_array["event_end"] = 0;
       } else {
         event_feedback["event_end"] = "";
@@ -254,11 +257,11 @@ function REGEXCheckEvent(str, input_to_check, admin){
     }
   }
   if (checkAreAllValuesOne(event_array) === true){
-        document.getElementById("add-event-submit").disabled = false;
-        document.getElementById("event-input-handeling").innerHTML = "";
+    document.getElementById("add-event-submit").disabled = false;
+    document.getElementById("event-input-handeling").innerHTML = "";
   }else{
-        document.getElementById("add-event-submit").disabled = true;
-        document.getElementById("event-input-handeling").innerHTML = returnFeedbackHTMl(event_feedback);
+    document.getElementById("add-event-submit").disabled = true;
+    document.getElementById("event-input-handeling").innerHTML = returnFeedbackHTMl(event_feedback);
   }
 }
 
@@ -270,8 +273,8 @@ function REGEXCheckRegister(str, user_id){
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
-      let userDetails = JSON.parse(this.responseText);
-      register_feedback[user_id] = "<a>" + userDetails.rank + " " + userDetails.first_name + " " + userDetails.last_name + " cant have an empty registar box<a><br>";
+        let userDetails = JSON.parse(this.responseText);
+        register_feedback[user_id] = "<a>" + userDetails.rank + " " + userDetails.first_name + " " + userDetails.last_name + " cant have an empty registar box<a><br>";
       }
     }
   }else if(str !== "1" && str !== "0"){
@@ -280,9 +283,9 @@ function REGEXCheckRegister(str, user_id){
     xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+user_id,true);
     xmlhttp.send();
     xmlhttp.onreadystatechange=function() {
-    if (this.readyState==4 && this.status==200) {
-      let userDetails = JSON.parse(this.responseText);
-      register_feedback[user_id] = "<a>" + userDetails.rank + " " + userDetails.first_name + " " + userDetails.last_name + " must have atendance of 1 or 0<a><br>";
+      if (this.readyState==4 && this.status==200) {
+        let userDetails = JSON.parse(this.responseText);
+        register_feedback[user_id] = "<a>" + userDetails.rank + " " + userDetails.first_name + " " + userDetails.last_name + " must have atendance of 1 or 0<a><br>";
       }
     }
   }else{
@@ -324,7 +327,7 @@ function REGEXCheckEquipment(str, equipment_id, originial_aproval, G4){
       equipment_feedback[equipment_id] = "";
     }
   }
-      if(checkAreAllValuesOne(equipment_array) === true){
+  if(checkAreAllValuesOne(equipment_array) === true){
     document.getElementById("equipment-submit").disabled = false;
     document.getElementById("equipment-input-handeling").innerHTML = "";
   }else{

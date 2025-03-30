@@ -6,17 +6,17 @@ if(isset($_GET["flag"]) and get_request("flag") == "search_first_name_owner"){
     $query = "SELECT users.user_id, users.rank, users.first_name, users.last_name FROM users WHERE first_name REGEXP '" . str_replace('"', "", $name) . "';";
     $result = mysqli_query($con, $query);
     if(mysqli_num_rows($result) > 0)	{
-                $output = "";
+        $output = "";
         while($cadet = mysqli_fetch_assoc($result)){
-                        if($output == ""){
+            if($output == ""){
                 $output = "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
             }	else	{
                 $output = $output . "<a style=\"background-color:#ddd;\" onclick='resultHasBeenClickedOwner(" . $cadet["user_id"] . ")' name=" . $cadet["user_id"] . ">" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
             }
         }
         echo $output;
-    }	else{
-                echo "<a>no names match your prompt</a>";
+    }else{
+    	echo "<a>no names match your prompt</a>";
     }
 }
 
@@ -38,7 +38,7 @@ if (isset($_POST["flag"])){
 			session_start();
 			include_once("../includes/functions.php");
 			$user_data = check_login($con);
-			if((post_request("user_id") == $owner or $user_data["admin"] == 1 or $user_data["G4"] == 1) and $_POST["calendar_flag"] == 0){
+			if((post_request("user_id") == $owner or post_request("duty") == $user_data["user_id"] or $user_data["admin"] == 1 or $user_data["G4"] == 1) and $_POST["calendar_flag"] == 0){
 				header("location: ../event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
 			}else{
 				header("location: ../calendar.php");
