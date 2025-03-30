@@ -20,8 +20,7 @@ session_start();
 						header("Location: calendar.php");
 						die;
 					}else{
-						$error_msg .= "Your account is inactive.</a><br><a style=\"text-align: center;\"> Speak to the system admin if this is an
-						error";
+						$error_msg .= "Your account is inactive.</a><br><a style=\"text-align: center;\"> Speak to the system admin if this is an error";
 					}
 				}else{
 					$error_msg .= "wrong password!";

@@ -20,13 +20,4 @@ function check_login($con){
 	die;
 
 }
-/*
-function check_login($con){
-	$query = "SELECT * FROM users WHERE user_id = 0;";
-	$result = mysqli_query($con, $query);
-	$user_data = mysqli_fetch_assoc($result);
-	return $user_data;
-}
-*/
-
 ?>

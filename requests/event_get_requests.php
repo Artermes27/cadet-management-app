@@ -64,7 +64,7 @@ if (isset($_GET["flag"])){
 			if(mysqli_num_rows($result) > 0)	{
 				$output_html = "";
 				while($cadet = mysqli_fetch_assoc($result)){
-					$output_html .= "<script src=\"js/search.js\"></script><a onclick='resultHasBeenClickedDelete(" . $cadet["user_id"] . ", " . $event_id . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
+					$output_html .= "<a onclick='resultHasBeenClickedDelete(" . $cadet["user_id"] . ", " . $event_id . ")' name=" . $cadet["user_id"] . "href=>" . $cadet["rank"] . " " . $cadet["first_name"] . " " . $cadet["last_name"] . "</a><br>";
 				}
 				echo $output_html;
 			}	else{
@@ -180,4 +180,5 @@ if (isset($_GET["flag"])){
 			break;
 	}
 }
+mysqli_close($con);
 ?>

@@ -32,9 +32,8 @@ if (isset($_GET["flag"])){
                     }
                 }
                 echo $output;
-                return $result;
             }	else{
-                return "<a>no names match your prompt</a>";
+                echo "<a>no names match your prompt</a>";
             }
             break;
         case "search_last_name_user";
@@ -77,9 +76,9 @@ if (isset($_GET["flag"])){
             }
             break;
         case "search_equipment_location";
-            $name = get_request("prompt");
+            $location = get_request("prompt");
             include_once("../includes/connection.php");
-            $query = "SELECT * FROM equipment WHERE location REGEXP '" . str_replace('"', "", $name) . "';";
+            $query = "SELECT * FROM equipment WHERE location REGEXP '" . str_replace('"', "", $location) . "';";
             $result = mysqli_query($con, $query);
             if(mysqli_num_rows($result) > 0)	{
                 $output = "";
@@ -121,5 +120,6 @@ if (isset($_GET["flag"])){
             }
             break;
     }
+    mysqli_close($con);
 }
 ?>

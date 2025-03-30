@@ -1,4 +1,4 @@
-/*overall rules for the page*/
+
 .grid-container {
     margin: 0;
     padding: 10px 0;
@@ -7,7 +7,7 @@
     grid-template-columns: 33% 33% 33%;
   }
 
-/*rueles for each catagory of actions*/
+
 .grid-container .events-parades{
     background-color: #ddd;;
     margin-left:5px;
@@ -26,7 +26,7 @@
     margin-right:5px;
 }
 
-/*elements within form boxes*/
+
 form {
     display: grid;
     grid-template-columns: 50%;
@@ -35,7 +35,7 @@ form {
     padding-right:10px;
 }
 
-/*livesearch output box*/
+
 .livesearch {
     grid-column: span 2;
     font-size: 25px;
@@ -47,7 +47,7 @@ form {
     background-color: #d11717;
 }
 
-/*lables and inputs*/
+
 h4 {
     grid-column: span 2;
     text-decoration: underline;
@@ -70,7 +70,7 @@ input, select {
     border-radius: 4px;
 }
 
-/*buttons*/
+
 button {
     grid-column: span 2;
     margin-top: 10px;
