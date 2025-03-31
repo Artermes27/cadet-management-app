@@ -5,30 +5,12 @@
 	include("includes/functions.php");
 
 	$user_data = check_login($con);
-    $query = "SELECT `owner`, `duty` FROM events WHERE event_id = " . $user_data["event_id"] . ";";
+    $query = "SELECT `owner`, `duty`, `event_name`, `final_aproval`, `date` FROM events, parades WHERE event_id = " . $user_data["event_id"] . " AND events.parade_id = parades.parade_id;";
     $result = mysqli_query($con, $query);
     $event = mysqli_fetch_assoc($result);
+    //checking the user has permision to be on the event page
     if(!($user_data["admin"] == 1 or $user_data["G4"] == 1 or $user_data["user_id"] == $event["owner"] or $user_data["user_id"] == $event["duty"])){
         header("location: calendar.php");
-    }
-
-    function get_event_name($con, $event_id){
-        $query = "SELECT event_name FROM events WHERE event_id = " . $event_id . ";";
-        $result = mysqli_query($con, $query);
-        return mysqli_fetch_assoc($result)["event_name"];
-    }
-
-    function get_event_aproval_value($con, $event_id){
-        $query = "SELECT final_aproval FROM events WHERE event_id = $event_id;";
-        $result = mysqli_query($con, $query);
-        return mysqli_fetch_assoc($result)["final_aproval"];
-    }
-
-    function get_parade_name_and_date_as_html_h1($con, $parade_id){
-        $query = "SELECT parade_name, date FROM parades WHERE parade_id = " . $parade_id . ";";
-        $result = mysqli_query($con, $query);
-        $parade = mysqli_fetch_assoc($result);
-        return "<h1>" . $parade["parade_name"] . "</h1><h1>" . $parade["date"] . "</h1>";
     }
 
     function generate_html_for_lesson_plan($con, $event_id, $admin){
@@ -81,47 +63,6 @@
         $lesson_plan_html .= "<button class=\"input_handeling\" id=\"delete-event-submit\" style=\"width: 100%;\">delete event</button>\n";
         $lesson_plan_html .= "</form>\n";
         return $lesson_plan_html;
-    }
-
-    function html_for_list_of_parades_events($con, $parade_id, $user_id, $admin, $G4){
-        if ($admin == 1 or $G4 == 1){
-            $query = "SELECT * FROM events WHERE parade_id = " . $parade_id . " ORDER BY event_start;";
-        } else {
-            $query = "SELECT DISTINCT events.* FROM events LEFT JOIN user_event ON events.event_id = user_event.event_id WHERE (parade_id = " . $parade_id . " AND user_event.user_id = " . $user_id . ") OR ((events.duty = " . $user_id . " OR events.owner = " . $user_id . ") AND parade_id = " . $parade_id . ") ORDER BY events.event_start;";
-        }
-        $result = mysqli_query($con, $query);
-        $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        $event_count = 0;
-        $event_html = "<div class=\"event\">\n";
-        while($event_count < count($events)){
-            if($events[$event_count]["final_aproval"] == 0){
-                $style_class = "event_not_aproved";
-              }elseif($events[$event_count]["final_aproval"] == 1){
-                $style_class = "event_aproved";
-              }elseif($events[$event_count]["final_aproval"] == 2){
-                $style_class = "event_aproval_requested";
-              }
-            if($user_id == $events[$event_count]["owner"] or $admin == 1 or $G4 == 1){
-                $event_html .= "<div class=\"" . $style_class . "\">\n";
-                $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
-                $event_html .= "<a href=\"event.php?parade_id=" . $parade_id . "&event_id=" . $events[$event_count]["event_id"] . "\">" . $events[$event_count]["event_name"] . "</a>\n";
-                $event_html .= "</div>\n";
-            }elseif($user_id == $events[$event_count]["duty"]){
-                $event_html .= "<div class=\"" . $style_class . "\">\n";
-                $event_html .= "<a>duty event</a><br>";
-                $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
-                $event_html .= "<a href=\"event.php?parade_id=" . $parade_id . "&event_id=" . $events[$event_count]["event_id"] . "\">" . $events[$event_count]["event_name"] . "</a>\n";
-                $event_html .= "</div>\n";
-            }else {
-                $event_html .= "<div class=\"event\">\n";
-                $event_html .= "<a>" . $events[$event_count]["event_start"] . " till " . $events[$event_count]["event_end"] . "</a><br>\n";
-                $event_html .= "<a>" . $events[$event_count]["event_name"] . "</a>\n";
-                $event_html .= "</div>\n";
-            }
-            $event_count = $event_count + 1;
-        }
-        $event_html .= "</div>\n";
-        return $event_html;
     }
 
     function html_for_register($con, $event_id, $parade_id){
@@ -215,9 +156,8 @@
         return $all_html;
     }
 
-    function javascript_for_onload($con, $event_id){
+    function javascript_for_onload($con, $event_id, $event_aproval){
         $return_js = "";
-        $event_aproval = get_event_aproval_value($con, $event_id);
         if($event_aproval != 1){
             $return_js .= "setStateOfEventApproval(" . $event_aproval . ");";
         }else{
@@ -256,19 +196,21 @@
     <link rel="stylesheet" href="css/event-display-block-style.css">
     <link rel="stylesheet" href="css/register-and-equipment-reuqests-style.css">
 </head>
-<body onload='<?php echo(javascript_for_onload($con, $user_data["event_id"]));?>'>
+<body onload='<?php echo(javascript_for_onload($con, $user_data["event_id"], $event["final_aproval"]));?>'>
     <?php include("includes/nav.php");?>
     <div class="grid-container">
         <div class="left-side">
-            <?php echo(get_parade_name_and_date_as_html_h1($con, $user_data["parade_id"]));?>
-            <?php echo(html_for_list_of_parades_events($con, $user_data["parade_id"], $user_data["user_id"], $user_data["admin"], $user_data["G4"])); ?>
+            <?php
+            include("includes/display_parade.php");
+            echo(html_for_parade($con, $event["date"], $user_data, "event"));
+            ?>
         </div>
         <div class="right-side">
-            <h1><?php echo(get_event_name($con, $user_data["event_id"]));?></h1><h1></h1><h1></h1>
+            <h1><?php echo($event["event_name"]);?></h1><h1></h1><h1></h1>
             <div class="register-box-all">
                 <h4>register</h4>
                 <?php
-                if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
+                if($event["final_aproval"] == 1){
                     echo(html_for_register($con, $user_data["event_id"], $user_data["parade_id"]));
                     echo(html_for_amending_the_register($user_data["event_id"]));
                 } else {
@@ -278,7 +220,7 @@
             </div>
             <div class="lesson-plan">
                 <?php 
-                if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
+                if($event["final_aproval"] == 1){
                     echo("<h4>event aproved, lesson plan not modifiable</h4>");
                 } else {
                     echo(generate_html_for_lesson_plan($con, $user_data["event_id"], $user_data["admin"]));
@@ -287,7 +229,7 @@
             <div class="equipment-requests">
                 <h4>equipment requests displayed here</h4>
                 <?php 
-                if(get_event_aproval_value($con, $user_data["event_id"]) == 1){
+                if($event["final_aproval"] == 1){
                     echo(html_for_equipment($con, $user_data["event_id"], $user_data["parade_id"], $user_data["G4"]));
                     echo(html_for_amending_the_equipment($user_data["event_id"]));
                 } else {
@@ -297,8 +239,6 @@
             </div>
         </div>
     </div>
-
-    
 </body>
 </html>
 <?php mysqli_close($con)?>
