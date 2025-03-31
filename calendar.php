@@ -208,7 +208,7 @@ session_start();
   if(isset($_GET["current_date"]) and get_request("current_date") != "null") {
     $current_date = $_GET["current_date"];
   } else {
-    $current_date = "2025-01-24";
+    $current_date = str_replace("/", "-", date("Y/m/d"));
   }
   $temp = get_parade_date_range($con, $current_date, $user_data["admin"]);
   $parade_dates = $temp[0];
