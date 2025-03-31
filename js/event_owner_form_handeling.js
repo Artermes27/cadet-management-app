@@ -5,7 +5,7 @@ function showResutsSearchForOwner(str) {
     document.getElementById("livesearch_owner").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("livesearch_owner").innerHTML=this.responseText;
@@ -37,12 +37,12 @@ function displayCurrentOwnerOfEvent(owner_id) {
     document.getElementById("display_current_owner").innerHTML="<a>curent owner: none selected<a>";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
-  if (this.readyState==4 && this.status==200) {
-      var owner_info = JSON.parse(this.responseText);
+    if (this.readyState==4 && this.status==200) {
+      let owner_info = JSON.parse(this.responseText);
       document.getElementById("display_current_owner").innerHTML="<a>curent owner: " + owner_info.rank + " " + owner_info.first_name + " " + owner_info.last_name + "<a>";
-  }
+    }
   }
   xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+owner_id,true);
   xmlhttp.send();

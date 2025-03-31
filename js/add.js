@@ -4,7 +4,7 @@ function showResutsSearchForUserFirstName(str) {
     document.getElementById("livesearch_first_name").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("livesearch_first_name").innerHTML=this.responseText;
@@ -21,7 +21,7 @@ function showResutsSearchForUserLastName(str) {
     document.getElementById("livesearch_last_name").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("livesearch_last_name").innerHTML=this.responseText;
@@ -38,7 +38,7 @@ function ShowResultsSearchForParade(str) {
     document.getElementById("livesearch_parade_id").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("livesearch_parade_id").innerHTML=this.responseText;
@@ -65,7 +65,7 @@ function showResutsSearchForDuty(str){
     document.getElementById("livesearch_duty").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("livesearch_duty").innerHTML=this.responseText;
@@ -77,12 +77,12 @@ function showResutsSearchForDuty(str){
   }
 
 function resultHasBeenClickedDuty(user_id){
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+user_id,true);
   xmlhttp.send();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
-      var userDetails = JSON.parse(this.responseText);
+      let userDetails = JSON.parse(this.responseText);
       document.getElementById("livesearch_duty").innerHTML="";
       document.getElementById("livesearch_duty").style.border="0px";
       document.getElementById("event_duty_search_box").value = "";
@@ -100,12 +100,12 @@ function resultHasBeenClickedUser(user_id) {
   document.getElementById("livesearch_last_name").innerHTML="";
   document.getElementById("livesearch_last_name").style.border="0px";
   document.getElementById("input_search_last_name").value = "";
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.open("GET","requests/add_get_requests.php?flag=user_id_info_dump&prompt="+user_id,true);
   xmlhttp.send();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
-      var userDetails = JSON.parse(this.responseText);
+      let userDetails = JSON.parse(this.responseText);
       console.log(userDetails);
       document.getElementById("modify_user_id").value = userDetails.user_id;
       document.getElementById("modify_email").value = userDetails.email;
@@ -131,7 +131,7 @@ function showResutsSearchForEquipmentByName(str){
     document.getElementById("livesearch_equipment_name").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("livesearch_equipment_name").innerHTML=this.responseText;
@@ -148,7 +148,7 @@ function showResutsSearchForEquipmentByLocation(str){
     document.getElementById("livesearch_equipment_location").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("livesearch_equipment_location").innerHTML=this.responseText;
@@ -167,12 +167,12 @@ function resultHasBeenClickedEquipment(equipment_id){
   document.getElementById("livesearch_equipment_location").style.border="0px";
   document.getElementById("input_search_equipment_location").value = "";
   document.getElementById("modify-equipment-submit").disabled = false;
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.open("GET","requests/add_get_requests.php?flag=equipment_id_info_dump&prompt="+equipment_id,true);
   xmlhttp.send();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
-      var equipmentDetails = JSON.parse(this.responseText);
+      let equipmentDetails = JSON.parse(this.responseText);
       console.log(equipmentDetails);
       document.getElementById("modify_equipment_id").value = equipmentDetails.equipment_id;
       document.getElementById("modify_equipment_name").value = equipmentDetails.name;

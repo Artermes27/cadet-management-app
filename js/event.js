@@ -4,7 +4,7 @@ function showResultAddCadet(str, search_for, event_id) {
     document.getElementById("livesearch").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("livesearch").innerHTML=this.responseText;
@@ -23,7 +23,7 @@ function showResultDeleteCadet(str, search_for, event_id) {
     document.getElementById("livesearch_delete").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("livesearch_delete").innerHTML=this.responseText;
@@ -42,7 +42,7 @@ function showResultSearchOtherCadet(str, event_id) {
     document.getElementById("livesearch_other_cadet").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       console.log(this.responseText);
@@ -55,7 +55,7 @@ function showResultSearchOtherCadet(str, event_id) {
 }
   
 function resultHasBeenClickedAdd(user_id, event_id) {
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.open("POST", "requests/event_get_requests.php?flag=add_user_id&add_user_id=" + user_id + "&event_id=" + event_id + "")
   xmlhttp.send();
   document.getElementById("livesearch").innerHTML="";
@@ -68,7 +68,7 @@ function resultHasBeenClickedAdd(user_id, event_id) {
 }
 
 function resultHasBeenClickedDelete(user_id, event_id) {
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.open("POST", "requests/event_get_requests.php?flag=remove_user_id&remove_user_id=" + user_id + "&event_id=" + event_id + "")
   xmlhttp.send();
   document.getElementById("livesearch_delete").innerHTML="";
@@ -86,7 +86,7 @@ function showResultAddEquipment(str, event_id) {
     document.getElementById("livesearch_equipment_add").style.border="0px";
     return;
   }
-  var xmlhttp=new XMLHttpRequest();
+  let xmlhttp=new XMLHttpRequest();
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       console.log(this.responseText);
@@ -104,7 +104,7 @@ function showResultDeleteEquipment(str, event_id){
     document.getElementById("livesearch_delete_equipment").style.border = "0px";
     return;
   }
-  var xmlhttp = new XMLHttpRequest();
+  let xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById("livesearch_delete_equipment").innerHTML = this.responseText;
@@ -121,7 +121,7 @@ function showResultSearchOtherEquipment(str, event_id){
     document.getElementById("livesearch_other_equipment").style.border = "0px";
     return;
   }
-  var xmlhttp = new XMLHttpRequest();
+  let xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       document.getElementById("livesearch_other_equipment").innerHTML = this.responseText;
@@ -146,7 +146,7 @@ function resultHasBeenClickedAddEquipment(equipment_id, event_id){
 }
 
 function resultHasBeenClickedDeleteEquipment(equipment_id, event_id){
-  var xmlhttp = new XMLHttpRequest();
+  let xmlhttp = new XMLHttpRequest();
   xmlhttp.open("POST", "requests/event_get_requests.php?flag=remove_equipment_id&remove_equipment_id=" + equipment_id + "&event_id=" + event_id);
   xmlhttp.send();
   document.getElementById("livesearch_delete_equipment").innerHTML = "";
