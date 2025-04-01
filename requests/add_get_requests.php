@@ -118,7 +118,7 @@ if (isset($_GET["flag"])){
                 $equipment = mysqli_fetch_assoc($result);
                 echo json_encode($equipment);
             } else {
-                echo json_encode(["message" => "no names match your prompt"]);
+                echo json_encode(["message" => "no equipment found"]);
             }
             break;
         case "user_id_info_dump";

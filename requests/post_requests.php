@@ -12,7 +12,7 @@ switch ($_POST["flag"]){
 		$result = mysqli_query($con, $query);
 		$parade_id = mysqli_fetch_assoc($result)["MAX(parade_id)"] + 1;
 		$query = "INSERT INTO `parades` (`parade_id`, `date`, `start`, `end`, `parade_name`) VALUES ('" . $parade_id . "', '" . $date . "', '" . $start . "', '" . $end . "', '" . $parade_name . "');";
-		$result = mysqli_query($con, $query);
+		mysqli_query($con, $query);
 		header("Location: ../add.php");
 	case "add_new_event";
 		include_once("post_request_scanning.php");
@@ -28,7 +28,7 @@ switch ($_POST["flag"]){
 		$result = mysqli_query($con, $query);
 		$event_id = mysqli_fetch_assoc($result)["MAX(event_id)"] + 1;
 		$query = "INSERT INTO `events` (`event_id`, `parade_id`, `event_type`, `event_name`, `event_start`, `event_end`, `owner`, `final_aproval`, `duty`) VALUES ('" . $event_id . "', '" . $parade_id . "', '" . $event_type . "', '" . $event_name . "', '" . $event_start . "', '" . $event_end . "', '" . $owner . "', '0', " . $duty . ");";
-		$result = mysqli_query($con, $query);
+		mysqli_query($con, $query);
 		header("Location: ../add.php");
 	case "add_new_user";
 		include_once("post_request_scanning.php");
@@ -47,7 +47,7 @@ switch ($_POST["flag"]){
 		$result = mysqli_query($con, $query);
 		$user_id = mysqli_fetch_assoc($result)["MAX(user_id)"] + 1;
 		$query = "INSERT INTO `users` (`user_id`, `email`, `password`, `first_name`, `last_name`, `DOB`, `gender`, `rank`, `active`, `admin`, `G4`) VALUES ('" . $user_id . "', '" . $email . "', '" . hash("sha256", $password) . "', '" . $first_name . "', '" . $last_name . "', '" . $DOB . "', '" . $gender . "', '" . $rank . "', " . $active . ", " . $admin . ", " . $G4 . ");";
-		$result = mysqli_query($con, $query);
+		mysqli_query($con, $query);
 		header("Location: ../add.php");
 	case "modify_user";
 		include_once("post_request_scanning.php");
@@ -82,7 +82,7 @@ switch ($_POST["flag"]){
 		$result = mysqli_query($con, $query);
 		$equipment_id = mysqli_fetch_assoc($result)["MAX(equipment_id)"] + 1;
 		$query = "INSERT INTO `equipment` (`equipment_id`, `name`, `description`, `location`) VALUES ('" . $equipment_id . "', '" . $name . "', '" . $description . "', '" . $location . "');";
-		$result = mysqli_query($con, $query);
+		mysqli_query($con, $query);
 		header("Location: ../add.php");
 	case "modify_equipment";
 		if($_POST["operation"] == "delete"){
@@ -90,7 +90,7 @@ switch ($_POST["flag"]){
 			$equipment_id = post_request("modify_equipment_id");
 			include_once("../includes/connection.php");
 			$query = "DELETE FROM `equipment` WHERE `equipment`.`equipment_id` = " . $equipment_id . ";";
-			$result = mysqli_query($con, $query);
+			mysqli_query($con, $query);
 			header("Location: ../add.php");
 		}else{
 			include_once("post_request_scanning.php");
@@ -100,7 +100,7 @@ switch ($_POST["flag"]){
 			$location = post_request("modify_equipment_location");
 			include_once("../includes/connection.php");
 			$query = "UPDATE `equipment` SET `name` = '" . $name . "', `description` = '" . $description . "', `location` = '" . $location . "' WHERE `equipment`.`equipment_id` = " . $equipment_id . ";";
-			$result = mysqli_query($con, $query);
+			mysqli_query($con, $query);
 			header("Location: ../add.php");
 		}
 	case "modify_register";
@@ -114,7 +114,7 @@ switch ($_POST["flag"]){
 		foreach ($_POST as $key => $value) {
 			$query = "UPDATE user_event SET present = " . $value . " WHERE user_id = " . $key . " AND event_id = " . $event_id . "";
 			echo($query);
-			$result = mysqli_query($con, $query);
+			mysqli_query($con, $query);
 		}
 		header("location: ../event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
 	case "modify_equipment_register";
@@ -127,7 +127,7 @@ switch ($_POST["flag"]){
 		include_once("../includes/connection.php");
 		foreach ($_POST as $key => $value) {
 			$query = "UPDATE equipment_requests SET aproved = " . $value . " WHERE equipment_id = " . $key . " AND event_id = " . $event_id . "";
-			$result = mysqli_query($con, $query);
+			mysqli_query($con, $query);
 		}
 		header("location: ../event.php?parade_id=" . $parade_id . "&event_id=" . $event_id);
 }
