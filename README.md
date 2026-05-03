@@ -10,7 +10,7 @@ A full-stack web application that digitises and streamlines the administration o
 
 The system replaces a paper-based process for managing cadet parades, lesson planning, equipment logistics, and attendance tracking. It supports five distinct user roles, each with carefully scoped server-side permissions, and provides a colour-coded calendar view of all scheduled events.
 
-A full technical write-up covering analysis, design, implementation, and testing is available upon request.
+The full 224-page technical write-up — covering analysis, requirements gathering, system design, implementation, and testing — is included in this repository: [Cadet-Management-System-redacted.pdf](Cadet-Management-System-redacted.pdf)
 
 ---
 
