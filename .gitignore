@@ -19,9 +19,10 @@ profile-photos/*
 
 # =============================================================================
 # PRIVATE DOCUMENTS
-# Coursework spec / assessment documents
+# Original spec contains personal info — redacted version is safe to commit
 # =============================================================================
 *.pdf
+!Cadet-Management-System-redacted.pdf
 
 # =============================================================================
 # PHP
