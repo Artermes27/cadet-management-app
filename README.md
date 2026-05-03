@@ -1,136 +1,151 @@
-# Help Page
+# Cadet Management System
 
-This is a help page with navigation and guidance for various user roles.
+A full-stack web application that digitises and streamlines the administration of a school cadet unit. Built as a solo Computer Science coursework project — covering requirements gathering, system design, implementation, testing, and deployment.
 
-## Categories
-
-- [All Users Issues](#all-users-issues)
-- [All Users Guidance](#all-users-guidance)
-- [Basic Users](#basic-users-guidance)
-- [Event Owner](#event-owner-guidance)
-- [Duty Cadets](#duty-cadets-guidance)
-- [G4 (Logistics Cadets)](#g4-logistics-cadets-guidance)
-- [Admin](#admin-guidance)
-- [Galaray of the system](#galary-of-the-pages-on-the-system)
+**Tech stack:** PHP · MySQL · JavaScript (Vanilla) · HTML/CSS · Apache
 
 ---
 
-## All Users Issues
+## Overview
 
-- Any issues with logins or passwords? Speak to the system admin.
-- If your account has been incorrectly deactivated, speak to the admin.
-- Any issues with permissions (e.g., G4 or Admin), contact the system admin.
+The system replaces a paper-based process for managing cadet parades, lesson planning, equipment logistics, and attendance tracking. It supports five distinct user roles, each with carefully scoped server-side permissions, and provides a colour-coded calendar view of all scheduled events.
 
----
-
-## All Users Guidance
-
-- For navigation, use the navigation bar at the top of the page.
-- To view your user details, hover over your profile photo.
-- To change your profile photo, use the user details drop-down menu and upload a new photo.
-- To view parades not in the current range, use the `>`, `>>>`, `<`, or `<<<` buttons at the top of the calendar.
-- Since all search features on this page use regular expressions, it is best to keep your searches non-descript. To see all possible results, enter the characters `+*`.
+A full technical write-up covering analysis, design, implementation, and testing is available upon request.
 
 ---
 
-## Basic Users Guidance
+## Features
 
-- As a basic user, you will be able to view the lessons you have upcoming for the next few parades on the calendar page.
-
----
-
-## Event Owner Guidance
-
-- As an event owner, you will be able to view the approval status of your event on the calendar page. Event statuses will be indicated by color:
-
-  - **Red**: Event not approved.
-  - **Amber**: Approval requested.
-  - **Green**: Event approved.
-
-### Functionality When an Event Is Not Approved
-
-- To change the approval status of the event, click the event's link on the calendar to access the event page.
-- Events that are approved cannot have their details changed. Be sure the details are correct before requesting approval.
-- The admin will always be able to see your event on the calendar. Once approval is requested, they will either approve it or set it as "not approved", meaning changes are required.
-
-### Once the Event Is Approved:
-
-#### Register
-
-- To add cadets to the register, search for their first name in the "add" box and select the result.
-- If a cadet cannot attend the event, they will not appear in the results.
-- To see why a cadet cannot attend, search for their name in the "other" box to view the event name and time.
-- To remove cadets from the register, search for their first name in the "remove" box and select the result.
-- At the start of your lesson, populate the register with `1` for present and `0` for absent, then click the submit register button to update the register.
-
-#### Equipment Requests Log
-
-- To add an equipment request, search for the equipment name in the "add" box and select the result.
-- If the equipment is unavailable due to being used elsewhere, it will not appear in the results.
-- To see where the equipment is being used, search for it in the "other" box to view the event name and time where it's being used.
-- To remove equipment from the log, search for it in the "remove" box and select the result.
-- G4 cadets will approve or deny the equipment requests. Once a request has been approved or denied, its status cannot be changed without deleting the request.
+- **Role-based access control** — five user roles (Admin, G4, Event Owner, Duty Cadet, Basic User) enforced server-side on every request
+- **Parade calendar** — interactive calendar showing upcoming parades and their events, with forward/backward skip navigation
+- **Event approval workflow** — events progress through three states (not approved → approval requested → approved), colour-coded red/amber/green
+- **Attendance register** — event owners populate per-cadet attendance records (present/absent) for each lesson
+- **Equipment request log** — booking system that prevents double-booking; G4 cadets approve or deny each request
+- **Admin dashboard** — full CRUD for users, parades, events, and equipment inventory
+- **Regex-powered search** — all live-search inputs filter results using regular expressions
+- **Profile photo uploads** — users can upload and update their own profile photo
+- **Automated database backup** — cron-driven shell script for nightly MySQL dumps with 7-day retention
 
 ---
 
-## Duty Cadets Guidance
+## Architecture
 
-- As a duty cadet, you will have all the same controls over an event as the event owner. The purpose of this role is to monitor the events you've been assigned to.
-- Events you are assigned to will appear on the calendar with the words "Duty Event" at the top.
+### Page & Link Structure
+![Page structure](flowcharts/graph%20of%20page%20structure.png)
+![Link structure](flowcharts/graph%20of%20link%20structure.png)
+
+### Event Approval Pipeline
+![Event pipeline](flowcharts/event_pipeline.png)
+
+### Lesson Planning Process
+![Lesson planning](flowcharts/lesson%20planning%20process.png)
+
+### Entity Relationship Diagram
+![ER diagram](flowcharts/ER%20diagram%20bacic.png)
 
 ---
 
-## G4 (Logistics Cadets) Guidance
+## Database Schema
 
-- As a G4 cadet, you will see all events on the calendar page, and you will be able to view them as if you were the event owner.
-- Your main responsibility is to approve or deny equipment requests.
-- If you accidentally approve or deny an equipment request, you may delete the request from the log, re-add it, and set its approval status to the correct setting.
-- When a request is denied, the system no longer recognizes it, meaning it will appear as available in future searches for equipment.
+Defined in [`schema.sql`](schema.sql). Six tables with foreign key constraints throughout:
+
+| Table | Purpose |
+|-------|---------|
+| `users` | Accounts with role flags (`admin`, `G4`) and active/retired status |
+| `parades` | Scheduled parade dates and time windows |
+| `events` | Lessons linked to a parade, with owner, duty cadet, and approval state |
+| `equipment` | Inventory items with name, description, and physical location |
+| `equipment_requests` | Links events to equipment; tracks approval status (requested / approved / denied) |
+| `user_event` | Attendance register — links users to events with a present/absent flag |
 
 ---
 
-## Admin Guidance
+## User Roles
 
-As the admin, you have access to functions and pages other users do not. Below are some of the key areas:
+| Role | Key Capabilities |
+|------|-----------------|
+| **Admin** | Full CRUD on all entities; approve events; view all parades and events |
+| **G4 (Logistics)** | View all events; approve or deny equipment requests |
+| **Event Owner** | Manage own events; populate the register; submit equipment requests |
+| **Duty Cadet** | Monitor assigned events with the same controls as the event owner |
+| **Basic User** | View own upcoming lessons on the calendar |
 
-### Add Page:
+---
 
-- The **Add Page** will be your primary tool to create, modify, or delete items in the system.
-- To add a parade, fill out the form and provide a descriptive name to keep the calendar organized.
-- To add an event, go to the "Add Event" form and populate the fields. Ensure the following details are accurate:
-  
-  - **Event Owner**: This will be the person teaching the lesson. They are responsible for setting the event's timings and details according to the specifications set by their senior cadet (C/SGT to RSM). Once the event is approved, they must populate the register and equipment requests.
-  
-  - **Duty Cadet**: This will be the senior (C/SGT to RSM) overseeing the planning of the event. Initially, you should set the event owner as this person, so they may delegate the event to a lower rank for organization. The duty cadet cannot be changed once the event is created.
-  
-  - **Parade**: This will be the parade the event is scheduled for. Check the date of the selected parade to ensure accuracy.
+## Getting Started
 
-- To add a user, go to the "Add User" form at the top center of the page, fill out the form, and submit it to add the user to the system.
-- To modify a user's details, go to the "Modify User" form below the "Add User" form. First, search for the user, select the result, and update their information. Instead of deleting users, mark their active status as non-active when they leave the cadet force to prevent them from logging in.
+### Prerequisites
+- PHP 8+
+- MySQL / MariaDB
+- Apache (or any PHP-capable web server, e.g. XAMPP / WAMP)
 
-- To add equipment to the system, use the "Add Equipment" form on the top right of the page. Be sure to use detailed descriptions for the locations (e.g., "Clothing Store Shelf 1").
-- To modify equipment, use the "Modify Equipment" form below the "Add Equipment" form. First, search for the equipment and select the desired result. If you intend to delete equipment, set the action to "delete" before submitting the form.
+### Installation
 
-### Calendar Page:
+1. Clone the repository:
+   ```bash
+   git clone <repo-url>
+   cd cadet-management-app
+   ```
 
-- The admin's calendar page will display all events for all parades within the date range.
-- To edit an event from the calendar, click the "Edit" button on the event. This will open the admin panel, where you can modify the event's details and submit the changes.
-- To access the event page for a lesson, click the link displaying the event's name.
+2. Import the database schema:
+   ```bash
+   mysql -u root -p < schema.sql
+   ```
 
-### Event Page:
+3. Configure the database connection:
+   ```bash
+   cp includes/connection.example.php includes/connection.php
+   # Edit includes/connection.php with your database credentials
+   ```
 
-- To set the approval status of an event to "approved," go to the "Modify Event Details" form at the center of the page, set the approval to "approved," and submit the form. This will update the event's status, allowing the register to be modified and equipment requests to be made.
+4. Point your web server's document root at the project directory and open it in a browser.
 
-## galary of the pages on the system
+5. Log in with the admin account you create directly in the database, then use the Add page to set up the rest.
 
-calendar page for the admin and G4 users
-![image](https://github.com/user-attachments/assets/16bc7a22-5f80-45d6-aa29-6d6b6f1b76df)
-calendar page for the regular users
-![image](https://github.com/user-attachments/assets/b5fb8107-986a-43c4-8009-a20adba023cb)
-add php page for changeing attributes of objects in the database
-![image](https://github.com/user-attachments/assets/6f10796d-0ad6-499f-91c7-ebc39f549023)
-event php page for an aproved event with equipment requests and people on the register
-![image](https://github.com/user-attachments/assets/653770fc-5ea4-4d9f-86c4-d19bd523fc98)
-event php page for a non-aproved event
-![image](https://github.com/user-attachments/assets/625f9102-8367-49ea-a30b-3fe60a1f6d26)
+---
 
+## Screenshots
+
+**Calendar — Admin / G4 view**
+![Admin calendar](https://github.com/user-attachments/assets/16bc7a22-5f80-45d6-aa29-6d6b6f1b76df)
+
+**Calendar — Standard user view**
+![Standard calendar](https://github.com/user-attachments/assets/b5fb8107-986a-43c4-8009-a20adba023cb)
+
+**Admin dashboard (Add page)**
+![Admin dashboard](https://github.com/user-attachments/assets/6f10796d-0ad6-499f-91c7-ebc39f549023)
+
+**Event page — Approved event with register and equipment requests**
+![Approved event](https://github.com/user-attachments/assets/653770fc-5ea4-4d9f-86c4-d19bd523fc98)
+
+**Event page — Pending approval**
+![Pending event](https://github.com/user-attachments/assets/625f9102-8367-49ea-a30b-3fe60a1f6d26)
+
+---
+
+## Project Background
+
+This application was designed, built, and documented independently from scratch. The development process covered:
+
+- **Requirements gathering** — stakeholder interviews with NCOs to identify pain points with the existing paper-based system; questionnaire responses used to define user needs and system objectives
+- **System design** — ER diagram, page-structure graphs, event pipeline flowcharts, and login-flow diagrams produced before any code was written
+- **Iterative development** — built in phases, progressively refactoring toward reusability (e.g. `display_parade.php` is a shared include used by both the calendar and event pages to avoid duplicating HTML generation logic)
+- **Security** — session-based authentication, SHA-256 password hashing, input sanitisation on all POST requests, role checks on every page load
+- **Deployment** — hosted on a Linux server; automated nightly MySQL backups via cron with 7-day rolling retention
+
+---
+
+## Skills Demonstrated
+
+- **Full-stack web development** — PHP backend, MySQL relational database, vanilla JS/CSS frontend with no frameworks
+- **Relational database design** — normalised schema, foreign key constraints, composite primary keys, and junction tables
+- **Role-based access control** — multi-tier permission system enforced entirely server-side
+- **Problem decomposition** — complex domain logic (equipment conflict detection, event approval workflow, REGEX live-search) broken into clean, reusable functions
+- **Software engineering process** — solo delivery covering the full lifecycle: analysis, design, implementation, testing, and deployment
+- **Independent project delivery** — all decisions made and justified independently, from data model to UI layout
+
+---
+
+## License
+
+[CC BY-NC 4.0](LICENSE-CC-BY-NC-4.0.md) — free to use for non-commercial purposes with attribution.

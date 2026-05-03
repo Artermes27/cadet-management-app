@@ -1,0 +1,77 @@
+# =============================================================================
+# DATABASE CREDENTIALS
+# Copy includes/connection.example.php → includes/connection.php and configure
+# =============================================================================
+includes/connection.php
+
+# =============================================================================
+# SERVER / DEPLOYMENT SCRIPTS WITH CREDENTIALS
+# Configure locally — do not commit
+# =============================================================================
+backup_mysql.sh
+
+# =============================================================================
+# USER UPLOADS
+# Keep the default profile photo placeholder, ignore all actual uploads
+# =============================================================================
+profile-photos/*
+!profile-photos/defalt.png
+
+# =============================================================================
+# PRIVATE DOCUMENTS
+# Coursework spec / assessment documents
+# =============================================================================
+*.pdf
+
+# =============================================================================
+# PHP
+# =============================================================================
+# Composer dependencies (if ever added)
+vendor/
+composer.lock
+
+# PHP error logs
+*.log
+error_log
+php_errors.log
+
+# Session files
+/tmp/
+
+# =============================================================================
+# ENVIRONMENT / CONFIG
+# =============================================================================
+.env
+.env.local
+.env.*.local
+config.local.php
+
+# =============================================================================
+# OS ARTEFACTS
+# =============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# =============================================================================
+# EDITOR / IDE
+# =============================================================================
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# =============================================================================
+# CLAUDE CODE
+# Keep launch.json (dev server config) but ignore session memory
+# =============================================================================
+.claude/*
+!.claude/launch.json
